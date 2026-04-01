@@ -13,6 +13,19 @@ YAHOO_GENERAL_RSS = [
     "https://finance.yahoo.com/news/rssindex",
 ]
 
+# Google News RSS — reliable fallback for per-ticker news
+GOOGLE_NEWS_TEMPLATE = (
+    "https://news.google.com/rss/search"
+    "?q={symbol}+stock&hl=en-US&gl=US&ceid=US:en"
+)
+
+# Additional general market RSS feeds
+EXTRA_MARKET_RSS = [
+    ("https://search.cnbc.com/rs/search/combinedcms/view.xml"
+     "?partnerId=wrss01&id=10001147", "CNBC"),
+    ("https://feeds.marketwatch.com/marketwatch/topstories/", "MarketWatch"),
+]
+
 
 class RSSClient:
     def __init__(self, lookback_days: int = 3):
@@ -20,12 +33,34 @@ class RSSClient:
 
     def fetch_yahoo_for_ticker(self, symbol: str) -> list[dict]:
         url = YAHOO_RSS_TEMPLATE.format(symbol=symbol)
-        return self._parse_feed(url, source="Yahoo Finance")
+        items = self._parse_feed(url, source="Yahoo Finance")
+        if not items:
+            logger.info(
+                "Yahoo RSS returned 0 items for %s — trying Google News fallback",
+                symbol,
+            )
+            google_url = GOOGLE_NEWS_TEMPLATE.format(symbol=symbol)
+            items = self._parse_feed(google_url, source="Google News")
+        logger.info("Fetched %d news items for ticker %s", len(items), symbol)
+        return items
 
     def fetch_yahoo_general(self) -> list[dict]:
         items: list[dict] = []
         for url in YAHOO_GENERAL_RSS:
-            items.extend(self._parse_feed(url, source="Yahoo Finance"))
+            fetched = self._parse_feed(url, source="Yahoo Finance")
+            if not fetched:
+                logger.info("Yahoo general RSS returned 0 items from %s", url)
+            items.extend(fetched)
+
+        # Try extra market feeds if Yahoo general returned nothing
+        if not items:
+            logger.info("Yahoo general RSS empty — trying CNBC/MarketWatch fallback")
+        for url, source in EXTRA_MARKET_RSS:
+            fetched = self._parse_feed(url, source=source)
+            if fetched:
+                logger.info("Fetched %d items from %s", len(fetched), source)
+            items.extend(fetched)
+
         return items
 
     def _parse_feed(self, url: str, source: str) -> list[dict]:

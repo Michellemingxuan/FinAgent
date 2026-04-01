@@ -32,8 +32,43 @@
       --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
       --radius: 8px;
     }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2d3041;
+      --border-light: #252836;
+      --text: #e4e6ed;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #60a5fa;
+      --accent-light: #1e293b;
+      --accent-border: #2563eb;
+      --green: #4ade80;
+      --green-bg: #052e16;
+      --green-border: #166534;
+      --red: #f87171;
+      --red-bg: #450a0a;
+      --red-border: #991b1b;
+      --yellow: #fbbf24;
+      --yellow-bg: #422006;
+      --yellow-border: #92400e;
+      --orange: #fb923c;
+      --orange-bg: #431407;
+      --orange-border: #9a3412;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+    }
+    [data-theme="dark"] .ai-block { background: var(--accent-light); }
+    [data-theme="dark"] .ai-text { color: var(--text-secondary); }
+    [data-theme="dark"] .kpi-grid { background: var(--border); }
+    [data-theme="dark"] .source-wsj { background: #422006; color: #fbbf24; }
+    [data-theme="dark"] .source-yahoofinance { background: #2e1065; color: #c4b5fd; }
+    [data-theme="dark"] canvas.sparkline { filter: brightness(1.2); }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
@@ -61,7 +96,7 @@
     /* ── Section shells ── */
     .section { margin-bottom: 24px; }
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); }
+    .section-title { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; color: var(--text); }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
 
     /* ── Analyst ratings table ── */
@@ -151,7 +186,7 @@
     .geo-headline::before { content: "›"; color: var(--text-muted); }
 
     /* ── Subsection headers ── */
-    .subsec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); padding: 8px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .subsec-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
 
     /* ── Empty/error states ── */
     .empty-state { padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
@@ -212,6 +247,29 @@
     .insider-table tbody tr:last-child td { border-bottom: none; }
     .insider-table tbody tr:hover { background: var(--bg); }
     .insider-summary { padding: 8px 14px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--bg); }
+
+    /* ── Toggle buttons (dark mode + language) ── */
+    .toggle-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text); transition: background 0.15s, border-color 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+    .toggle-btn:hover { background: var(--bg); border-color: var(--accent); }
+
+    /* ── Add-stock modal ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+    .modal-overlay.visible { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 400px; width: 90%; box-shadow: 0 8px 32px rgb(0 0 0 / 0.2); }
+    .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+    .modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+    .modal input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); margin-bottom: 12px; outline: none; font-family: inherit; }
+    .modal input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15); }
+    .modal label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .modal-actions .btn { flex: 1; justify-content: center; }
+    .modal-status { margin-top: 12px; padding: 8px 12px; border-radius: 6px; font-size: 12px; display: none; }
+    .modal-status.success { display: block; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .modal-status.error { display: block; background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .modal-status.running { display: block; background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); }
+
+    [data-theme="dark"] .theme-chip { background: #1e3a5f; color: #93c5fd; border-color: #2563eb; }
+    .header, .card { transition: background 0.3s, border-color 0.3s; }
   </style>
 </head>
 <body>
@@ -221,22 +279,27 @@
   <div class="header-top">
     <div>
       <div class="header-title">FinAgent</div>
-      <div class="header-meta">Updated {{ ctx.generated_at }}</div>
+      <div class="header-meta" data-i18n="updated">Updated {{ ctx.generated_at }}</div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <button class="toggle-btn" id="langToggle" onclick="toggleLang()" title="Switch language">EN</button>
+      <button class="toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
       {% if archive_dates %}
       <select class="archive-select" onchange="if(this.value) window.location.href=this.value">
-        <option value="">History</option>
+        <option value="" data-i18n="history">History</option>
         {% for d in archive_dates | sort(reverse=true) %}
         <option value="archive/{{ d }}.html">{{ d }}</option>
         {% endfor %}
       </select>
       {% endif %}
       {% if github_repo %}
+      <button class="btn" id="addStockBtn" onclick="document.getElementById('addStockModal').classList.add('visible')">
+        &#x2b;&nbsp; <span data-i18n="add_stock">Add Stock</span>
+      </button>
       <a class="btn btn-primary"
          href="https://github.com/{{ github_repo }}/actions/workflows/generate_report.yml"
          target="_blank" rel="noopener">
-        &#x21bb;&nbsp; Refresh Report
+        &#x21bb;&nbsp; <span data-i18n="refresh_report">Refresh Report</span>
       </a>
       {% endif %}
     </div>
@@ -249,9 +312,36 @@
       {{ tr.symbol }}
     </div>
     {% endfor %}
-    <div class="tab" data-tab="macro">Macro &amp; Geo</div>
+    <div class="tab" data-tab="macro" data-i18n="macro_geo">Macro &amp; Geo</div>
   </div>
 </div>
+
+<!-- ═══ ADD STOCK MODAL ═══ -->
+{% if github_repo %}
+<div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)this.classList.remove('visible')">
+  <div class="modal">
+    <h3 data-i18n="add_stock_title">Add a Stock</h3>
+    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report including this stock will be generated immediately.</p>
+    <label for="newTicker" data-i18n="ticker_label">Ticker Symbol</label>
+    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;" />
+    <label for="addStockPat" data-i18n="pat_label">GitHub Personal Access Token</label>
+    <input type="password" id="addStockPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+    <div style="font-size:11px;color:var(--text-muted);margin-top:-8px;margin-bottom:12px;">
+      <span data-i18n="pat_hint">Needs <code>workflow</code> scope.</span>
+      <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent+AddStock" target="_blank" rel="noopener" data-i18n="pat_create">Create one here ↗</a>
+    </div>
+    <label style="display:flex;align-items:center;gap:6px;margin-bottom:14px;cursor:pointer;">
+      <input type="checkbox" id="addStockRemember" style="width:auto;margin:0;padding:0;" />
+      <span style="font-size:12px;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;" data-i18n="remember">Remember in this browser</span>
+    </label>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById('addStockModal').classList.remove('visible')" data-i18n="cancel">Cancel</button>
+      <button class="btn btn-primary" id="addStockSubmit" onclick="submitAddStock()" data-i18n="add_generate">Add &amp; Generate</button>
+    </div>
+    <div class="modal-status" id="addStockStatus"></div>
+  </div>
+</div>
+{% endif %}
 
 <div class="page">
 
@@ -297,7 +387,7 @@
     <!-- ── SECTION: ANALYST RATINGS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Analyst Ratings</span>
+        <span class="section-title" data-i18n="analyst_ratings">Analyst Ratings</span>
       </div>
       <div class="card">
         {% if tr.ratings %}
@@ -377,7 +467,7 @@
     {% set ev = sym_earnings[0] %}
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Upcoming Earnings</span>
+        <span class="section-title" data-i18n="upcoming_earnings">Upcoming Earnings</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
@@ -416,7 +506,7 @@
     <!-- ── SECTION: NEWS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">News</span>
+        <span class="section-title" data-i18n="news">News</span>
       </div>
       <div class="card">
         {% set direct = ctx.news.direct_news | selectattr("relevant_tickers", "containing", tr.symbol) | list %}
@@ -470,7 +560,7 @@
     {% if tf %}
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Financial Statements</span>
+        <span class="section-title" data-i18n="financials">Financial Statements</span>
       </div>
       <div class="card">
         <!-- KPI strip -->
@@ -553,7 +643,7 @@
     {% if sym_insider %}
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Insider Transactions</span>
+        <span class="section-title" data-i18n="insider_txns">Insider Transactions</span>
       </div>
       <div class="card">
         <table class="insider-table">
@@ -597,7 +687,7 @@
     {% if ticker_geo %}
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Geopolitical Exposure</span>
+        <span class="section-title" data-i18n="geo_exposure">Geopolitical Exposure</span>
       </div>
       <div class="card">
         {% for theme in ticker_geo %}
@@ -635,7 +725,7 @@
     {% if sym_themes %}
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Portfolio Themes</span>
+        <span class="section-title" data-i18n="portfolio_themes">Portfolio Themes</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -651,7 +741,7 @@
     {% set sc = ctx.supply_chain_detail.get(tr.symbol, {}) %}
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Supply Chain Map</span>
+        <span class="section-title" data-i18n="supply_chain_map">Supply Chain Map</span>
       </div>
       <div class="card">
         {% if sc and (sc.get('upstream') or sc.get('downstream')) %}
@@ -794,7 +884,7 @@
     <!-- AI market narrative -->
     {% if ctx.news.ai_summary %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Market Narrative</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="market_narrative">Market Narrative</span></div>
       <div class="card">
         <div class="ai-block" style="border-top:none;">
           <div class="ai-label">AI Summary</div>
@@ -807,7 +897,7 @@
     <!-- Peer comparison table -->
     {% if ctx.peer_table %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Peer Comparison</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="peer_comparison">Peer Comparison</span></div>
       <div class="card">
         <table class="peer-table">
           <thead>
@@ -862,7 +952,7 @@
     <!-- Macro news -->
     {% if ctx.news.macro_news %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Macro &amp; Sector News</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="macro_sector_news">Macro &amp; Sector News</span></div>
       <div class="card">
         {% for item in ctx.news.macro_news %}
         <div class="news-item">
@@ -888,7 +978,7 @@
     <!-- Flagged tickers -->
     {% if ctx.news.flagged_tickers %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Tickers to Watch</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="tickers_to_watch">Tickers to Watch</span></div>
       <div class="card" style="padding:14px 16px;">
         <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">Claude flagged these based on news relevance to your portfolio's supply chain and markets:</p>
         <div style="display:flex;flex-wrap:wrap;gap:6px;">
@@ -903,7 +993,7 @@
     <!-- Portfolio Themes -->
     {% if ctx.themes %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Themes</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="themes">Themes</span></div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;flex-direction:column;gap:12px;">
           {% for theme in ctx.themes %}
@@ -927,7 +1017,7 @@
     <!-- Supply Chain Network (all tickers) -->
     {% if ctx.supply_chain_detail %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Supply Chain Network</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="supply_chain_network">Supply Chain Network</span></div>
       <div class="card">
         <div class="sc-diagram-wrap">
           <svg id="sc-network-svg" class="sc-svg" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -1072,7 +1162,7 @@
     <!-- Geopolitical themes — full list -->
     {% if ctx.geopolitical_themes %}
     <div class="section">
-      <div class="section-header"><span class="section-title">Geopolitical Risk Themes</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="geo_risk_themes">Geopolitical Risk Themes</span></div>
       {% if ctx.geopolitical_summary %}
       <div class="card" style="margin-bottom:12px;">
         <div class="ai-block" style="border-top:none;">
@@ -1177,5 +1267,192 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- DARK MODE + LANGUAGE + ADD STOCK                               -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<script>
+// ── Dark mode ──────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('finagent_theme', isDark ? 'light' : 'dark');
+}
+(function initTheme() {
+  const saved = localStorage.getItem('finagent_theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = '☀️';
+  }
+})();
+
+// ── i18n ───────────────────────────────────────────────────────────
+const I18N = {
+  zh: {
+    updated: '更新于 {{ ctx.generated_at }}',
+    history: '历史记录',
+    add_stock: '添加股票',
+    refresh_report: '刷新报告',
+    macro_geo: '宏观与地缘',
+    analyst_ratings: '分析师评级',
+    upcoming_earnings: '即将发布的财报',
+    news: '新闻',
+    financials: '财务报表',
+    insider_txns: '内部交易',
+    geo_exposure: '地缘风险敞口',
+    portfolio_themes: '投资主题',
+    supply_chain_map: '供应链图谱',
+    market_narrative: '市场叙事',
+    peer_comparison: '同行比较',
+    macro_sector_news: '宏观与行业新闻',
+    tickers_to_watch: '值得关注的股票',
+    themes: '主题',
+    supply_chain_network: '供应链网络',
+    geo_risk_themes: '地缘政治风险主题',
+    add_stock_title: '添加股票',
+    add_stock_desc: '输入股票代码，系统将立即生成包含该股票的新报告。',
+    ticker_label: '股票代码',
+    pat_label: 'GitHub 个人访问令牌',
+    pat_hint: '需要 <code>workflow</code> 权限。',
+    pat_create: '在这里创建 ↗',
+    remember: '在此浏览器中记住',
+    cancel: '取消',
+    add_generate: '添加并生成',
+  },
+  en: {
+    updated: 'Updated {{ ctx.generated_at }}',
+    history: 'History',
+    add_stock: 'Add Stock',
+    refresh_report: 'Refresh Report',
+    macro_geo: 'Macro & Geo',
+    analyst_ratings: 'Analyst Ratings',
+    upcoming_earnings: 'Upcoming Earnings',
+    news: 'News',
+    financials: 'Financial Statements',
+    insider_txns: 'Insider Transactions',
+    geo_exposure: 'Geopolitical Exposure',
+    portfolio_themes: 'Portfolio Themes',
+    supply_chain_map: 'Supply Chain Map',
+    market_narrative: 'Market Narrative',
+    peer_comparison: 'Peer Comparison',
+    macro_sector_news: 'Macro & Sector News',
+    tickers_to_watch: 'Tickers to Watch',
+    themes: 'Themes',
+    supply_chain_network: 'Supply Chain Network',
+    geo_risk_themes: 'Geopolitical Risk Themes',
+    add_stock_title: 'Add a Stock',
+    add_stock_desc: 'Enter the ticker symbol. A new report including this stock will be generated immediately.',
+    ticker_label: 'Ticker Symbol',
+    pat_label: 'GitHub Personal Access Token',
+    pat_hint: 'Needs <code>workflow</code> scope.',
+    pat_create: 'Create one here ↗',
+    remember: 'Remember in this browser',
+    cancel: 'Cancel',
+    add_generate: 'Add & Generate',
+  }
+};
+
+let currentLang = localStorage.getItem('finagent_lang') || 'en';
+
+function applyLang(lang) {
+  const strings = I18N[lang];
+  if (!strings) return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (strings[key] !== undefined) el.innerHTML = strings[key];
+  });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'EN' : '中文';
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  localStorage.setItem('finagent_lang', currentLang);
+  applyLang(currentLang);
+}
+
+(function initLang() {
+  if (currentLang !== 'en') applyLang(currentLang);
+})();
+
+// ── Add Stock ─────────────────────────────────────────────────────
+const ADD_STOCK_PAT_KEY = 'finagent_add_stock_pat';
+(function initAddStock() {
+  const saved = localStorage.getItem(ADD_STOCK_PAT_KEY);
+  if (saved) {
+    const el = document.getElementById('addStockPat');
+    if (el) el.value = saved;
+    const cb = document.getElementById('addStockRemember');
+    if (cb) cb.checked = true;
+  }
+})();
+
+{% if github_repo %}
+async function submitAddStock() {
+  const REPO = "{{ github_repo }}";
+  const WORKFLOW = "generate_report.yml";
+  const ticker = (document.getElementById('newTicker').value || '').trim().toUpperCase();
+  const pat = (document.getElementById('addStockPat').value || '').trim();
+  const remember = document.getElementById('addStockRemember').checked;
+  const statusEl = document.getElementById('addStockStatus');
+  const btn = document.getElementById('addStockSubmit');
+
+  if (!ticker) { showAddStatus('error', currentLang === 'zh' ? '请输入股票代码。' : 'Please enter a ticker symbol.'); return; }
+  if (!pat) { showAddStatus('error', currentLang === 'zh' ? '请输入 GitHub PAT。' : 'Please enter your GitHub PAT.'); return; }
+
+  if (remember) localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
+  else localStorage.removeItem(ADD_STOCK_PAT_KEY);
+
+  btn.disabled = true;
+  btn.textContent = currentLang === 'zh' ? '触发中…' : 'Triggering…';
+  showAddStatus('running', currentLang === 'zh' ? '正在发送请求到 GitHub Actions…' : 'Sending request to GitHub Actions…');
+
+  try {
+    const resp = await fetch(
+      `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main', inputs: { section: 'all', new_ticker: ticker } }),
+      }
+    );
+
+    if (resp.status === 204) {
+      showAddStatus('success', currentLang === 'zh'
+        ? `✓ 已触发! ${ticker} 的报告将在约 3 分钟后生成。届时请刷新页面。`
+        : `✓ Triggered! Report for ${ticker} will be ready in ~3 minutes. Refresh the page afterwards.`);
+      btn.textContent = '✓';
+      setTimeout(() => { btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate'; }, 30000);
+    } else if (resp.status === 401) {
+      showAddStatus('error', currentLang === 'zh' ? 'Token 无效或缺少 workflow 权限。' : 'Invalid token or missing workflow scope.');
+      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    } else {
+      const body = await resp.text();
+      showAddStatus('error', `GitHub ${resp.status}: ${body.slice(0, 120)}`);
+      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    }
+  } catch (err) {
+    showAddStatus('error', `Network error: ${err.message}`);
+    btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+  }
+}
+{% endif %}
+
+function showAddStatus(type, msg) {
+  const el = document.getElementById('addStockStatus');
+  if (!el) return;
+  el.className = `modal-status ${type}`;
+  el.textContent = msg;
+}
+</script>
+
 </body>
 </html>
+

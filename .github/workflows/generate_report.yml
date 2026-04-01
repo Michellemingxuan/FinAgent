@@ -12,6 +12,10 @@ on:
         description: "Section to run (all / analyst / news / financials / geo)"
         required: false
         default: "all"
+      new_ticker:
+        description: "Ticker symbol to add to the watchlist (optional)"
+        required: false
+        default: ""
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -53,7 +57,24 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
-        run: python main.py --section ${{ github.event.inputs.section || 'all' }}
+        run: |
+          CMD="python main.py --section ${{ github.event.inputs.section || 'all' }}"
+          if [ -n "${{ github.event.inputs.new_ticker }}" ]; then
+            CMD="$CMD --add-ticker ${{ github.event.inputs.new_ticker }}"
+          fi
+          $CMD
+
+      - name: Commit updated config (if ticker added)
+        run: |
+          git config user.name  "FinAgent Bot"
+          git config user.email "finagent-bot@users.noreply.github.com"
+          git add config/stocks.json
+          if git diff --cached --quiet; then
+            echo "No config changes."
+          else
+            git commit -m "chore: add ticker ${{ github.event.inputs.new_ticker }} [skip ci]"
+            git push
+          fi
 
       - name: Deploy to GitHub Pages (gh-pages branch)
         uses: peaceiris/actions-gh-pages@v4

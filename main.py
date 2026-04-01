@@ -85,9 +85,43 @@ def main() -> None:
         action="store_true",
         help="Run SupplyChainAgent for each ticker and update config/stocks.json",
     )
+    parser.add_argument(
+        "--add-ticker",
+        type=str,
+        default="",
+        help="Add a new ticker to config/stocks.json and run a full report",
+    )
     args = parser.parse_args()
 
     config = _load_config(Path(args.config))
+
+    # ── Add new ticker to config if requested ──────────────────────────
+    if args.add_ticker:
+        new_sym = args.add_ticker.strip().upper()
+        existing = {t["symbol"] for t in config.get("tickers", [])}
+        if new_sym in existing:
+            logger.info("Ticker %s already in config — skipping add", new_sym)
+        else:
+            logger.info("Adding new ticker %s to config", new_sym)
+            new_entry = {"symbol": new_sym, "name": new_sym, "sector": "", "market": "", "upstream": [], "downstream": []}
+            config.setdefault("tickers", []).append(new_entry)
+            # Auto-discover supply chain
+            anthropic_key_for_sc = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+            if anthropic_key_for_sc:
+                try:
+                    from agents.supply_chain_agent import SupplyChainAgent
+                    sc_agent = SupplyChainAgent(anthropic_api_key=anthropic_key_for_sc)
+                    result = sc_agent.discover(new_sym, new_sym, "")
+                    config.setdefault("supply_chain_detail", {})[new_sym] = result
+                    new_entry["upstream"] = [r["ticker"] for r in result.get("upstream", [])]
+                    new_entry["downstream"] = [r["ticker"] for r in result.get("downstream", [])]
+                    logger.info("Supply chain discovered for %s", new_sym)
+                except Exception as exc:
+                    logger.warning("Supply chain discovery failed for %s: %s", new_sym, exc)
+            # Save updated config
+            with Path(args.config).open("w") as f:
+                json.dump(config, f, indent=2)
+            logger.info("Config updated: %s", args.config)
 
     if args.refresh_supply_chain:
         anthropic_key = _require_env("ANTHROPIC_API_KEY")
