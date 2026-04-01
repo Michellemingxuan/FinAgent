@@ -63,6 +63,28 @@
         "INTC",
         "MRVL"
       ]
+    },
+    {
+      "symbol": "MU",
+      "name": "MU",
+      "sector": "",
+      "market": "",
+      "upstream": [
+        "ASML",
+        "AMAT",
+        "LRCX",
+        "ENTG",
+        "KLAC",
+        "SUMCO"
+      ],
+      "downstream": [
+        "AAPL",
+        "NVDA",
+        "AMZN",
+        "DELL",
+        "QCOM",
+        "TSLA"
+      ]
     }
   ],
   "supply_chain_detail": {
@@ -290,6 +312,85 @@
         }
       ],
       "supply_chain_summary": "TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world's dominant pure-play foundry, manufacturing chips designed by fabless companies on leading-edge nodes that no other foundry can replicate at scale. Its upstream dependency on a small set of highly specialized equipment makers (particularly ASML for EUV) and its downstream concentration among a few hyperscale and fabless giants make it both extraordinarily powerful and geopolitically sensitive."
+    },
+    "MU": {
+      "upstream": [
+        {
+          "ticker": "ASML",
+          "name": "ASML Holding N.V.",
+          "relationship": "Critical supplier of EUV and DUV lithography equipment essential for advanced DRAM and NAND manufacturing",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AMAT",
+          "name": "Applied Materials, Inc.",
+          "relationship": "Key supplier of wafer fabrication equipment including CVD, PVD, and etch systems used in memory production",
+          "criticality": "high"
+        },
+        {
+          "ticker": "LRCX",
+          "name": "Lam Research Corporation",
+          "relationship": "Supplier of etch and deposition equipment critical for NAND 3D stacking and DRAM cell fabrication",
+          "criticality": "high"
+        },
+        {
+          "ticker": "ENTG",
+          "name": "Entegris, Inc.",
+          "relationship": "Supplier of advanced materials, chemical mechanical planarization slurries, and filtration systems for memory fabs",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "KLAC",
+          "name": "KLA Corporation",
+          "relationship": "Supplier of process control and wafer inspection equipment used to maintain yield in memory manufacturing",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "SUMCO",
+          "name": "SUMCO Corporation",
+          "relationship": "Key supplier of silicon wafers, a primary raw material for DRAM and NAND flash production",
+          "criticality": "medium"
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "relationship": "Major customer purchasing LPDDR and NAND flash memory for iPhones, iPads, and Mac products",
+          "criticality": "high"
+        },
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "Critical customer for High Bandwidth Memory (HBM3E) used in AI/data center GPUs such as H100 and B200",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com, Inc.",
+          "relationship": "Large cloud customer purchasing data center DRAM modules and SSDs for AWS infrastructure",
+          "criticality": "high"
+        },
+        {
+          "ticker": "DELL",
+          "name": "Dell Technologies Inc.",
+          "relationship": "Significant customer purchasing DRAM modules and enterprise SSDs for servers, PCs, and storage systems",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "QCOM",
+          "name": "Qualcomm Incorporated",
+          "relationship": "Customer for LPDDR mobile DRAM integrated into Snapdragon mobile and automotive platforms",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "TSLA",
+          "name": "Tesla, Inc.",
+          "relationship": "Customer for automotive-grade DRAM and NAND flash used in vehicle infotainment and ADAS systems",
+          "criticality": "low"
+        }
+      ],
+      "supply_chain_summary": "Micron Technology occupies a critical mid-tier position in the semiconductor supply chain as one of only three major global producers of DRAM and NAND flash memory, sitting downstream of specialized capital equipment makers and upstream of nearly every major computing, mobile, cloud, and automotive platform. Its highly capital-intensive, vertically integrated manufacturing model creates deep dependencies on a small number of equipment suppliers while serving a broad but concentrated customer base where AI-driven HBM demand from companies like NVIDIA is rapidly reshaping revenue mix."
     }
   },
   "supply_chain_last_updated": "2026-04-01",
