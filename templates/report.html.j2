@@ -659,7 +659,8 @@
           </thead>
           <tbody>
             {% for txn in sym_insider[:5] %}
-            {% set is_buy = 'purchase' in txn.transaction_type.lower() or txn.transaction_type == 'P-Purchase' %}
+            {% set t_lower = txn.transaction_type.lower() %}
+            {% set is_buy = ('purchase' in t_lower) or (t_lower == 'p-purchase') %}
             <tr>
               <td>{{ txn.reporting_name or "—" }}</td>
               <td>

@@ -42,16 +42,19 @@ class Orchestrator:
         report_settings: Optional[dict] = None,
         delivery_config: Optional[dict] = None,
         report_output_dir: str = "output",
+        lang: str = "en",
     ):
         settings = report_settings or {}
         self._fmp_api_key = fmp_api_key
         self._delivery_config = delivery_config or {}
         self._report_output_dir = report_output_dir
+        self._lang = lang
 
         self._ratings_agent = AnalystRatingsAgent(
             anthropic_api_key=anthropic_api_key,
             fmp_api_key=fmp_api_key,
             ratings_count=settings.get("analyst_ratings_count", 5),
+            lang=self._lang,
         )
         self._news_agent = NewsAgent(
             anthropic_api_key=anthropic_api_key,
@@ -59,13 +62,18 @@ class Orchestrator:
             lookback_days=settings.get("news_lookback_days", 3),
             max_per_ticker=settings.get("max_news_per_ticker", 4),
             max_macro=settings.get("max_macro_news", 5),
+            lang=self._lang,
         )
         self._financials_agent = FinancialsAgent(
             anthropic_api_key=anthropic_api_key,
             fmp_api_key=fmp_api_key,
             financials_years=settings.get("financials_years", 3),
+            lang=self._lang,
         )
-        self._geo_agent = GeopoliticalAgent(anthropic_api_key=anthropic_api_key)
+        self._geo_agent = GeopoliticalAgent(
+            anthropic_api_key=anthropic_api_key,
+            lang=self._lang,
+        )
 
     def run(self, ticker_configs: list[dict], themes: Optional[list[dict]] = None, supply_chain_detail: Optional[dict] = None) -> ReportContext:
         errors: list[str] = []

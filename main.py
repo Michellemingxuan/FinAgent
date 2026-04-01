@@ -70,6 +70,7 @@ def main() -> None:
     parser.add_argument("--section", choices=["analyst", "news", "financials", "geo", "all"], default="all")
     parser.add_argument("--output", default="output/index.html")
     parser.add_argument("--config", default="config/stocks.json")
+    parser.add_argument("--lang", choices=["en", "zh"], default="en", help="Language for AI summaries (en or zh)")
     parser.add_argument(
         "--test-delivery",
         action="store_true",
@@ -203,6 +204,7 @@ def main() -> None:
         report_settings=report_settings,
         delivery_config=delivery_config,
         report_output_dir=output_dir,
+        lang=args.lang,
     )
 
     logger.info("Generating report for %d tickers...", len(ticker_configs))

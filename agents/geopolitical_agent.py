@@ -14,7 +14,7 @@ For each theme:
 - Name the theme concisely (e.g. "US-China Semiconductor Export Controls")
 - List which portfolio tickers (and any flagged tickers) are affected
 - Assign risk level: Low / Medium / Medium-High / High
-- Write a 2-3 sentence analysis of the risk
+- Write a short analysis of the risk using 2-3 bullet points
 
 Return a JSON object with this exact structure:
 {
@@ -27,7 +27,8 @@ Return a JSON object with this exact structure:
       "source_headlines": ["headline 1", "headline 2"]
     }
   ],
-  "portfolio_summary": "2-3 sentence overall geopolitical risk summary for the portfolio"
+  ],
+  "portfolio_summary": "• bullet 1\n• bullet 2"
 }
 
 Focus on: trade policy, sanctions, export controls, geopolitical conflicts, supply chain
@@ -35,8 +36,9 @@ disruptions, regulatory actions by governments. Omit purely domestic business/ea
 
 
 class GeopoliticalAgent(BaseAgent):
-    def __init__(self, anthropic_api_key: str):
+    def __init__(self, anthropic_api_key: str, lang: str = "en"):
         super().__init__(anthropic_api_key)
+        self._lang = lang
 
     def run(
         self,
@@ -67,7 +69,11 @@ class GeopoliticalAgent(BaseAgent):
             "Identify geopolitical themes and return the JSON response."
         )
 
-        raw = self._simple_completion(SYSTEM, user_msg, max_tokens=2000)
+        system = SYSTEM
+        if self._lang == "zh":
+            system += "\n\nIMPORTANT: Write the analysis bullets and portfolio_summary bullets in Chinese (简体中文). Keep the JSON keys and risk_level values in English."
+
+        raw = self._simple_completion(system, user_msg, max_tokens=2000)
 
         data = _extract_json(raw)
         if data:
