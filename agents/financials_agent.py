@@ -17,10 +17,13 @@ from models.report import (
 logger = logging.getLogger(__name__)
 
 SYSTEM = """You are a CFA-level financial analyst. Given 3 years of income statement,
-balance sheet, and cash flow data for a company, write a concise 3-4 sentence
-analysis covering: revenue and margin trajectory, balance sheet health, cash
-generation quality, and any notable red flags or highlights. Be specific with
-numbers. Do not add investment advice or recommendations."""
+balance sheet, and cash flow data for a company, write a concise analysis using
+bullet points covering:
+• Revenue and margin trajectory (cite specific numbers)
+• Balance sheet health (debt levels, cash position)
+• Cash generation quality (free cash flow trends)
+• Any notable red flags or highlights
+Use 4-6 bullet points. Be specific with numbers. Do not add investment advice."""
 
 # yfinance row name mappings (may vary by ticker/version)
 _INCOME_MAP = {
@@ -42,10 +45,11 @@ _CASHFLOW_MAP = {
 
 
 class FinancialsAgent(BaseAgent):
-    def __init__(self, anthropic_api_key: str, fmp_api_key: str = "", financials_years: int = 3):
+    def __init__(self, anthropic_api_key: str, fmp_api_key: str = "", financials_years: int = 3, lang: str = "en"):
         super().__init__(anthropic_api_key)
         self._yf = YFinanceClient()
         self._years = financials_years
+        self._lang = lang
 
     def run(
         self, ticker_config: dict
@@ -273,10 +277,14 @@ class FinancialsAgent(BaseAgent):
             f"Company: {name} ({symbol})\n\n"
             f"3-year financials:\n{metrics_text}\n\n"
             f"Current valuation metrics:\n{valuation_text}\n\n"
-            "Write a 3-4 sentence financial analysis."
+            "Write bullet-point financial analysis."
         )
 
-        return self._simple_completion(SYSTEM, user_msg, max_tokens=400)
+        system = SYSTEM
+        if self._lang == "zh":
+            system += "\n\nIMPORTANT: Write your entire response in Chinese (简体中文)."
+
+        return self._simple_completion(system, user_msg, max_tokens=500)
 
 
 def _pick(data: dict, mapping: dict, target_key: str) -> Optional[float]:

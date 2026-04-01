@@ -12,10 +12,11 @@ logger = logging.getLogger(__name__)
 RELEVANCE_SYSTEM = """You are a financial news analyst. Given a list of news headlines
 and a portfolio of stocks (with their upstream/downstream supply chains), your job is to:
 1. Classify each news item as: "direct" (about a held ticker), "market" (upstream/downstream
-   supply chain), or "macro" (general market/economic).
+   supply chain), or "macro" (general market/economic). Be generous with the "direct" label:
+   if a headline mentions a portfolio company by name or ticker, mark it "direct".
 2. For each item, list which tickers from the extended universe are relevant.
 3. Flag any tickers NOT in the portfolio that are worth monitoring based on the news.
-4. Write a 2-3 sentence narrative summarizing the most important market themes.
+4. Write a narrative (as bullet points, 4-6 bullets) summarizing the most important market themes.
 
 Return a JSON object with this exact structure:
 {
@@ -28,7 +29,7 @@ Return a JSON object with this exact structure:
     }
   ],
   "flagged_tickers": ["ASML", "AMD"],
-  "narrative": "..."
+  "narrative": "• bullet 1\n• bullet 2\n..."
 }"""
 
 
@@ -40,12 +41,14 @@ class NewsAgent(BaseAgent):
         lookback_days: int = 3,
         max_per_ticker: int = 4,
         max_macro: int = 5,
+        lang: str = "en",
     ):
         super().__init__(anthropic_api_key)
         self._rss = RSSClient(lookback_days=lookback_days)
         self._wsj = WSJClient(cookie=wsj_cookie, lookback_days=lookback_days)
         self._max_per_ticker = max_per_ticker
         self._max_macro = max_macro
+        self._lang = lang
 
     def run(self, ticker_configs: list[dict]) -> NewsSection:
         logger.info("Fetching news for %d tickers", len(ticker_configs))
@@ -94,9 +97,7 @@ class NewsAgent(BaseAgent):
         macro_news: list[NewsItem] = []
 
         for i, raw in enumerate(unique_items):
-            meta = classified.get(i, {"category": "macro", "relevant_tickers": [], "importance": "low"})
-            if meta.get("importance") == "low" and meta.get("category") == "macro":
-                continue  # skip low-importance macro noise
+            meta = classified.get(i, {"category": "macro", "relevant_tickers": [], "importance": "medium"})
 
             item = NewsItem(
                 title=raw["title"],
@@ -114,6 +115,18 @@ class NewsAgent(BaseAgent):
                 market_news.append(item)
             else:
                 macro_news.append(item)
+
+        # If classification yielded very few direct/market items, promote macro items
+        # that mention any portfolio ticker in their title
+        if len(direct_news) + len(market_news) < 3:
+            portfolio_syms = {t["symbol"] for t in ticker_configs}
+            for item in list(macro_news):
+                title_upper = item.title.upper()
+                matched = [s for s in portfolio_syms if s in title_upper]
+                if matched:
+                    item.relevant_tickers = list(set(item.relevant_tickers + matched))
+                    direct_news.append(item)
+                    macro_news.remove(item)
 
         # Apply limits
         direct_news = _top_n(direct_news, self._max_per_ticker * len(ticker_configs))
@@ -161,7 +174,11 @@ class NewsAgent(BaseAgent):
             "Classify each news item and return the JSON response."
         )
 
-        raw = self._simple_completion(RELEVANCE_SYSTEM, user_msg, max_tokens=3000)
+        system = RELEVANCE_SYSTEM
+        if self._lang == "zh":
+            system += "\n\nIMPORTANT: Write the narrative bullets in Chinese (简体中文). Classification categories and JSON keys must remain in English."
+
+        raw = self._simple_completion(system, user_msg, max_tokens=3000)
 
         return _extract_json(raw, logger) or {"classified_items": [], "flagged_tickers": [], "narrative": raw}
 

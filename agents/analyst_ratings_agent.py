@@ -10,18 +10,22 @@ from models.report import AnalystRating, TickerRatings
 logger = logging.getLogger(__name__)
 
 SYSTEM = """You are a senior equity research analyst. Given raw analyst rating and
-price target data for a stock, write a concise 2-3 sentence rationale paragraph
-that synthesizes the consensus view, key bull/bear arguments, and any notable
-rating changes. Be factual and grounded in the data provided. Do not speculate
-beyond what the data shows."""
+price target data for a stock, write a concise rationale using bullet points
+that synthesizes:
+• The consensus view and current rating distribution
+• Key bull/bear arguments implied by recent rating changes
+• Notable price target movements and implied upside/downside
+Be factual and grounded in the data provided. Do not speculate
+beyond what the data shows. Use 3-5 bullet points."""
 
 
 class AnalystRatingsAgent(BaseAgent):
-    def __init__(self, anthropic_api_key: str, fmp_api_key: str = "", ratings_count: int = 5):
+    def __init__(self, anthropic_api_key: str, fmp_api_key: str = "", ratings_count: int = 5, lang: str = "en"):
         super().__init__(anthropic_api_key)
         self._yf = YFinanceClient()
         self._sa = StockAnalysisClient()
         self._count = ratings_count
+        self._lang = lang
 
     def run(self, ticker_config: dict) -> TickerRatings:
         symbol = ticker_config["symbol"]
@@ -123,7 +127,11 @@ class AnalystRatingsAgent(BaseAgent):
             f"Stock: {name} ({symbol})\n"
             f"Current price: {price_str}{pt_text}\n\n"
             f"Recent analyst actions:\n{ratings_text}\n\n"
-            "Write a 2-3 sentence rationale paragraph synthesizing these ratings."
+            "Write bullet-point analysis synthesizing these ratings."
         )
 
-        return self._simple_completion(SYSTEM, user_msg, max_tokens=300)
+        system = SYSTEM
+        if self._lang == "zh":
+            system += "\n\nIMPORTANT: Write your entire response in Chinese (简体中文)."
+
+        return self._simple_completion(system, user_msg, max_tokens=400)

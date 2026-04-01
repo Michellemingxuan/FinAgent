@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinAgent — 2026-04-01 13:54 UTC</title>
+  <title>FinAgent — 2026-04-01 16:20 UTC</title>
   <style>
     :root {
       --bg: #f8f9fb;
@@ -32,8 +32,43 @@
       --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
       --radius: 8px;
     }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2d3041;
+      --border-light: #252836;
+      --text: #e4e6ed;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #60a5fa;
+      --accent-light: #1e293b;
+      --accent-border: #2563eb;
+      --green: #4ade80;
+      --green-bg: #052e16;
+      --green-border: #166534;
+      --red: #f87171;
+      --red-bg: #450a0a;
+      --red-border: #991b1b;
+      --yellow: #fbbf24;
+      --yellow-bg: #422006;
+      --yellow-border: #92400e;
+      --orange: #fb923c;
+      --orange-bg: #431407;
+      --orange-border: #9a3412;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+    }
+    [data-theme="dark"] .ai-block { background: var(--accent-light); }
+    [data-theme="dark"] .ai-text { color: var(--text-secondary); }
+    [data-theme="dark"] .kpi-grid { background: var(--border); }
+    [data-theme="dark"] .source-wsj { background: #422006; color: #fbbf24; }
+    [data-theme="dark"] .source-yahoofinance { background: #2e1065; color: #c4b5fd; }
+    [data-theme="dark"] canvas.sparkline { filter: brightness(1.2); }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
@@ -61,7 +96,7 @@
     /* ── Section shells ── */
     .section { margin-bottom: 24px; }
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); }
+    .section-title { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; color: var(--text); }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
 
     /* ── Analyst ratings table ── */
@@ -151,7 +186,7 @@
     .geo-headline::before { content: "›"; color: var(--text-muted); }
 
     /* ── Subsection headers ── */
-    .subsec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); padding: 8px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .subsec-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
 
     /* ── Empty/error states ── */
     .empty-state { padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
@@ -212,6 +247,29 @@
     .insider-table tbody tr:last-child td { border-bottom: none; }
     .insider-table tbody tr:hover { background: var(--bg); }
     .insider-summary { padding: 8px 14px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--bg); }
+
+    /* ── Toggle buttons (dark mode + language) ── */
+    .toggle-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text); transition: background 0.15s, border-color 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+    .toggle-btn:hover { background: var(--bg); border-color: var(--accent); }
+
+    /* ── Add-stock modal ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+    .modal-overlay.visible { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 400px; width: 90%; box-shadow: 0 8px 32px rgb(0 0 0 / 0.2); }
+    .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+    .modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+    .modal input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); margin-bottom: 12px; outline: none; font-family: inherit; }
+    .modal input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15); }
+    .modal label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .modal-actions .btn { flex: 1; justify-content: center; }
+    .modal-status { margin-top: 12px; padding: 8px 12px; border-radius: 6px; font-size: 12px; display: none; }
+    .modal-status.success { display: block; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .modal-status.error { display: block; background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .modal-status.running { display: block; background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); }
+
+    [data-theme="dark"] .theme-chip { background: #1e3a5f; color: #93c5fd; border-color: #2563eb; }
+    .header, .card { transition: background 0.3s, border-color 0.3s; }
   </style>
 </head>
 <body>
@@ -221,17 +279,28 @@
   <div class="header-top">
     <div>
       <div class="header-title">FinAgent</div>
-      <div class="header-meta">Updated 2026-04-01 13:54 UTC</div>
+      <div class="header-meta" data-i18n="updated">Updated 2026-04-01 16:20 UTC</div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <button class="toggle-btn" id="langToggle" onclick="toggleLang()" title="Switch language">EN</button>
+      <button class="toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
       
       <select class="archive-select" onchange="if(this.value) window.location.href=this.value">
-        <option value="">History</option>
+        <option value="" data-i18n="history">History</option>
         
         <option value="archive/2026-04-01.html">2026-04-01</option>
         
       </select>
       
+      
+      <button class="btn" id="addStockBtn" onclick="document.getElementById('addStockModal').classList.add('visible')">
+        &#x2b;&nbsp; <span data-i18n="add_stock">Add Stock</span>
+      </button>
+      <a class="btn btn-primary"
+         href="https://github.com/Michellemingxuan/FinAgent/actions/workflows/generate_report.yml"
+         target="_blank" rel="noopener">
+        &#x21bb;&nbsp; <span data-i18n="refresh_report">Refresh Report</span>
+      </a>
       
     </div>
   </div>
@@ -251,9 +320,36 @@
       TSM
     </div>
     
-    <div class="tab" data-tab="macro">Macro &amp; Geo</div>
+    <div class="tab" data-tab="macro" data-i18n="macro_geo">Macro &amp; Geo</div>
   </div>
 </div>
+
+<!-- ═══ ADD STOCK MODAL ═══ -->
+
+<div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)this.classList.remove('visible')">
+  <div class="modal">
+    <h3 data-i18n="add_stock_title">Add a Stock</h3>
+    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report including this stock will be generated immediately.</p>
+    <label for="newTicker" data-i18n="ticker_label">Ticker Symbol</label>
+    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;" />
+    <label for="addStockPat" data-i18n="pat_label">GitHub Personal Access Token</label>
+    <input type="password" id="addStockPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+    <div style="font-size:11px;color:var(--text-muted);margin-top:-8px;margin-bottom:12px;">
+      <span data-i18n="pat_hint">Needs <code>workflow</code> scope.</span>
+      <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent+AddStock" target="_blank" rel="noopener" data-i18n="pat_create">Create one here ↗</a>
+    </div>
+    <label style="display:flex;align-items:center;gap:6px;margin-bottom:14px;cursor:pointer;">
+      <input type="checkbox" id="addStockRemember" style="width:auto;margin:0;padding:0;" />
+      <span style="font-size:12px;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;" data-i18n="remember">Remember in this browser</span>
+    </label>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById('addStockModal').classList.remove('visible')" data-i18n="cancel">Cancel</button>
+      <button class="btn btn-primary" id="addStockSubmit" onclick="submitAddStock()" data-i18n="add_generate">Add &amp; Generate</button>
+    </div>
+    <div class="modal-status" id="addStockStatus"></div>
+  </div>
+</div>
+
 
 <div class="page">
 
@@ -281,7 +377,7 @@
         </div>
         
         <div style="margin-left:auto; text-align:right;">
-          <div class="ticker-price">$175.84</div>
+          <div class="ticker-price">$177.13</div>
           <div class="ticker-price-sub">Current price</div>
         </div>
         
@@ -294,7 +390,7 @@
     <!-- ── SECTION: ANALYST RATINGS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Analyst Ratings</span>
+        <span class="section-title" data-i18n="analyst_ratings">Analyst Ratings</span>
       </div>
       <div class="card">
         
@@ -339,7 +435,7 @@
               <td>
                 
                 <span class="upside-positive">
-                  +84.8%
+                  +83.5%
                 </span>
                 
               </td>
@@ -376,7 +472,7 @@
               <td>
                 
                 <span class="upside-positive">
-                  +70.6%
+                  +69.4%
                 </span>
                 
               </td>
@@ -415,7 +511,7 @@
               <td>
                 
                 <span class="upside-positive">
-                  +83.7%
+                  +82.4%
                 </span>
                 
               </td>
@@ -454,7 +550,7 @@
               <td>
                 
                 <span class="upside-positive">
-                  +63.2%
+                  +62.0%
                 </span>
                 
               </td>
@@ -493,7 +589,7 @@
               <td>
                 
                 <span class="upside-positive">
-                  +84.8%
+                  +83.5%
                 </span>
                 
               </td>
@@ -510,7 +606,7 @@
           <div class="ai-label">AI Consensus Summary</div>
           <div class="ai-text">## NVDA Analyst Consensus Rationale
 
-The analyst community maintains a firmly bullish stance on NVIDIA, with a **strong buy** consensus across 56 analysts and a mean price target of $268.22 — representing approximately **53% upside** from the current price of $175.84. Recent actions reflect notable conviction, with high-profile firms including Rosenblatt (twice), Raymond James, and Truist Securities all reiterating or maintaining Strong Buy ratings in the past week, suggesting no deterioration in sentiment despite any near-term price weakness. However, the wide dispersion between the low target of $140.00 (implying ~20% downside) and the high of $380.00 highlights that a minority bear case exists — likely centered on valuation risk, export restrictions, or potential AI spending deceleration — even as the preponderant view remains that NVIDIA&#39;s dominant positioning in AI accelerated computing warrants a significant premium to current levels.</div>
+The analyst community maintains a firmly bullish stance on NVIDIA, with a **strong buy** consensus across 56 analysts and a mean price target of **$268.22** — implying approximately **51% upside** from the current price of $177.13. Recent actions reflect unwavering conviction, with high-profile firms including Rosenblatt (twice), Raymond James, and Truist Securities all maintaining Strong Buy ratings in the past week, alongside Cantor Fitzgerald reiterating its Buy — notably, **no downgrades or rating reductions are present** in recent activity. While the bull case is clearly dominant, the wide target range of **$140 to $380** signals that a minority of analysts harbor meaningful concerns around valuation, competitive dynamics, or demand sustainability, even as the broad consensus points to significant undervaluation at current levels.</div>
         </div>
       </div>
     </div>
@@ -520,7 +616,7 @@ The analyst community maintains a firmly bullish stance on NVIDIA, with a **stro
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Upcoming Earnings</span>
+        <span class="section-title" data-i18n="upcoming_earnings">Upcoming Earnings</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
@@ -547,7 +643,7 @@ The analyst community maintains a firmly bullish stance on NVIDIA, with a **stro
     <!-- ── SECTION: NEWS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">News</span>
+        <span class="section-title" data-i18n="news">News</span>
       </div>
       <div class="card">
         
@@ -564,22 +660,22 @@ The analyst community maintains a firmly bullish stance on NVIDIA, with a **stro
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Financial Statements</span>
+        <span class="section-title" data-i18n="financials">Financial Statements</span>
       </div>
       <div class="card">
         <!-- KPI strip -->
         <div class="kpi-grid">
           <div class="kpi-cell">
             <div class="kpi-label">Market Cap</div>
-            <div class="kpi-value">$4275.25B</div>
+            <div class="kpi-value">$4305.14B</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">Trailing P/E</div>
-            <div class="kpi-value">35.9×</div>
+            <div class="kpi-value">36.1×</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">Forward P/E</div>
-            <div class="kpi-value">15.8×</div>
+            <div class="kpi-value">15.9×</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">EV / EBITDA</div>
@@ -591,7 +687,7 @@ The analyst community maintains a firmly bullish stance on NVIDIA, with a **stro
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">FCF Yield</div>
-            <div class="kpi-value">2.3%</div>
+            <div class="kpi-value">2.2%</div>
           </div>
           
           <div class="kpi-cell">
@@ -632,7 +728,7 @@ The analyst community maintains a firmly bullish stance on NVIDIA, with a **stro
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">## NVIDIA Corporation (NVDA) — Financial Analysis
 
-NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60.92B in FY2024 to $215.94B in FY2026 — a 3.5x increase in just two years — driven overwhelmingly by surging data center and AI accelerator demand, while operating margins have expanded from 54.1% to 60.4%, underscoring powerful operating leverage at scale. Gross margins dipped modestly from 75.0% to 71.1% in FY2026, likely reflecting a richer mix of complex system-level shipments (e.g., NVL rack-scale products) and supply chain costs, though remaining at exceptional levels for a semiconductor company. Cash generation quality is outstanding, with free cash flow nearly tripling from $27.02B to $96.68B over the period, representing a ~44.8% FCF margin in FY2026, and the balance sheet remains manageable with $11.04B in total debt nearly offset by $10.61B in cash, yielding a near-neutral net debt position despite a debt-to-equity ratio of 7.26x that reflects aggressive share buybacks compressing book equity. The primary notable dynamic is the valuation context: at a $4,275B market cap, the trailing P/E of 35.9x compresses sharply to a forward P/E of 15.8x, implying the market is pricing in continued aggressive earnings growth — any deceleration in AI infrastructure spending, export restriction escalation, or competitive displacement in accelerator silicon would represent meaningful fundamental risk to sustaining current financial trajectory.</div>
+NVIDIA has delivered extraordinary top-line growth, with revenue nearly tripling from $60.9B in FY2024 to $215.9B in FY2026 — a ~254% cumulative increase driven overwhelmingly by surging data center and AI accelerator demand — while sustaining elite profitability, with gross margins holding in the 71–75% range and net margins expanding from 48.8% to 55.6% over the same period. Cash generation quality is exceptional: free cash flow scaled from $27.0B to $96.7B across the three years, representing a FCF conversion rate consistently above 44% of revenue, underscoring that earnings growth is translating directly into hard cash rather than accounting artifacts. The balance sheet is modestly leveraged in absolute terms ($11.0B total debt vs. $10.6B cash in FY2026), though the reported debt-to-equity ratio of 7.26x warrants attention and likely reflects the capital-light, high-return-on-equity structure compressing book equity rather than signaling distress — net debt is effectively near zero. The primary notable flag is valuation: at a $4.3T market cap, the trailing P/E of 36x and EV/EBITDA of 31x price in continued hypergrowth, and while the forward P/E of 15.9x implies consensus expects another sharp earnings jump, any deceleration in AI infrastructure spending or gross margin compression — already visible in the slight 390bps dip from FY2025 to FY2026 — could create material downside to those expectations.</div>
         </div>
       </div>
     </div>
@@ -642,7 +738,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Insider Transactions</span>
+        <span class="section-title" data-i18n="insider_txns">Insider Transactions</span>
       </div>
       <div class="card">
         <table class="insider-table">
@@ -742,7 +838,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Geopolitical Exposure</span>
+        <span class="section-title" data-i18n="geo_exposure">Geopolitical Exposure</span>
       </div>
       <div class="card">
         
@@ -760,7 +856,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
             <span class="ticker-tag">TSM</span>
             
           </div>
-          <div class="geo-analysis">The U.S. has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly impacting NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100 series) to Chinese customers. TSM faces dual pressure as a key manufacturer for NVDA and other U.S. chipmakers, and must comply with U.S. restrictions while managing its exposure to Chinese foundry clients. Further escalation could materially reduce revenue for both companies and fragment the global semiconductor supply chain.</div>
+          <div class="geo-analysis">The U.S. government has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly constraining NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100, H800) in one of its largest markets. TSM faces parallel pressure as U.S. rules restrict its ability to manufacture chips for Chinese customers above certain performance thresholds, threatening a significant revenue segment. Further escalation — including potential foreign direct product rule expansions — remains a persistent tail risk for both companies.</div>
           
         </div>
         
@@ -780,13 +876,13 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company, the world&#39;s dominant advanced-node foundry, is geographically concentrated in Taiwan, making it acutely vulnerable to any military escalation or blockade scenario in the Taiwan Strait. NVDA relies almost exclusively on TSM for its leading-edge GPU production, meaning a supply disruption would be existential for its hardware business in the near term. AAPL&#39;s custom silicon (A-series, M-series chips) is also manufactured at TSM, exposing its flagship product lines to the same concentration risk.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade War &amp; Tariff Escalation</span>
+            <span class="geo-name">US-China Technology Decoupling &amp; Market Access Risk</span>
             <span class="pill risk-pill risk-medium-high">
               Medium-High
             </span>
@@ -798,31 +894,13 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
             <span class="ticker-tag">NVDA</span>
             
           </div>
-          <div class="geo-analysis">Apple generates approximately 20% of its revenue from Greater China and manufactures the majority of its devices through Chinese supply chain partners, making it highly sensitive to tariff escalation or retaliatory trade measures. NVDA also faces demand-side risk in China, which has historically been a significant market for its data center and gaming products. Renewed or expanded tariff regimes could increase production costs for AAPL and reduce addressable market size for both companies.</div>
+          <div class="geo-analysis">China represents a significant revenue market for both AAPL (iPhone sales, services) and NVDA (data center, gaming), and ongoing U.S.-China strategic rivalry raises the risk of retaliatory Chinese regulatory actions, app store restrictions, or informal boycotts targeting American technology brands. Beijing has already signaled willingness to restrict government use of Apple devices and foreign technology platforms, and could broaden such measures in response to U.S. trade or sanctions actions. This bilateral decoupling dynamic creates sustained demand uncertainty and potential market-share erosion for both companies in China.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">China Domestic Technology Nationalism &amp; Market Access</span>
-            <span class="pill risk-pill risk-medium-high">
-              Medium-High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">NVDA</span>
-            
-          </div>
-          <div class="geo-analysis">Beijing has been actively promoting domestic alternatives to U.S. technology products, including encouraging state entities and consumers to replace iPhones with domestic brands like Huawei, and pushing for homegrown AI chip solutions to replace NVDA hardware. Regulatory actions such as app store restrictions, data localization requirements, or outright procurement bans on U.S. tech products could meaningfully erode market share for both AAPL and NVDA in China. This trend is structural and likely to persist regardless of short-term diplomatic developments.</div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Subsidies)</span>
             <span class="pill risk-pill risk-medium">
               Medium
             </span>
@@ -836,7 +914,23 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          <div class="geo-analysis">Government-driven industrial policy in the U.S. (CHIPS and Science Act), EU (European Chips Act), and Japan is incentivizing TSM and others to build fabs outside Taiwan, partially de-risking geographic concentration but introducing execution, cost, and timeline uncertainties. For NVDA and AAPL, diversification of TSM&#39;s manufacturing footprint (Arizona, Japan, Germany fabs) is a long-term positive, though near-term cost inflation at new facilities could pressure margins. Geopolitical alignment requirements attached to subsidy programs may also constrain customers&#39; and suppliers&#39; operational flexibility.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">AI Hardware Sanctions &amp; Entity List Expansion</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">NVDA</span>
+            
+          </div>
+          <div class="geo-analysis">The U.S. Department of Commerce has repeatedly updated its Entity List and introduced new AI chip-specific controls (including licensing requirements for chips above defined performance thresholds) that directly target NVDA&#39;s export markets beyond China, including the Middle East and other regions of concern. NVDA has been forced to develop downgraded chip variants (e.g., A800, H800, now subject to additional controls) to navigate restrictions, creating an ongoing regulatory cat-and-mouse dynamic that introduces product planning and revenue uncertainty. Any further expansion of controlled destinations or performance-threshold reductions would materially reduce NVDA&#39;s total addressable market for its most profitable AI accelerators.</div>
           
         </div>
         
@@ -848,7 +942,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Portfolio Themes</span>
+        <span class="section-title" data-i18n="portfolio_themes">Portfolio Themes</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -864,7 +958,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Supply Chain Map</span>
+        <span class="section-title" data-i18n="supply_chain_map">Supply Chain Map</span>
       </div>
       <div class="card">
         
@@ -1014,7 +1108,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
         </div>
         
         <div style="margin-left:auto; text-align:right;">
-          <div class="ticker-price">$254.70</div>
+          <div class="ticker-price">$254.40</div>
           <div class="ticker-price-sub">Current price</div>
         </div>
         
@@ -1027,7 +1121,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
     <!-- ── SECTION: ANALYST RATINGS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Analyst Ratings</span>
+        <span class="section-title" data-i18n="analyst_ratings">Analyst Ratings</span>
       </div>
       <div class="card">
         
@@ -1072,7 +1166,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
               <td>
                 
                 <span class="upside-positive">
-                  +37.4%
+                  +37.6%
                 </span>
                 
               </td>
@@ -1109,7 +1203,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
               <td>
                 
                 <span class="upside-positive">
-                  +37.4%
+                  +37.6%
                 </span>
                 
               </td>
@@ -1146,7 +1240,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
               <td>
                 
                 <span class="upside-positive">
-                  +23.7%
+                  +23.8%
                 </span>
                 
               </td>
@@ -1185,7 +1279,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
               <td>
                 
                 <span class="upside-positive">
-                  +25.6%
+                  +25.8%
                 </span>
                 
               </td>
@@ -1222,7 +1316,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
               <td>
                 
                 <span class="upside-positive">
-                  +37.4%
+                  +37.6%
                 </span>
                 
               </td>
@@ -1239,7 +1333,7 @@ NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60
           <div class="ai-label">AI Consensus Summary</div>
           <div class="ai-text">## AAPL Analyst Consensus Rationale
 
-The analyst community maintains a broadly constructive stance on Apple, with a consensus **Buy** recommendation (mean score of 1.90/5) across 41 analysts and a mean price target of **$295.31** — implying approximately **16% upside** from the current price of $254.70. Recent actions reflect notable conviction among top-tier firms, with Wedbush reiterating its Buy rating on multiple occasions and both Morgan Stanley and B of A Securities (the latter at Strong Buy) affirming positive views in late March 2026, suggesting no meaningful deterioration in the bull case. However, the wide price target range of **$205–$350** signals meaningful dispersion in analyst views, with the bear case implying roughly 20% downside, likely reflecting macro uncertainty, valuation concerns, or questions around the pace of AI-driven revenue contribution.</div>
+The 41-analyst consensus on Apple remains firmly constructive, with a mean recommendation of 1.90/5.0 (Buy) and a mean price target of $295.31 — implying approximately 16% upside from the current price of $254.40. Recent analyst activity reinforces this bullish tilt, with Wedbush reiterating its Buy rating on multiple occasions in March 2026 and both Morgan Stanley and B of A Securities (the latter at Strong Buy) maintaining positive stances, suggesting no meaningful deterioration in institutional conviction. That said, the wide target range of $205–$350 highlights a notable divergence in views on the stock&#39;s risk/reward profile, with bear-case scenarios potentially reflecting concerns around valuation, AI monetization timelines, or macro headwinds, while the bull case appears anchored in Apple&#39;s ecosystem strength and longer-term growth catalysts.</div>
         </div>
       </div>
     </div>
@@ -1249,7 +1343,7 @@ The analyst community maintains a broadly constructive stance on Apple, with a c
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Upcoming Earnings</span>
+        <span class="section-title" data-i18n="upcoming_earnings">Upcoming Earnings</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
@@ -1276,7 +1370,7 @@ The analyst community maintains a broadly constructive stance on Apple, with a c
     <!-- ── SECTION: NEWS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">News</span>
+        <span class="section-title" data-i18n="news">News</span>
       </div>
       <div class="card">
         
@@ -1293,18 +1387,18 @@ The analyst community maintains a broadly constructive stance on Apple, with a c
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Financial Statements</span>
+        <span class="section-title" data-i18n="financials">Financial Statements</span>
       </div>
       <div class="card">
         <!-- KPI strip -->
         <div class="kpi-grid">
           <div class="kpi-cell">
             <div class="kpi-label">Market Cap</div>
-            <div class="kpi-value">$3743.56B</div>
+            <div class="kpi-value">$3739.23B</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">Trailing P/E</div>
-            <div class="kpi-value">32.3×</div>
+            <div class="kpi-value">32.2×</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">Forward P/E</div>
@@ -1361,7 +1455,7 @@ The analyst community maintains a broadly constructive stance on Apple, with a c
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">## Apple Inc. (AAPL) — Financial Analysis
 
-Apple has demonstrated consistent top-line growth and meaningful margin expansion over the three-year period, with revenue rising from $383.3B in 2023 to $416.2B in 2025 (+8.6% cumulative) while gross margins improved 280 basis points to 46.9% and operating margins expanded from 29.8% to 32.0%, reflecting favorable Services mix shift and disciplined cost management. Balance sheet leverage remains elevated — net debt stands at approximately $62.7B in 2025 (total debt of $98.7B against cash of $35.9B), and a debt-to-equity ratio of 102.6x signals that Apple&#39;s aggressive share buyback program has deeply eroded book equity, though this is a structural feature of its capital return strategy rather than a distress indicator given its robust earnings power. Free cash flow quality is strong and consistent, averaging approximately $102.4B annually across the three years, with FCF conversion relative to net income well above 1.0x, underscoring that reported earnings are solidly backed by cash — notably, the 2025 FCF of $98.8B represents a ~26.3% FCF yield on revenue despite moderating slightly from the 2024 peak of $108.8B. A key highlight is the net margin expansion to 26.9% in 2025 (from 24.0% in 2024), though investors should monitor whether debt reduction keeps pace with cash generation, as total debt has declined modestly from $111.1B to $98.7B over the period while the forward P/E of 27.3x and EV/EBITDA of 24.5x leave limited margin for error if Services growth decelerates.</div>
+Apple has demonstrated consistent revenue growth and meaningful margin expansion over the three-year period, with revenue rising from $383.3B in 2023 to $416.2B in 2025 (+8.6% cumulative) while gross margins improved 280 basis points to 46.9% and operating margins expanded from 29.8% to 32.0%, reflecting favorable Services mix shift and disciplined cost management. Balance sheet leverage remains notable, with total debt of $98.7B against only $35.9B in cash (net debt of ~$62.7B) and a strikingly high debt-to-equity ratio of 102.6x, a structural artifact of Apple&#39;s aggressive, multi-year share buyback program that has driven book equity to near-zero rather than reflecting distressed financial conditions. Free cash flow generation is exceptionally robust and consistent, averaging ~$102B annually across the three years, with the 2025 FCF of $98.8B representing a FCF-to-net-income conversion well above 100%, confirming high earnings quality with minimal accrual distortion. One notable flag is that net margin dipped to 24.0% in 2024 before recovering to 26.9% in 2025, warranting monitoring, while the $3.74T market cap implies a trailing P/E of 32.2x and EV/EBITDA of 24.5x, pricing in sustained premium execution with limited room for operational disappointment.</div>
         </div>
       </div>
     </div>
@@ -1371,7 +1465,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Insider Transactions</span>
+        <span class="section-title" data-i18n="insider_txns">Insider Transactions</span>
       </div>
       <div class="card">
         <table class="insider-table">
@@ -1471,7 +1565,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Geopolitical Exposure</span>
+        <span class="section-title" data-i18n="geo_exposure">Geopolitical Exposure</span>
       </div>
       <div class="card">
         
@@ -1491,13 +1585,13 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company, the world&#39;s dominant advanced-node foundry, is geographically concentrated in Taiwan, making it acutely vulnerable to any military escalation or blockade scenario in the Taiwan Strait. NVDA relies almost exclusively on TSM for its leading-edge GPU production, meaning a supply disruption would be existential for its hardware business in the near term. AAPL&#39;s custom silicon (A-series, M-series chips) is also manufactured at TSM, exposing its flagship product lines to the same concentration risk.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade War &amp; Tariff Escalation</span>
+            <span class="geo-name">US-China Technology Decoupling &amp; Market Access Risk</span>
             <span class="pill risk-pill risk-medium-high">
               Medium-High
             </span>
@@ -1509,31 +1603,13 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
             <span class="ticker-tag">NVDA</span>
             
           </div>
-          <div class="geo-analysis">Apple generates approximately 20% of its revenue from Greater China and manufactures the majority of its devices through Chinese supply chain partners, making it highly sensitive to tariff escalation or retaliatory trade measures. NVDA also faces demand-side risk in China, which has historically been a significant market for its data center and gaming products. Renewed or expanded tariff regimes could increase production costs for AAPL and reduce addressable market size for both companies.</div>
+          <div class="geo-analysis">China represents a significant revenue market for both AAPL (iPhone sales, services) and NVDA (data center, gaming), and ongoing U.S.-China strategic rivalry raises the risk of retaliatory Chinese regulatory actions, app store restrictions, or informal boycotts targeting American technology brands. Beijing has already signaled willingness to restrict government use of Apple devices and foreign technology platforms, and could broaden such measures in response to U.S. trade or sanctions actions. This bilateral decoupling dynamic creates sustained demand uncertainty and potential market-share erosion for both companies in China.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">China Domestic Technology Nationalism &amp; Market Access</span>
-            <span class="pill risk-pill risk-medium-high">
-              Medium-High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">NVDA</span>
-            
-          </div>
-          <div class="geo-analysis">Beijing has been actively promoting domestic alternatives to U.S. technology products, including encouraging state entities and consumers to replace iPhones with domestic brands like Huawei, and pushing for homegrown AI chip solutions to replace NVDA hardware. Regulatory actions such as app store restrictions, data localization requirements, or outright procurement bans on U.S. tech products could meaningfully erode market share for both AAPL and NVDA in China. This trend is structural and likely to persist regardless of short-term diplomatic developments.</div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Subsidies)</span>
             <span class="pill risk-pill risk-medium">
               Medium
             </span>
@@ -1547,23 +1623,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">India Manufacturing Expansion &amp; Geopolitical Pivot</span>
-            <span class="pill risk-pill risk-low">
-              Low
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">AAPL</span>
-            
-          </div>
-          <div class="geo-analysis">Apple has been accelerating its supply chain diversification into India, with partners like Foxconn and Tata ramping iPhone production to reduce dependence on China. Geopolitically, this aligns with U.S.-India strategic partnership deepening under the Indo-Pacific Economic Framework, providing a relatively stable and supportive environment. While execution and infrastructure risks remain, this trend is broadly risk-reducing for AAPL&#39;s long-term supply chain geopolitical exposure.</div>
+          <div class="geo-analysis">Government-driven industrial policy in the U.S. (CHIPS and Science Act), EU (European Chips Act), and Japan is incentivizing TSM and others to build fabs outside Taiwan, partially de-risking geographic concentration but introducing execution, cost, and timeline uncertainties. For NVDA and AAPL, diversification of TSM&#39;s manufacturing footprint (Arizona, Japan, Germany fabs) is a long-term positive, though near-term cost inflation at new facilities could pressure margins. Geopolitical alignment requirements attached to subsidy programs may also constrain customers&#39; and suppliers&#39; operational flexibility.</div>
           
         </div>
         
@@ -1575,7 +1635,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Portfolio Themes</span>
+        <span class="section-title" data-i18n="portfolio_themes">Portfolio Themes</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -1591,7 +1651,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Supply Chain Map</span>
+        <span class="section-title" data-i18n="supply_chain_map">Supply Chain Map</span>
       </div>
       <div class="card">
         
@@ -1741,7 +1801,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
         </div>
         
         <div style="margin-left:auto; text-align:right;">
-          <div class="ticker-price">$345.82</div>
+          <div class="ticker-price">$348.23</div>
           <div class="ticker-price-sub">Current price</div>
         </div>
         
@@ -1754,7 +1814,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
     <!-- ── SECTION: ANALYST RATINGS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Analyst Ratings</span>
+        <span class="section-title" data-i18n="analyst_ratings">Analyst Ratings</span>
       </div>
       <div class="card">
         
@@ -1799,7 +1859,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
               <td>
                 
                 <span class="upside-positive">
-                  +30.1%
+                  +29.2%
                 </span>
                 
               </td>
@@ -1838,7 +1898,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
               <td>
                 
                 <span class="upside-positive">
-                  +30.1%
+                  +29.2%
                 </span>
                 
               </td>
@@ -1877,7 +1937,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
               <td>
                 
                 <span class="upside-positive">
-                  +7.0%
+                  +6.3%
                 </span>
                 
               </td>
@@ -1916,7 +1976,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
               <td>
                 
                 <span class="upside-positive">
-                  +18.6%
+                  +17.7%
                 </span>
                 
               </td>
@@ -1955,7 +2015,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
               <td>
                 
                 <span class="upside-negative">
-                  -4.6%
+                  -5.2%
                 </span>
                 
               </td>
@@ -1972,7 +2032,7 @@ Apple has demonstrated consistent top-line growth and meaningful margin expansio
           <div class="ai-label">AI Consensus Summary</div>
           <div class="ai-text">## TSM Analyst Consensus Rationale
 
-Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly constructive, with the 18-analyst consensus price target of $430.65 implying approximately 24.5% upside from the current price of $345.82, and the bull case extending as high as $520. Recent coverage is dominated by bullish ratings — including a fresh **Strong Buy** initiation from DA Davidson in February 2026 and maintained Strong Buy and Buy ratings from Needham, Barclays, and Bernstein — reflecting confidence in TSMC&#39;s leading-edge process technology and sustained AI-driven semiconductor demand. The lone cautionary note comes from TD Cowen&#39;s maintained **Hold**, and the relatively tight low-end price target of $351 suggests some analysts see limited near-term upside, likely reflecting concerns around geopolitical risk tied to Taiwan and potential cyclical demand variability.</div>
+Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly constructive, with the majority of recent coverage carrying Buy or Strong Buy ratings — including a fresh initiation from DA Davidson at Strong Buy in February 2026 — and a consensus mean price target of ~$431, implying approximately **24% upside** from the current price of $348.23. The wide target range ($351–$520) reflects meaningful divergence in views, likely centered on macro and geopolitical risk exposure, AI/advanced node demand trajectory, and capital expenditure intensity, with TD Cowen&#39;s Hold stance representing the more cautious end of the spectrum. Bulls appear anchored to TSMC&#39;s near-unassailable position in leading-edge semiconductor fabrication and robust AI-driven demand, while bears or more cautious observers may be weighing concentration risk, geopolitical tensions surrounding Taiwan, and potential cyclical headwinds.</div>
         </div>
       </div>
     </div>
@@ -1982,7 +2042,7 @@ Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly construc
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Upcoming Earnings</span>
+        <span class="section-title" data-i18n="upcoming_earnings">Upcoming Earnings</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
@@ -2009,7 +2069,7 @@ Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly construc
     <!-- ── SECTION: NEWS ── -->
     <div class="section">
       <div class="section-header">
-        <span class="section-title">News</span>
+        <span class="section-title" data-i18n="news">News</span>
       </div>
       <div class="card">
         
@@ -2026,22 +2086,22 @@ Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly construc
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Financial Statements</span>
+        <span class="section-title" data-i18n="financials">Financial Statements</span>
       </div>
       <div class="card">
         <!-- KPI strip -->
         <div class="kpi-grid">
           <div class="kpi-cell">
             <div class="kpi-label">Market Cap</div>
-            <div class="kpi-value">$1792.20B</div>
+            <div class="kpi-value">$1806.41B</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">Trailing P/E</div>
-            <div class="kpi-value">33.4×</div>
+            <div class="kpi-value">33.7×</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">Forward P/E</div>
-            <div class="kpi-value">19.3×</div>
+            <div class="kpi-value">19.4×</div>
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">EV / EBITDA</div>
@@ -2053,7 +2113,7 @@ Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly construc
           </div>
           <div class="kpi-cell">
             <div class="kpi-label">FCF Yield</div>
-            <div class="kpi-value">55.4%</div>
+            <div class="kpi-value">54.9%</div>
           </div>
           
           <div class="kpi-cell">
@@ -2092,9 +2152,9 @@ Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly construc
 
         <div class="ai-block">
           <div class="ai-label">AI Analysis</div>
-          <div class="ai-text">## TSMC Financial Analysis (2023–2025, figures in TWD billions)
+          <div class="ai-text">## TSMC (TSM) — Financial Analysis
 
-TSMC has delivered exceptional top-line growth, with revenue expanding 76% over three years from TWD 2,161.74B to TWD 3,809.05B, while margins have expanded meaningfully across all metrics — gross margin improved from 54.4% to 59.9%, operating margin from 42.6% to 50.8%, and net margin from 39.4% to 45.1% — reflecting strong pricing power and operating leverage driven by surging AI and advanced-node demand. Balance sheet health is robust: net cash is strongly positive at approximately TWD 1,703.28B (cash of TWD 2,767.86B against total debt of TWD 1,064.58B), and cash has nearly doubled over the period, while the debt-to-equity ratio of 19.6 warrants monitoring but is characteristic of a capital-intensive semiconductor foundry funding aggressive capacity expansion. Free cash flow quality is a notable highlight, with FCF surging from TWD 286.57B in 2023 to TWD 992.38B in 2025 — a 246% increase — as heavy capex cycles begin to moderate relative to revenue growth, signaling improving capital efficiency. A modest red flag is the wide gap between trailing P/E (33.4x) and forward P/E (19.3x), which implies the market is pricing in continued sharp earnings growth; the unusually low EV/EBITDA of 2.6x likely reflects currency or definitional inconsistencies in the inputs and warrants independent verification before use in valuation conclusions.</div>
+TSMC has delivered exceptional top-line growth, with revenue expanding 76% over three years from TWD 2,161.74B (2023) to TWD 3,809.05B (2025), while simultaneously expanding all margin lines — gross margin improved 550 basis points to 59.9%, operating margin climbed to 50.8%, and net margin reached 45.1% — reflecting robust pricing power and a favorable mix shift toward advanced nodes (3nm/5nm). Balance sheet health is notably strong, with a net cash position of approximately TWD 1,703.28B (cash of TWD 2,767.86B against total debt of TWD 1,064.58B), though the reported debt-to-equity ratio of 19.6x warrants attention and likely reflects aggressive capital lease or construction financing tied to global fab expansion (Arizona, Japan). Cash generation quality has improved markedly, with free cash flow surging from TWD 286.57B in 2023 to TWD 992.38B in 2025 — a 246% increase — as heavy capex investment cycles begin to normalize relative to rapidly growing operating cash flows. A notable highlight is the divergence between the trailing P/E of 33.7x and the forward P/E of 19.4x, implying consensus expects continued strong earnings growth, while the unusually low EV/EBITDA of 2.6x may reflect currency denomination differences or definitional nuances that warrant independent verification before use in cross-company comparisons.</div>
         </div>
       </div>
     </div>
@@ -2108,7 +2168,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Geopolitical Exposure</span>
+        <span class="section-title" data-i18n="geo_exposure">Geopolitical Exposure</span>
       </div>
       <div class="card">
         
@@ -2126,7 +2186,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
             <span class="ticker-tag">TSM</span>
             
           </div>
-          <div class="geo-analysis">The U.S. has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly impacting NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100 series) to Chinese customers. TSM faces dual pressure as a key manufacturer for NVDA and other U.S. chipmakers, and must comply with U.S. restrictions while managing its exposure to Chinese foundry clients. Further escalation could materially reduce revenue for both companies and fragment the global semiconductor supply chain.</div>
+          <div class="geo-analysis">The U.S. government has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly constraining NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100, H800) in one of its largest markets. TSM faces parallel pressure as U.S. rules restrict its ability to manufacture chips for Chinese customers above certain performance thresholds, threatening a significant revenue segment. Further escalation — including potential foreign direct product rule expansions — remains a persistent tail risk for both companies.</div>
           
         </div>
         
@@ -2146,13 +2206,13 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company, the world&#39;s dominant advanced-node foundry, is geographically concentrated in Taiwan, making it acutely vulnerable to any military escalation or blockade scenario in the Taiwan Strait. NVDA relies almost exclusively on TSM for its leading-edge GPU production, meaning a supply disruption would be existential for its hardware business in the near term. AAPL&#39;s custom silicon (A-series, M-series chips) is also manufactured at TSM, exposing its flagship product lines to the same concentration risk.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Subsidies)</span>
             <span class="pill risk-pill risk-medium">
               Medium
             </span>
@@ -2166,7 +2226,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          <div class="geo-analysis">Government-driven industrial policy in the U.S. (CHIPS and Science Act), EU (European Chips Act), and Japan is incentivizing TSM and others to build fabs outside Taiwan, partially de-risking geographic concentration but introducing execution, cost, and timeline uncertainties. For NVDA and AAPL, diversification of TSM&#39;s manufacturing footprint (Arizona, Japan, Germany fabs) is a long-term positive, though near-term cost inflation at new facilities could pressure margins. Geopolitical alignment requirements attached to subsidy programs may also constrain customers&#39; and suppliers&#39; operational flexibility.</div>
           
         </div>
         
@@ -2178,7 +2238,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Portfolio Themes</span>
+        <span class="section-title" data-i18n="portfolio_themes">Portfolio Themes</span>
       </div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -2196,7 +2256,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     
     <div class="section">
       <div class="section-header">
-        <span class="section-title">Supply Chain Map</span>
+        <span class="section-title" data-i18n="supply_chain_map">Supply Chain Map</span>
       </div>
       <div class="card">
         
@@ -2340,7 +2400,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     <!-- Peer comparison table -->
     
     <div class="section">
-      <div class="section-header"><span class="section-title">Peer Comparison</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="peer_comparison">Peer Comparison</span></div>
       <div class="card">
         <table class="peer-table">
           <thead>
@@ -2362,10 +2422,10 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
             
             <tr>
               <td>NVDA</td>
-              <td>$175.90</td>
-              <td>$4275.25B</td>
-              <td>35.9×</td>
-              <td>15.8×</td>
+              <td>$177.13</td>
+              <td>$4305.14B</td>
+              <td>36.1×</td>
+              <td>15.9×</td>
               <td>31.4×</td>
               <td>71.1%</td>
               <td>
@@ -2376,7 +2436,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
                 
               </td>
               <td>7.25</td>
-              <td>2.3%</td>
+              <td>2.2%</td>
               <td>
                 
                 <span class="short-low">
@@ -2388,9 +2448,9 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
             
             <tr>
               <td>AAPL</td>
-              <td>$254.70</td>
-              <td>$3743.56B</td>
-              <td>32.3×</td>
+              <td>$254.41</td>
+              <td>$3739.23B</td>
+              <td>32.2×</td>
               <td>27.3×</td>
               <td>24.5×</td>
               <td>46.9%</td>
@@ -2414,10 +2474,10 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
             
             <tr>
               <td>TSM</td>
-              <td>$345.55</td>
-              <td>$1792.20B</td>
-              <td>33.4×</td>
-              <td>19.3×</td>
+              <td>$348.29</td>
+              <td>$1806.41B</td>
+              <td>33.7×</td>
+              <td>19.4×</td>
               <td>2.6×</td>
               <td>59.9%</td>
               <td>
@@ -2428,7 +2488,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
                 
               </td>
               <td>19.57</td>
-              <td>55.4%</td>
+              <td>54.9%</td>
               <td>
                 
                 <span class="short-low">
@@ -2453,7 +2513,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     <!-- Portfolio Themes -->
     
     <div class="section">
-      <div class="section-header"><span class="section-title">Themes</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="themes">Themes</span></div>
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;flex-direction:column;gap:12px;">
           
@@ -2493,7 +2553,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     <!-- Supply Chain Network (all tickers) -->
     
     <div class="section">
-      <div class="section-header"><span class="section-title">Supply Chain Network</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="supply_chain_network">Supply Chain Network</span></div>
       <div class="card">
         <div class="sc-diagram-wrap">
           <svg id="sc-network-svg" class="sc-svg" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -2638,12 +2698,12 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
     <!-- Geopolitical themes — full list -->
     
     <div class="section">
-      <div class="section-header"><span class="section-title">Geopolitical Risk Themes</span></div>
+      <div class="section-header"><span class="section-title" data-i18n="geo_risk_themes">Geopolitical Risk Themes</span></div>
       
       <div class="card" style="margin-bottom:12px;">
         <div class="ai-block" style="border-top:none;">
           <div class="ai-label">Portfolio-Level Summary</div>
-          <div class="ai-text">This portfolio carries elevated geopolitical risk, primarily concentrated around U.S.-China tensions and Taiwan Strait stability, with all three tickers—NVDA, AAPL, and TSM—materially exposed to one or more of these structural fault lines. The semiconductor supply chain&#39;s geographic concentration in Taiwan represents the single highest-severity tail risk, while ongoing export controls and China market-access restrictions create persistent medium-to-high headwinds for near-term revenue. Investors should monitor U.S.-China diplomatic developments, Taiwan Strait military activity, and any expansion of U.S. Bureau of Industry and Security (BIS) entity list actions as key leading indicators for this portfolio&#39;s geopolitical risk profile. Note: this analysis is based on established structural geopolitical dynamics as no current news headlines were provided.</div>
+          <div class="ai-text">This three-stock portfolio — NVDA, AAPL, and TSM — carries elevated aggregate geopolitical risk, primarily stemming from U.S.-China strategic competition and the geographic concentration of critical semiconductor manufacturing in Taiwan. NVDA faces the most direct near-term regulatory exposure through export controls on AI chips, while TSM bears the highest tail risk from any Taiwan Strait military escalation that could disrupt global semiconductor supply chains catastrophically. AAPL&#39;s risk profile is comparatively more diffuse but meaningful, given its deep China revenue dependence and reliance on TSM for its most strategic silicon; the portfolio as a whole should be monitored closely for developments in U.S.-China trade policy, Taiwan security dynamics, and evolving semiconductor export control frameworks.</div>
         </div>
       </div>
       
@@ -2659,7 +2719,7 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
           <div class="geo-tickers">
             <span class="ticker-tag">NVDA</span><span class="ticker-tag">TSM</span>
           </div>
-          <div class="geo-analysis">The U.S. has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly impacting NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100 series) to Chinese customers. TSM faces dual pressure as a key manufacturer for NVDA and other U.S. chipmakers, and must comply with U.S. restrictions while managing its exposure to Chinese foundry clients. Further escalation could materially reduce revenue for both companies and fragment the global semiconductor supply chain.</div>
+          <div class="geo-analysis">The U.S. government has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly constraining NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100, H800) in one of its largest markets. TSM faces parallel pressure as U.S. rules restrict its ability to manufacture chips for Chinese customers above certain performance thresholds, threatening a significant revenue segment. Further escalation — including potential foreign direct product rule expansions — remains a persistent tail risk for both companies.</div>
           
         </div>
         
@@ -2673,13 +2733,13 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
           <div class="geo-tickers">
             <span class="ticker-tag">TSM</span><span class="ticker-tag">NVDA</span><span class="ticker-tag">AAPL</span>
           </div>
-          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company, the world&#39;s dominant advanced-node foundry, is geographically concentrated in Taiwan, making it acutely vulnerable to any military escalation or blockade scenario in the Taiwan Strait. NVDA relies almost exclusively on TSM for its leading-edge GPU production, meaning a supply disruption would be existential for its hardware business in the near term. AAPL&#39;s custom silicon (A-series, M-series chips) is also manufactured at TSM, exposing its flagship product lines to the same concentration risk.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade War &amp; Tariff Escalation</span>
+            <span class="geo-name">US-China Technology Decoupling &amp; Market Access Risk</span>
             <span class="pill risk-pill risk-medium-high">
               Medium-High
             </span>
@@ -2687,27 +2747,13 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
           <div class="geo-tickers">
             <span class="ticker-tag">AAPL</span><span class="ticker-tag">NVDA</span>
           </div>
-          <div class="geo-analysis">Apple generates approximately 20% of its revenue from Greater China and manufactures the majority of its devices through Chinese supply chain partners, making it highly sensitive to tariff escalation or retaliatory trade measures. NVDA also faces demand-side risk in China, which has historically been a significant market for its data center and gaming products. Renewed or expanded tariff regimes could increase production costs for AAPL and reduce addressable market size for both companies.</div>
+          <div class="geo-analysis">China represents a significant revenue market for both AAPL (iPhone sales, services) and NVDA (data center, gaming), and ongoing U.S.-China strategic rivalry raises the risk of retaliatory Chinese regulatory actions, app store restrictions, or informal boycotts targeting American technology brands. Beijing has already signaled willingness to restrict government use of Apple devices and foreign technology platforms, and could broaden such measures in response to U.S. trade or sanctions actions. This bilateral decoupling dynamic creates sustained demand uncertainty and potential market-share erosion for both companies in China.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">China Domestic Technology Nationalism &amp; Market Access</span>
-            <span class="pill risk-pill risk-medium-high">
-              Medium-High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            <span class="ticker-tag">AAPL</span><span class="ticker-tag">NVDA</span>
-          </div>
-          <div class="geo-analysis">Beijing has been actively promoting domestic alternatives to U.S. technology products, including encouraging state entities and consumers to replace iPhones with domestic brands like Huawei, and pushing for homegrown AI chip solutions to replace NVDA hardware. Regulatory actions such as app store restrictions, data localization requirements, or outright procurement bans on U.S. tech products could meaningfully erode market share for both AAPL and NVDA in China. This trend is structural and likely to persist regardless of short-term diplomatic developments.</div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Subsidies)</span>
             <span class="pill risk-pill risk-medium">
               Medium
             </span>
@@ -2715,21 +2761,21 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
           <div class="geo-tickers">
             <span class="ticker-tag">TSM</span><span class="ticker-tag">NVDA</span><span class="ticker-tag">AAPL</span>
           </div>
-          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          <div class="geo-analysis">Government-driven industrial policy in the U.S. (CHIPS and Science Act), EU (European Chips Act), and Japan is incentivizing TSM and others to build fabs outside Taiwan, partially de-risking geographic concentration but introducing execution, cost, and timeline uncertainties. For NVDA and AAPL, diversification of TSM&#39;s manufacturing footprint (Arizona, Japan, Germany fabs) is a long-term positive, though near-term cost inflation at new facilities could pressure margins. Geopolitical alignment requirements attached to subsidy programs may also constrain customers&#39; and suppliers&#39; operational flexibility.</div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">India Manufacturing Expansion &amp; Geopolitical Pivot</span>
-            <span class="pill risk-pill risk-low">
-              Low
+            <span class="geo-name">AI Hardware Sanctions &amp; Entity List Expansion</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
             </span>
           </div>
           <div class="geo-tickers">
-            <span class="ticker-tag">AAPL</span>
+            <span class="ticker-tag">NVDA</span>
           </div>
-          <div class="geo-analysis">Apple has been accelerating its supply chain diversification into India, with partners like Foxconn and Tata ramping iPhone production to reduce dependence on China. Geopolitically, this aligns with U.S.-India strategic partnership deepening under the Indo-Pacific Economic Framework, providing a relatively stable and supportive environment. While execution and infrastructure risks remain, this trend is broadly risk-reducing for AAPL&#39;s long-term supply chain geopolitical exposure.</div>
+          <div class="geo-analysis">The U.S. Department of Commerce has repeatedly updated its Entity List and introduced new AI chip-specific controls (including licensing requirements for chips above defined performance thresholds) that directly target NVDA&#39;s export markets beyond China, including the Middle East and other regions of concern. NVDA has been forced to develop downgraded chip variants (e.g., A800, H800, now subject to additional controls) to navigate restrictions, creating an ongoing regulatory cat-and-mouse dynamic that introduces product planning and revenue uncertainty. Any further expansion of controlled destinations or performance-threshold reductions would materially reduce NVDA&#39;s total addressable market for its most profitable AI accelerators.</div>
           
         </div>
         
@@ -2767,11 +2813,11 @@ TSMC has delivered exceptional top-line growth, with revenue expanding 76% over 
 <script>
 const priceHistory = {
   
-  "AAPL": [270.75665283203125, 267.0101623535156, 262.1147155761719, 260.08660888671875, 258.7978515625, 259.1275329589844, 260.0067138671875, 260.8059387207031, 259.71697998046875, 257.9685974121094, 255.29112243652344, 246.46937561035156, 247.41848754882812, 248.1178436279297, 247.80812072753906, 255.17123413085938, 258.0285339355469, 256.2002868652344, 258.0385437011719, 259.2374267578125, 269.7575988769531, 269.22808837890625, 276.23150634765625, 275.6520690917969, 277.8599853515625, 274.6199951171875, 273.67999267578125, 275.5, 261.7300109863281, 255.77999877929688, 263.8800048828125, 264.3500061035156, 260.5799865722656, 264.5799865722656, 266.17999267578125, 272.1400146484375, 274.2300109863281, 272.95001220703125, 264.17999267578125, 264.7200012207031, 263.75, 262.5199890136719, 260.2900085449219, 257.4599914550781, 259.8800048828125, 260.8299865722656, 260.80999755859375, 255.75999450683594, 250.1199951171875, 252.82000732421875, 254.22999572753906, 249.94000244140625, 248.9600067138672, 247.99000549316406, 251.49000549316406, 251.63999938964844, 252.6199951171875, 252.88999938964844, 248.8000030517578, 246.6300048828125, 253.7899932861328, 254.74000549316406],
+  "AAPL": [270.75665283203125, 267.0101623535156, 262.1147155761719, 260.08660888671875, 258.7978515625, 259.1275329589844, 260.0067138671875, 260.8059387207031, 259.71697998046875, 257.9685974121094, 255.29112243652344, 246.46937561035156, 247.41848754882812, 248.1178436279297, 247.80812072753906, 255.17123413085938, 258.0285339355469, 256.2002868652344, 258.0385437011719, 259.2374267578125, 269.7575988769531, 269.22808837890625, 276.23150634765625, 275.6520690917969, 277.8599853515625, 274.6199951171875, 273.67999267578125, 275.5, 261.7300109863281, 255.77999877929688, 263.8800048828125, 264.3500061035156, 260.5799865722656, 264.5799865722656, 266.17999267578125, 272.1400146484375, 274.2300109863281, 272.95001220703125, 264.17999267578125, 264.7200012207031, 263.75, 262.5199890136719, 260.2900085449219, 257.4599914550781, 259.8800048828125, 260.8299865722656, 260.80999755859375, 255.75999450683594, 250.1199951171875, 252.82000732421875, 254.22999572753906, 249.94000244140625, 248.9600067138672, 247.99000549316406, 251.49000549316406, 251.63999938964844, 252.6199951171875, 252.88999938964844, 248.8000030517578, 246.6300048828125, 253.7899932861328, 254.3699951171875],
   
-  "NVDA": [188.83978271484375, 188.1098175048828, 187.22987365722656, 189.09976196289062, 185.0299835205078, 184.84999084472656, 184.92999267578125, 185.79994201660156, 183.1300811767578, 187.03988647460938, 186.21990966796875, 178.06036376953125, 183.31008911132812, 184.82998657226562, 187.6598358154297, 186.4599151611328, 188.50979614257812, 191.5096435546875, 192.49957275390625, 191.11965942382812, 185.59996032714844, 180.33023071289062, 174.18057250976562, 171.87069702148438, 185.39996337890625, 190.0297088623047, 188.52978515625, 190.0397186279297, 186.9298858642578, 182.80010986328125, 184.95999145507812, 187.96981811523438, 187.88983154296875, 189.8097381591797, 191.53964233398438, 192.83956909179688, 195.54940795898438, 184.87998962402344, 177.180419921875, 182.47012329101562, 180.04025268554688, 183.03009033203125, 183.330078125, 177.8103790283203, 182.64010620117188, 184.760009765625, 186.02999877929688, 183.13999938964844, 180.25, 183.22000122070312, 181.92999267578125, 180.39999389648438, 178.55999755859375, 172.6999969482422, 175.63999938964844, 175.1999969482422, 178.67999267578125, 171.24000549316406, 167.52000427246094, 165.1699981689453, 174.39999389648438, 175.80999755859375],
+  "NVDA": [188.83978271484375, 188.1098175048828, 187.22987365722656, 189.09976196289062, 185.0299835205078, 184.84999084472656, 184.92999267578125, 185.79994201660156, 183.1300811767578, 187.03988647460938, 186.21990966796875, 178.06036376953125, 183.31008911132812, 184.82998657226562, 187.6598358154297, 186.4599151611328, 188.50979614257812, 191.5096435546875, 192.49957275390625, 191.11965942382812, 185.59996032714844, 180.33023071289062, 174.18057250976562, 171.87069702148438, 185.39996337890625, 190.0297088623047, 188.52978515625, 190.0397186279297, 186.9298858642578, 182.80010986328125, 184.95999145507812, 187.96981811523438, 187.88983154296875, 189.8097381591797, 191.53964233398438, 192.83956909179688, 195.54940795898438, 184.87998962402344, 177.180419921875, 182.47012329101562, 180.04025268554688, 183.03009033203125, 183.330078125, 177.8103790283203, 182.64010620117188, 184.760009765625, 186.02999877929688, 183.13999938964844, 180.25, 183.22000122070312, 181.92999267578125, 180.39999389648438, 178.55999755859375, 172.6999969482422, 175.63999938964844, 175.1999969482422, 178.67999267578125, 171.24000549316406, 167.52000427246094, 165.1699981689453, 174.39999389648438, 177.09500122070312],
   
-  "TSM": [318.7119140625, 321.3445129394531, 326.50994873046875, 317.7845458984375, 317.1164245605469, 322.72064208984375, 330.8377685546875, 330.2793273925781, 326.19085693359375, 340.6800537109375, 341.4378967285156, 326.24072265625, 325.2036437988281, 326.45013427734375, 333.9290466308594, 331.7751159667969, 337.3893127441406, 341.3381652832031, 338.59588623046875, 329.63116455078125, 340.40081787109375, 334.80657958984375, 324.82470703125, 329.8006896972656, 347.8697814941406, 354.4113464355469, 360.89306640625, 373.0388488769531, 367.065673828125, 365.33056640625, 363.1766662597656, 361.2420959472656, 359.3773498535156, 369.49884033203125, 369.000244140625, 384.66607666015625, 386.6405334472656, 375.751220703125, 373.5274658203125, 368.07281494140625, 352.13775634765625, 356.4356384277344, 352.8656921386719, 337.9377746582031, 347.72021484375, 346.1147155761719, 353.563720703125, 335.7638854980469, 337.359375, 339.2740173339844, 345.9800109863281, 339.57000732421875, 338.7900085449219, 329.239990234375, 338.45001220703125, 343.25, 347.75, 326.1099853515625, 326.739990234375, 316.5, 337.95001220703125, 345.29998779296875],
+  "TSM": [318.7119140625, 321.3445129394531, 326.50994873046875, 317.7845458984375, 317.1164245605469, 322.72064208984375, 330.8377685546875, 330.2793273925781, 326.19085693359375, 340.6800537109375, 341.4378967285156, 326.24072265625, 325.2036437988281, 326.45013427734375, 333.9290466308594, 331.7751159667969, 337.3893127441406, 341.3381652832031, 338.59588623046875, 329.63116455078125, 340.40081787109375, 334.80657958984375, 324.82470703125, 329.8006896972656, 347.8697814941406, 354.4113464355469, 360.89306640625, 373.0388488769531, 367.065673828125, 365.33056640625, 363.1766662597656, 361.2420959472656, 359.3773498535156, 369.49884033203125, 369.000244140625, 384.66607666015625, 386.6405334472656, 375.751220703125, 373.5274658203125, 368.07281494140625, 352.13775634765625, 356.4356384277344, 352.8656921386719, 337.9377746582031, 347.72021484375, 346.1147155761719, 353.563720703125, 335.7638854980469, 337.359375, 339.2740173339844, 345.9800109863281, 339.57000732421875, 338.7900085449219, 329.239990234375, 338.45001220703125, 343.25, 347.75, 326.1099853515625, 326.739990234375, 316.5, 337.95001220703125, 348.3699951171875],
   
 };
 
@@ -2821,6 +2867,192 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
 });
+</script>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- DARK MODE + LANGUAGE + ADD STOCK                               -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<script>
+// ── Dark mode ──────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('finagent_theme', isDark ? 'light' : 'dark');
+}
+(function initTheme() {
+  const saved = localStorage.getItem('finagent_theme');
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = '☀️';
+  }
+})();
+
+// ── i18n ───────────────────────────────────────────────────────────
+const I18N = {
+  zh: {
+    updated: '更新于 2026-04-01 16:20 UTC',
+    history: '历史记录',
+    add_stock: '添加股票',
+    refresh_report: '刷新报告',
+    macro_geo: '宏观与地缘',
+    analyst_ratings: '分析师评级',
+    upcoming_earnings: '即将发布的财报',
+    news: '新闻',
+    financials: '财务报表',
+    insider_txns: '内部交易',
+    geo_exposure: '地缘风险敞口',
+    portfolio_themes: '投资主题',
+    supply_chain_map: '供应链图谱',
+    market_narrative: '市场叙事',
+    peer_comparison: '同行比较',
+    macro_sector_news: '宏观与行业新闻',
+    tickers_to_watch: '值得关注的股票',
+    themes: '主题',
+    supply_chain_network: '供应链网络',
+    geo_risk_themes: '地缘政治风险主题',
+    add_stock_title: '添加股票',
+    add_stock_desc: '输入股票代码，系统将立即生成包含该股票的新报告。',
+    ticker_label: '股票代码',
+    pat_label: 'GitHub 个人访问令牌',
+    pat_hint: '需要 <code>workflow</code> 权限。',
+    pat_create: '在这里创建 ↗',
+    remember: '在此浏览器中记住',
+    cancel: '取消',
+    add_generate: '添加并生成',
+  },
+  en: {
+    updated: 'Updated 2026-04-01 16:20 UTC',
+    history: 'History',
+    add_stock: 'Add Stock',
+    refresh_report: 'Refresh Report',
+    macro_geo: 'Macro & Geo',
+    analyst_ratings: 'Analyst Ratings',
+    upcoming_earnings: 'Upcoming Earnings',
+    news: 'News',
+    financials: 'Financial Statements',
+    insider_txns: 'Insider Transactions',
+    geo_exposure: 'Geopolitical Exposure',
+    portfolio_themes: 'Portfolio Themes',
+    supply_chain_map: 'Supply Chain Map',
+    market_narrative: 'Market Narrative',
+    peer_comparison: 'Peer Comparison',
+    macro_sector_news: 'Macro & Sector News',
+    tickers_to_watch: 'Tickers to Watch',
+    themes: 'Themes',
+    supply_chain_network: 'Supply Chain Network',
+    geo_risk_themes: 'Geopolitical Risk Themes',
+    add_stock_title: 'Add a Stock',
+    add_stock_desc: 'Enter the ticker symbol. A new report including this stock will be generated immediately.',
+    ticker_label: 'Ticker Symbol',
+    pat_label: 'GitHub Personal Access Token',
+    pat_hint: 'Needs <code>workflow</code> scope.',
+    pat_create: 'Create one here ↗',
+    remember: 'Remember in this browser',
+    cancel: 'Cancel',
+    add_generate: 'Add & Generate',
+  }
+};
+
+let currentLang = localStorage.getItem('finagent_lang') || 'en';
+
+function applyLang(lang) {
+  const strings = I18N[lang];
+  if (!strings) return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (strings[key] !== undefined) el.innerHTML = strings[key];
+  });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'EN' : '中文';
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'zh' : 'en';
+  localStorage.setItem('finagent_lang', currentLang);
+  applyLang(currentLang);
+}
+
+(function initLang() {
+  if (currentLang !== 'en') applyLang(currentLang);
+})();
+
+// ── Add Stock ─────────────────────────────────────────────────────
+const ADD_STOCK_PAT_KEY = 'finagent_add_stock_pat';
+(function initAddStock() {
+  const saved = localStorage.getItem(ADD_STOCK_PAT_KEY);
+  if (saved) {
+    const el = document.getElementById('addStockPat');
+    if (el) el.value = saved;
+    const cb = document.getElementById('addStockRemember');
+    if (cb) cb.checked = true;
+  }
+})();
+
+
+async function submitAddStock() {
+  const REPO = "Michellemingxuan/FinAgent";
+  const WORKFLOW = "generate_report.yml";
+  const ticker = (document.getElementById('newTicker').value || '').trim().toUpperCase();
+  const pat = (document.getElementById('addStockPat').value || '').trim();
+  const remember = document.getElementById('addStockRemember').checked;
+  const statusEl = document.getElementById('addStockStatus');
+  const btn = document.getElementById('addStockSubmit');
+
+  if (!ticker) { showAddStatus('error', currentLang === 'zh' ? '请输入股票代码。' : 'Please enter a ticker symbol.'); return; }
+  if (!pat) { showAddStatus('error', currentLang === 'zh' ? '请输入 GitHub PAT。' : 'Please enter your GitHub PAT.'); return; }
+
+  if (remember) localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
+  else localStorage.removeItem(ADD_STOCK_PAT_KEY);
+
+  btn.disabled = true;
+  btn.textContent = currentLang === 'zh' ? '触发中…' : 'Triggering…';
+  showAddStatus('running', currentLang === 'zh' ? '正在发送请求到 GitHub Actions…' : 'Sending request to GitHub Actions…');
+
+  try {
+    const resp = await fetch(
+      `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main', inputs: { section: 'all', new_ticker: ticker } }),
+      }
+    );
+
+    if (resp.status === 204) {
+      showAddStatus('success', currentLang === 'zh'
+        ? `✓ 已触发! ${ticker} 的报告将在约 3 分钟后生成。届时请刷新页面。`
+        : `✓ Triggered! Report for ${ticker} will be ready in ~3 minutes. Refresh the page afterwards.`);
+      btn.textContent = '✓';
+      setTimeout(() => { btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate'; }, 30000);
+    } else if (resp.status === 401) {
+      showAddStatus('error', currentLang === 'zh' ? 'Token 无效或缺少 workflow 权限。' : 'Invalid token or missing workflow scope.');
+      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    } else {
+      const body = await resp.text();
+      showAddStatus('error', `GitHub ${resp.status}: ${body.slice(0, 120)}`);
+      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    }
+  } catch (err) {
+    showAddStatus('error', `Network error: ${err.message}`);
+    btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+  }
+}
+
+
+function showAddStatus(type, msg) {
+  const el = document.getElementById('addStockStatus');
+  if (!el) return;
+  el.className = `modal-status ${type}`;
+  el.textContent = msg;
+}
 </script>
 
 </body>
