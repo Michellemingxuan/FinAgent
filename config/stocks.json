@@ -1,0 +1,329 @@
+{
+  "tickers": [
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corporation",
+      "sector": "Technology",
+      "market": "US Semiconductors",
+      "upstream": [
+        "TSM",
+        "ASML",
+        "MU",
+        "AVGO",
+        "AMAT"
+      ],
+      "downstream": [
+        "MSFT",
+        "META",
+        "GOOGL",
+        "AMZN",
+        "TSLA",
+        "HPE"
+      ]
+    },
+    {
+      "symbol": "AAPL",
+      "name": "Apple Inc.",
+      "sector": "Technology",
+      "market": "US Consumer Tech",
+      "upstream": [
+        "TSM",
+        "QCOM",
+        "AVGO",
+        "CRUS",
+        "HON"
+      ],
+      "downstream": [
+        "VZ",
+        "T",
+        "TMUS",
+        "AMZN",
+        "WMT",
+        "GOOGL"
+      ]
+    },
+    {
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "sector": "Semiconductors",
+      "market": "Global Foundry",
+      "upstream": [
+        "ASML",
+        "AMAT",
+        "LRCX",
+        "KLAC",
+        "EMR",
+        "FSI"
+      ],
+      "downstream": [
+        "AAPL",
+        "NVDA",
+        "AMD",
+        "QCOM",
+        "INTC",
+        "MRVL"
+      ]
+    }
+  ],
+  "supply_chain_detail": {
+    "NVDA": {
+      "upstream": [
+        {
+          "ticker": "TSM",
+          "name": "Taiwan Semiconductor Manufacturing Company",
+          "relationship": "Primary fab partner manufacturing all advanced NVIDIA GPUs (H100, A100, RTX series) on leading-edge nodes (4nm/5nm)",
+          "criticality": "high"
+        },
+        {
+          "ticker": "ASML",
+          "name": "ASML Holding",
+          "relationship": "Sole supplier of EUV lithography equipment to TSMC and Samsung, indirectly critical to NVIDIA's advanced chip production",
+          "criticality": "high"
+        },
+        {
+          "ticker": "MU",
+          "name": "Micron Technology",
+          "relationship": "Supplier of GDDR6/GDDR6X memory for GeForce and professional GPU products, and HBM3e for AI accelerators",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AVGO",
+          "name": "Broadcom Inc.",
+          "relationship": "Supplier of high-speed networking ASICs and PCIe switch silicon used in NVIDIA's NVLink and data center interconnect solutions",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "AMAT",
+          "name": "Applied Materials",
+          "relationship": "Supplier of wafer fabrication and deposition equipment used across NVIDIA's foundry partners in chip manufacturing",
+          "criticality": "medium"
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Major hyperscaler customer purchasing H100/H200 GPU clusters for Azure AI cloud infrastructure and OpenAI partnership",
+          "criticality": "high"
+        },
+        {
+          "ticker": "META",
+          "name": "Meta Platforms Inc.",
+          "relationship": "Large-scale buyer of H100 GPU clusters for AI model training (LLaMA) and metaverse/recommendation systems",
+          "criticality": "high"
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Significant purchaser of NVIDIA data center GPUs for Google Cloud AI services and internal AI research/training",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Major customer deploying NVIDIA GPUs across AWS cloud instances (p4, p5 series) for AI/ML workloads",
+          "criticality": "high"
+        },
+        {
+          "ticker": "TSLA",
+          "name": "Tesla Inc.",
+          "relationship": "Customer for NVIDIA DRIVE automotive platforms and historically a large GPU buyer for Dojo/AI training infrastructure",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "HPE",
+          "name": "Hewlett Packard Enterprise",
+          "relationship": "OEM partner integrating NVIDIA GPUs into enterprise AI servers and HPC systems sold to end customers",
+          "criticality": "medium"
+        }
+      ],
+      "supply_chain_summary": "NVIDIA sits at the critical nexus of the AI infrastructure supply chain, designing cutting-edge GPU accelerators that are entirely dependent on TSMC's leading-edge foundry capacity and HBM memory from a concentrated set of suppliers (Samsung, SK Hynix, Micron). On the demand side, NVIDIA is the dominant AI compute supplier to the world's largest hyperscalers and cloud providers, making its revenue highly concentrated among a small number of mega-cap technology companies aggressively investing in AI infrastructure."
+    },
+    "AAPL": {
+      "upstream": [
+        {
+          "ticker": "TSM",
+          "name": "Taiwan Semiconductor Manufacturing Company",
+          "relationship": "Primary fabricator of Apple Silicon (A-series, M-series chips) on leading-edge nodes",
+          "criticality": "high"
+        },
+        {
+          "ticker": "QCOM",
+          "name": "Qualcomm Inc.",
+          "relationship": "Supplier of 5G modem chipsets used in iPhone lineup",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AVGO",
+          "name": "Broadcom Inc.",
+          "relationship": "Supplier of Wi-Fi, Bluetooth, and RF semiconductor components across Apple product lines",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "CRUS",
+          "name": "Cirrus Logic Inc.",
+          "relationship": "Sole-source supplier of audio chips and haptic controllers for iPhone and iPad",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "HON",
+          "name": "Honeywell International",
+          "relationship": "Supplier of specialty materials and sensor components used in device manufacturing",
+          "criticality": "low"
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "VZ",
+          "name": "Verizon Communications",
+          "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans",
+          "criticality": "high"
+        },
+        {
+          "ticker": "T",
+          "name": "AT&T Inc.",
+          "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans",
+          "criticality": "high"
+        },
+        {
+          "ticker": "TMUS",
+          "name": "T-Mobile US",
+          "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales; largest iPhone carrier partner",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Significant third-party online retailer and distribution channel for Apple hardware and accessories",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "WMT",
+          "name": "Walmart Inc.",
+          "relationship": "Large brick-and-mortar retail distribution channel for Apple devices and accessories",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Pays Apple an estimated $15-20B annually as default search engine on Safari/iOS, a major services revenue source",
+          "criticality": "high"
+        }
+      ],
+      "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a powerful demand-side orchestrator that designs its own silicon and outsources manufacturing to a concentrated set of critical partners \u2014 most notably TSMC for chips and Samsung for displays and memory. On the downstream side, Apple distributes its products through major telecom carriers and retailers while generating substantial high-margin services revenue from platform participants like Google, making it both a hardware seller and a platform gatekeeper."
+    },
+    "TSM": {
+      "upstream": [
+        {
+          "ticker": "ASML",
+          "name": "ASML Holding N.V.",
+          "relationship": "Sole supplier of EUV lithography equipment, critical for leading-edge 5nm/3nm/2nm node manufacturing",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AMAT",
+          "name": "Applied Materials Inc.",
+          "relationship": "Leading supplier of wafer fabrication equipment including CVD, PVD, and etch systems",
+          "criticality": "high"
+        },
+        {
+          "ticker": "LRCX",
+          "name": "Lam Research Corporation",
+          "relationship": "Key supplier of etch and deposition equipment essential for advanced node wafer processing",
+          "criticality": "high"
+        },
+        {
+          "ticker": "KLAC",
+          "name": "KLA Corporation",
+          "relationship": "Primary supplier of process control, wafer inspection, and metrology equipment",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "EMR",
+          "name": "Emerson Electric Co.",
+          "relationship": "Supplier of specialty industrial gases and chemical delivery systems used in fab operations",
+          "criticality": "low"
+        },
+        {
+          "ticker": "FSI",
+          "name": "Ferrotec Holdings (via chemical suppliers)",
+          "relationship": "Supplier of ultra-pure chemicals and silicon wafer materials for wafer fabrication",
+          "criticality": "medium"
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "relationship": "Largest single customer, sole manufacturer of A-series and M-series chips for iPhone, iPad, and Mac; estimated ~25% of TSMC revenue",
+          "criticality": "high"
+        },
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "Major fabless customer for GPU and AI accelerator chips (H100, B100) on leading-edge nodes; rapidly growing revenue share",
+          "criticality": "high"
+        },
+        {
+          "ticker": "AMD",
+          "name": "Advanced Micro Devices Inc.",
+          "relationship": "Key fabless customer for Ryzen/EPYC CPUs and Radeon GPUs manufactured exclusively at TSMC on 5nm/4nm nodes",
+          "criticality": "high"
+        },
+        {
+          "ticker": "QCOM",
+          "name": "Qualcomm Incorporated",
+          "relationship": "Major customer for Snapdragon mobile SoCs and RF semiconductor products on advanced nodes",
+          "criticality": "high"
+        },
+        {
+          "ticker": "INTC",
+          "name": "Intel Corporation",
+          "relationship": "Growing customer outsourcing select products including Meteor Lake tiles and future foundry orders to TSMC",
+          "criticality": "medium"
+        },
+        {
+          "ticker": "MRVL",
+          "name": "Marvell Technology Inc.",
+          "relationship": "Customer for custom AI/cloud silicon and networking chips manufactured at TSMC advanced nodes",
+          "criticality": "medium"
+        }
+      ],
+      "supply_chain_summary": "TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world's dominant pure-play foundry, manufacturing chips designed by fabless companies on leading-edge nodes that no other foundry can replicate at scale. Its upstream dependency on a small set of highly specialized equipment makers (particularly ASML for EUV) and its downstream concentration among a few hyperscale and fabless giants make it both extraordinarily powerful and geopolitically sensitive."
+    }
+  },
+  "supply_chain_last_updated": "2026-04-01",
+  "themes": [
+    {
+      "name": "AI Infrastructure",
+      "tickers": [
+        "NVDA",
+        "TSM"
+      ],
+      "description": "Companies at the core of AI compute buildout"
+    },
+    {
+      "name": "Taiwan Geopolitical Risk",
+      "tickers": [
+        "TSM",
+        "AAPL"
+      ],
+      "description": "Supply chain exposure to Taiwan strait tension"
+    }
+  ],
+  "subscribers": {
+    "email": [
+      "mingxuan99michelle@gmail.com"
+    ],
+    "whatsapp": [
+      "+6582442078"
+    ]
+  },
+  "report_settings": {
+    "news_lookback_days": 3,
+    "analyst_ratings_count": 5,
+    "financials_years": 3,
+    "max_news_per_ticker": 4,
+    "max_macro_news": 5
+  }
+}

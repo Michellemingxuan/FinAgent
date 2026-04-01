@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinAgent — {{ ctx.generated_at }}</title>
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-light: #f0f1f4;
+      --text: #111827;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --accent-border: #bfdbfe;
+      --green: #16a34a;
+      --green-bg: #f0fdf4;
+      --green-border: #bbf7d0;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      --yellow: #d97706;
+      --yellow-bg: #fffbeb;
+      --yellow-border: #fde68a;
+      --orange: #ea580c;
+      --orange-bg: #fff7ed;
+      --orange-border: #fed7aa;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Header ── */
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 14px; gap: 16px; flex-wrap: wrap; }
+    .header-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+    .header-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; transition: background 0.15s; }
+    .btn:hover { background: var(--bg); text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    /* ── Tab bar ── */
+    .tab-bar { display: flex; gap: 0; overflow-x: auto; padding-bottom: 0; }
+    .tab { padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; user-select: none; }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Page layout ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Section shells ── */
+    .section { margin-bottom: 24px; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+
+    /* ── Analyst ratings table ── */
+    .ratings-table { width: 100%; border-collapse: collapse; }
+    .ratings-table thead th { padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .ratings-table thead th:not(:first-child) { text-align: right; }
+    .ratings-table tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+    .ratings-table tbody td:not(:first-child) { text-align: right; }
+    .ratings-table tbody tr:last-child td { border-bottom: none; }
+    .ratings-table tbody tr:hover { background: var(--bg); }
+    .firm-name { font-weight: 600; font-size: 13px; }
+    .analyst-name { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+    /* Rating pill */
+    .pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+    .pill-buy { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .pill-sell { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .pill-hold { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .pill-neutral { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
+
+    /* Price target upside */
+    .upside-positive { color: var(--green); font-weight: 600; }
+    .upside-negative { color: var(--red); font-weight: 600; }
+
+    /* Performance stars */
+    .perf-stars { color: var(--yellow); font-size: 11px; }
+
+    /* ── AI block ── */
+    .ai-block { padding: 12px 16px; background: var(--accent-light); border-top: 1px solid var(--accent-border); }
+    .ai-label { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+    .ai-text { font-size: 13px; color: #374151; line-height: 1.65; }
+
+    /* ── Ticker hero ── */
+    .ticker-hero { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .ticker-symbol { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .ticker-name { font-size: 13px; color: var(--text-secondary); }
+    .ticker-price { font-size: 20px; font-weight: 700; margin-left: auto; }
+    .ticker-price-sub { font-size: 11px; color: var(--text-muted); text-align: right; }
+
+    /* ── News ── */
+    .news-list { divide-y: var(--border-light); }
+    .news-item { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
+    .news-item:last-child { border-bottom: none; }
+    .news-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
+    .news-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+    .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; }
+    .source-wsj { background: #fef3c7; color: #92400e; }
+    .source-yahoofinance { background: #ede9fe; color: #5b21b6; }
+    .news-date { font-size: 11px; color: var(--text-muted); }
+    .news-summary { font-size: 12px; color: var(--text-secondary); margin-top: 5px; line-height: 1.5; }
+    .ticker-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .ticker-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; background: var(--bg); border: 1px solid var(--border); color: var(--text-secondary); }
+    .full-text-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-left: 2px; }
+
+    /* ── Flagged tickers ── */
+    .flagged-row { padding: 10px 16px; border-top: 1px solid var(--border); background: var(--yellow-bg); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .flagged-label { font-size: 11px; font-weight: 600; color: var(--yellow); }
+    .flag-chip { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: var(--surface); border: 1px solid var(--yellow-border); color: var(--yellow); }
+
+    /* ── Financials ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+    .kpi-cell { background: var(--surface); padding: 12px 14px; }
+    .kpi-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+    .kpi-value { font-size: 15px; font-weight: 700; margin-top: 3px; letter-spacing: -0.3px; }
+    .fin-table { width: 100%; border-collapse: collapse; }
+    .fin-table thead th { padding: 9px 14px; text-align: right; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .fin-table thead th:first-child { text-align: left; }
+    .fin-table tbody td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--border-light); }
+    .fin-table tbody td:first-child { text-align: left; color: var(--text-secondary); font-weight: 500; }
+    .fin-table tbody tr:last-child td { border-bottom: none; }
+    .fin-table tbody tr:hover { background: var(--bg); }
+
+    /* ── Geopolitical ── */
+    .geo-theme { border-bottom: 1px solid var(--border-light); padding: 14px 16px; }
+    .geo-theme:last-child { border-bottom: none; }
+    .geo-header { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+    .geo-name { font-size: 13px; font-weight: 700; flex: 1; }
+    .risk-pill { }
+    .risk-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .risk-medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .risk-medium-high { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+    .risk-high { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .geo-tickers { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+    .geo-analysis { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .geo-headlines { margin-top: 8px; }
+    .geo-headline { font-size: 11px; color: var(--text-muted); padding: 2px 0; display: flex; gap: 6px; }
+    .geo-headline::before { content: "›"; color: var(--text-muted); }
+
+    /* ── Subsection headers ── */
+    .subsec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); padding: 8px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+
+    /* ── Empty/error states ── */
+    .empty-state { padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+    .error-banner { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 20px; font-size: 12px; color: var(--red); }
+
+    /* ── Macro tab ── */
+    .macro-summary { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── Sparkline ── */
+    .spark-wrap { display: flex; align-items: center; }
+    canvas.sparkline { display: block; }
+
+    /* ── Insider transaction pills ── */
+    .pill-insider-buy { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .pill-insider-sell { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    /* ── Earnings countdown ── */
+    .earnings-soon { color: #d97706; font-weight: 600; }
+    .earnings-far { color: #6b7280; }
+
+    /* ── Short interest ── */
+    .short-high { color: #dc2626; }
+    .short-mid { color: #d97706; }
+    .short-low { color: #16a34a; }
+
+    /* ── Theme chips ── */
+    .theme-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: default; }
+
+    /* ── Archive select ── */
+    .archive-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 12px; cursor: pointer; }
+
+    /* ── Supply Chain diagram ── */
+    .sc-diagram-wrap { padding: 16px; overflow-x: auto; }
+    .sc-svg { width: 100%; min-width: 560px; }
+    .sc-summary { font-size: 12px; color: var(--text-secondary); padding: 0 16px 14px; line-height: 1.55; font-style: italic; }
+    .sc-empty { padding: 16px; color: var(--text-muted); font-size: 13px; text-align: center; }
+
+    /* ── Peer table ── */
+    .peer-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .peer-table thead th { padding: 8px 12px; text-align: right; font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .peer-table thead th:first-child { text-align: left; }
+    .peer-table tbody td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--border-light); }
+    .peer-table tbody td:first-child { text-align: left; font-weight: 600; }
+    .peer-table tbody tr:last-child td { border-bottom: none; }
+    .peer-table tbody tr:hover { background: var(--bg); }
+
+    /* ── Insider table ── */
+    .insider-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .insider-table thead th { padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .insider-table thead th:not(:first-child):not(:nth-child(2)) { text-align: right; }
+    .insider-table tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); }
+    .insider-table tbody td:not(:first-child):not(:nth-child(2)) { text-align: right; }
+    .insider-table tbody tr:last-child td { border-bottom: none; }
+    .insider-table tbody tr:hover { background: var(--bg); }
+    .insider-summary { padding: 8px 14px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--bg); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">FinAgent</div>
+      <div class="header-meta">Updated {{ ctx.generated_at }}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      {% if archive_dates %}
+      <select class="archive-select" onchange="if(this.value) window.location.href=this.value">
+        <option value="">History</option>
+        {% for d in archive_dates | sort(reverse=true) %}
+        <option value="archive/{{ d }}.html">{{ d }}</option>
+        {% endfor %}
+      </select>
+      {% endif %}
+      {% if github_repo %}
+      <a class="btn btn-primary"
+         href="https://github.com/{{ github_repo }}/actions/workflows/generate_report.yml"
+         target="_blank" rel="noopener">
+        &#x21bb;&nbsp; Refresh Report
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="tabBar">
+    {% for tr in ctx.ratings %}
+    <div class="tab {% if loop.first %}active{% endif %}" data-tab="stock-{{ tr.symbol }}">
+      {{ tr.symbol }}
+    </div>
+    {% endfor %}
+    <div class="tab" data-tab="macro">Macro &amp; Geo</div>
+  </div>
+</div>
+
+<div class="page">
+
+  {% if ctx.errors %}
+  <div class="error-banner">
+    <strong>Partial data —</strong>
+    {% for e in ctx.errors %}{{ e }}{% if not loop.last %} &bull; {% endif %}{% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PER-TICKER TABS                                -->
+  <!-- ═══════════════════════════════════════════════ -->
+  {% for tr in ctx.ratings %}
+  {% set loop_idx = loop.index0 %}
+  {% set tf = ctx.financials[loop_idx] if loop_idx < ctx.financials|length else none %}
+  {% set sym_earnings = ctx.earnings_events | selectattr("symbol", "equalto", tr.symbol) | list %}
+  {% set sym_insider = ctx.insider_transactions.get(tr.symbol, []) %}
+  {% set sym_short = ctx.short_data.get(tr.symbol, none) %}
+  {% set sym_themes = ctx.themes | selectattr("tickers", "containing", tr.symbol) | list %}
+
+  <div class="tab-content {% if loop.first %}active{% endif %}" id="tab-stock-{{ tr.symbol }}">
+
+    <!-- Ticker hero bar -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="ticker-hero">
+        <div>
+          <div class="ticker-symbol">{{ tr.symbol }}</div>
+          <div class="ticker-name">{{ tr.name }}</div>
+        </div>
+        {% if tr.current_price %}
+        <div style="margin-left:auto; text-align:right;">
+          <div class="ticker-price">{{ fmt_price(tr.current_price) }}</div>
+          <div class="ticker-price-sub">Current price</div>
+        </div>
+        {% endif %}
+        <div class="spark-wrap">
+          <canvas id="spark-{{ tr.symbol }}" class="sparkline" width="160" height="48"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: ANALYST RATINGS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Analyst Ratings</span>
+      </div>
+      <div class="card">
+        {% if tr.ratings %}
+        <table class="ratings-table">
+          <thead>
+            <tr>
+              <th>Firm &amp; Analyst</th>
+              <th>Action</th>
+              <th>Rating</th>
+              <th>Price Target</th>
+              <th>PT Upside</th>
+              <th>Analyst Perf.</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in tr.ratings %}
+            {% set upside = none %}
+            {% if r.price_target and tr.current_price and tr.current_price > 0 %}
+              {% set upside = (r.price_target - tr.current_price) / tr.current_price * 100 %}
+            {% endif %}
+            <tr>
+              <td>
+                <div class="firm-name">{{ r.firm }}</div>
+                {% if r.analyst %}<div class="analyst-name">{{ r.analyst }}</div>{% endif %}
+              </td>
+              <td style="color:var(--text-secondary)">{{ r.action or "—" }}</td>
+              <td>
+                {% if r.rating %}
+                <span class="pill
+                  {%- if 'buy' in r.rating.lower() or 'overweight' in r.rating.lower() or 'outperform' in r.rating.lower() %} pill-buy
+                  {%- elif 'sell' in r.rating.lower() or 'underweight' in r.rating.lower() or 'underperform' in r.rating.lower() %} pill-sell
+                  {%- elif 'hold' in r.rating.lower() or 'neutral' in r.rating.lower() or 'equal' in r.rating.lower() %} pill-hold
+                  {%- else %} pill-neutral{%- endif %}">
+                  {{ r.rating }}
+                </span>
+                {% if r.previous_rating and r.previous_rating != r.rating %}
+                <span style="font-size:10px;color:var(--text-muted);margin-left:4px;">← {{ r.previous_rating }}</span>
+                {% endif %}
+                {% else %}—{% endif %}
+              </td>
+              <td>
+                {% if r.price_target %}
+                {{ fmt_price(r.price_target) }}
+                {% if r.previous_price_target and r.previous_price_target != r.price_target %}
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← {{ fmt_price(r.previous_price_target) }}</span>
+                {% endif %}
+                {% else %}—{% endif %}
+              </td>
+              <td>
+                {% if upside is not none %}
+                <span class="{{ 'upside-positive' if upside >= 0 else 'upside-negative' }}">
+                  {{ "%+.1f"|format(upside) }}%
+                </span>
+                {% else %}—{% endif %}
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">{{ r.date }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">No recent analyst ratings available{% if tr.error %}: {{ tr.error }}{% endif %}</div>
+        {% endif %}
+        <div class="ai-block">
+          <div class="ai-label">AI Consensus Summary</div>
+          <div class="ai-text">{{ tr.ai_rationale }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: UPCOMING EARNINGS ── -->
+    {% if sym_earnings %}
+    {% set ev = sym_earnings[0] %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Upcoming Earnings</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+          <div>
+            <div class="kpi-label">Earnings Date</div>
+            <div class="kpi-value" style="font-size:14px;">{{ ev.earnings_date }}</div>
+          </div>
+          {% if ev.days_until is not none %}
+          <div>
+            <div class="kpi-label">Days Until</div>
+            <div class="kpi-value {{ 'earnings-soon' if ev.days_until <= 7 else 'earnings-far' }}" style="font-size:14px;">
+              {% if ev.days_until == 0 %}Today
+              {% elif ev.days_until < 0 %}Past
+              {% else %}in {{ ev.days_until }} day{{ 's' if ev.days_until != 1 else '' }}
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+          {% if ev.eps_estimate is not none %}
+          <div>
+            <div class="kpi-label">EPS Estimate</div>
+            <div class="kpi-value" style="font-size:14px;">${{ "%.2f"|format(ev.eps_estimate) }}</div>
+          </div>
+          {% endif %}
+          {% if ev.revenue_estimate is not none %}
+          <div>
+            <div class="kpi-label">Revenue Estimate</div>
+            <div class="kpi-value" style="font-size:14px;">{{ fmt_b(ev.revenue_estimate) }}</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── SECTION: NEWS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">News</span>
+      </div>
+      <div class="card">
+        {% set direct = ctx.news.direct_news | selectattr("relevant_tickers", "containing", tr.symbol) | list %}
+        {% set related = ctx.news.market_news | selectattr("relevant_tickers", "containing", tr.symbol) | list %}
+        {% set all_items = (direct + related) %}
+
+        {% if all_items %}
+          {% if direct %}
+          <div class="subsec-title">Direct Coverage</div>
+          {% for item in direct %}
+          <div class="news-item">
+            <div class="news-title">
+              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+              {% if item.full_text_available %}<span class="full-text-dot" title="Full article available"></span>{% endif %}
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-{{ item.source.lower().replace(' ','') }}">{{ item.source }}</span>
+              <span class="news-date">{{ item.published }}</span>
+            </div>
+            {% if item.summary %}<div class="news-summary">{{ item.summary[:240] }}{% if item.summary|length > 240 %}…{% endif %}</div>{% endif %}
+          </div>
+          {% endfor %}
+          {% endif %}
+
+          {% if related %}
+          <div class="subsec-title">Supply Chain &amp; Adjacent</div>
+          {% for item in related %}
+          <div class="news-item">
+            <div class="news-title">
+              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-{{ item.source.lower().replace(' ','') }}">{{ item.source }}</span>
+              <span class="news-date">{{ item.published }}</span>
+              {% for t in item.relevant_tickers %}
+              <span class="ticker-tag">{{ t }}</span>
+              {% endfor %}
+            </div>
+            {% if item.summary %}<div class="news-summary">{{ item.summary[:240] }}{% if item.summary|length > 240 %}…{% endif %}</div>{% endif %}
+          </div>
+          {% endfor %}
+          {% endif %}
+
+        {% else %}
+          <div class="empty-state">No recent news found for {{ tr.symbol }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ── SECTION: FINANCIALS ── -->
+    {% if tf %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Financial Statements</span>
+      </div>
+      <div class="card">
+        <!-- KPI strip -->
+        <div class="kpi-grid">
+          <div class="kpi-cell">
+            <div class="kpi-label">Market Cap</div>
+            <div class="kpi-value">{{ fmt_b(tf.market_cap) }}</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Trailing P/E</div>
+            <div class="kpi-value">{{ "%.1f×"|format(tf.pe_ratio) if tf.pe_ratio else "—" }}</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Forward P/E</div>
+            <div class="kpi-value">{{ "%.1f×"|format(tf.forward_pe) if tf.forward_pe else "—" }}</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">EV / EBITDA</div>
+            <div class="kpi-value">{{ "%.1f×"|format(tf.ev_ebitda) if tf.ev_ebitda else "—" }}</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Debt / Equity</div>
+            <div class="kpi-value">{{ "%.2f"|format(tf.debt_to_equity) if tf.debt_to_equity else "—" }}</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">FCF Yield</div>
+            <div class="kpi-value">{{ fmt_pct(tf.fcf_yield) }}</div>
+          </div>
+          {% if sym_short %}
+          <div class="kpi-cell">
+            <div class="kpi-label">Short Float %</div>
+            {% if sym_short.short_percent_float is not none %}
+            {% set sp = sym_short.short_percent_float %}
+            <div class="kpi-value {{ 'short-high' if sp > 0.10 else ('short-mid' if sp > 0.05 else 'short-low') }}">
+              {{ "%.1f"|format(sp * 100) }}%
+            </div>
+            {% elif sym_short.short_percent_outstanding is not none %}
+            {% set sp = sym_short.short_percent_outstanding %}
+            <div class="kpi-value {{ 'short-high' if sp > 0.10 else ('short-mid' if sp > 0.05 else 'short-low') }}">
+              {{ "%.1f"|format(sp * 100) }}%
+            </div>
+            {% else %}
+            <div class="kpi-value">—</div>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Multi-year table -->
+        {% if tf.metrics_by_year %}
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              {% for m in tf.metrics_by_year %}<th>{{ m.year }}</th>{% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Revenue</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_b(m.revenue) }}</td>{% endfor %}</tr>
+            <tr><td>Gross Margin</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_pct(m.gross_margin) }}</td>{% endfor %}</tr>
+            <tr><td>Operating Margin</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_pct(m.operating_margin) }}</td>{% endfor %}</tr>
+            <tr><td>Net Margin</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_pct(m.net_margin) }}</td>{% endfor %}</tr>
+            <tr><td>Net Income</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_b(m.net_income) }}</td>{% endfor %}</tr>
+            <tr><td>Free Cash Flow</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_b(m.free_cash_flow) }}</td>{% endfor %}</tr>
+            <tr><td>Total Debt</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_b(m.total_debt) }}</td>{% endfor %}</tr>
+            <tr><td>Cash &amp; Equiv.</td>{% for m in tf.metrics_by_year %}<td>{{ fmt_b(m.cash_and_equivalents) }}</td>{% endfor %}</tr>
+          </tbody>
+        </table>
+        {% endif %}
+
+        <div class="ai-block">
+          <div class="ai-label">AI Analysis</div>
+          <div class="ai-text">{{ tf.ai_analysis }}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── SECTION: INSIDER TRANSACTIONS ── -->
+    {% if sym_insider %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Insider Transactions</span>
+      </div>
+      <div class="card">
+        <table class="insider-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Shares</th>
+              <th>Price</th>
+              <th>Total Value</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for txn in sym_insider[:5] %}
+            {% set is_buy = 'purchase' in txn.transaction_type.lower() or txn.transaction_type == 'P-Purchase' %}
+            <tr>
+              <td>{{ txn.reporting_name or "—" }}</td>
+              <td>
+                <span class="pill {{ 'pill-insider-buy' if is_buy else 'pill-insider-sell' }}">
+                  {{ "Buy" if is_buy else "Sell" }}
+                </span>
+              </td>
+              <td style="text-align:right;">{{ "{:,.0f}".format(txn.securities_transacted) if txn.securities_transacted else "—" }}</td>
+              <td style="text-align:right;">{{ fmt_price(txn.price) if txn.price else "—" }}</td>
+              <td style="text-align:right;">{{ fmt_b(txn.total_value) if txn.total_value else "—" }}</td>
+              <td style="text-align:right;color:var(--text-muted);">{{ txn.transaction_date[:10] if txn.transaction_date else "—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% set buy_count = sym_insider | selectattr("transaction_type", "containing", "Purchase") | list | length %}
+        {% set sell_count = sym_insider | length - buy_count %}
+        <div class="insider-summary">{{ buy_count }} buy{{ 's' if buy_count != 1 else '' }} / {{ sell_count }} sell{{ 's' if sell_count != 1 else '' }} in the last 30 days</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── SECTION: GEOPOLITICAL (filtered to this ticker) ── -->
+    {% set ticker_geo = ctx.geopolitical_themes | selectattr("affected_tickers", "containing", tr.symbol) | list %}
+    {% if ticker_geo %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Geopolitical Exposure</span>
+      </div>
+      <div class="card">
+        {% for theme in ticker_geo %}
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">{{ theme.theme }}</span>
+            <span class="pill risk-pill
+              {%- if theme.risk_level == 'High' %} risk-high
+              {%- elif theme.risk_level == 'Medium-High' %} risk-medium-high
+              {%- elif theme.risk_level == 'Medium' %} risk-medium
+              {%- else %} risk-low{%- endif %}">
+              {{ theme.risk_level }}
+            </span>
+          </div>
+          <div class="geo-tickers">
+            {% for sym in theme.affected_tickers %}
+            <span class="ticker-tag">{{ sym }}</span>
+            {% endfor %}
+          </div>
+          <div class="geo-analysis">{{ theme.ai_analysis }}</div>
+          {% if theme.source_headlines %}
+          <div class="geo-headlines">
+            {% for hl in theme.source_headlines %}
+            <div class="geo-headline">{{ hl }}</div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── SECTION: PORTFOLIO THEMES ── -->
+    {% if sym_themes %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Portfolio Themes</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          {% for theme in sym_themes %}
+          <span class="theme-chip" title="{{ theme.description }}">{{ theme.name }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── SECTION: SUPPLY CHAIN MAP ── -->
+    {% set sc = ctx.supply_chain_detail.get(tr.symbol, {}) %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Supply Chain Map</span>
+      </div>
+      <div class="card">
+        {% if sc and (sc.get('upstream') or sc.get('downstream')) %}
+        <div class="sc-diagram-wrap">
+          <svg class="sc-svg" id="sc-svg-{{ tr.symbol }}" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        {% if sc.get('supply_chain_summary') %}
+        <div class="sc-summary">{{ sc.supply_chain_summary }}</div>
+        {% endif %}
+        <script>
+        (function() {
+          var sym = {{ tr.symbol | tojson }};
+          var sc = {{ sc | tojson }};
+          var upstream = sc.upstream || [];
+          var downstream = sc.downstream || [];
+          var svgEl = document.getElementById('sc-svg-' + sym);
+          if (!svgEl) return;
+
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
+          var COL_GAP = 80;
+          var ROW_GAP = 14;
+          var CENTER_W = 110, CENTER_H = 60;
+
+          var criticColor = {
+            'high': {stroke: '#dc2626', fill: '#fef2f2'},
+            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+          var downColor = {
+            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
+            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+
+          var maxRows = Math.max(upstream.length, downstream.length, 1);
+          var totalH = Math.max(maxRows * (NODE_H + ROW_GAP) - ROW_GAP, CENTER_H) + 40;
+          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
+
+          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
+          svgEl.setAttribute('height', totalH);
+
+          function svgEl_(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (var k in attrs) el.setAttribute(k, attrs[k]);
+            return el;
+          }
+          function addText(parent, x, y, text, style) {
+            var t = svgEl_('text', {x: x, y: y, style: style || ''});
+            t.textContent = text;
+            parent.appendChild(t);
+          }
+
+          var cx = NODE_W + COL_GAP + 20;
+          var cy = totalH / 2 - CENTER_H / 2;
+
+          // Draw center node
+          var centerG = svgEl_('g', {});
+          centerG.appendChild(svgEl_('rect', {
+            x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
+            fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
+          }));
+          addText(centerG, cx + CENTER_W/2, cy + 22, sym, 'font-size:14px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+          svgEl.appendChild(centerG);
+
+          function drawNodes(nodes, isLeft, colorMap) {
+            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
+            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
+            var startY = totalH / 2 - totalNodesH / 2;
+            nodes.forEach(function(node, i) {
+              var ny = startY + i * (NODE_H + ROW_GAP);
+              var nc = colorMap[node.criticality] || colorMap['low'];
+              var g = svgEl_('g', {});
+              g.appendChild(svgEl_('rect', {
+                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
+                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+              }));
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
+                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+              var nameText = (node.name || '').substring(0, 20);
+              addText(g, colX + NODE_W/2, ny + 30, nameText,
+                'font-size:9px;fill:#6b7280;text-anchor:middle;');
+              var relText = (node.relationship || '').substring(0, 26);
+              addText(g, colX + NODE_W/2, ny + 44, relText,
+                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              svgEl.appendChild(g);
+
+              // Arrow
+              var nodeRightX = colX + NODE_W;
+              var nodeMidY = ny + NODE_H / 2;
+              var centerMidY = cy + CENTER_H / 2;
+              var p1x, p1y, p2x, p2y, cp1x, cp1y, cp2x, cp2y;
+              if (isLeft) {
+                p1x = nodeRightX; p1y = nodeMidY;
+                p2x = cx; p2y = centerMidY;
+              } else {
+                p1x = cx + CENTER_W; p1y = centerMidY;
+                p2x = colX; p2y = nodeMidY;
+              }
+              cp1x = p1x + (p2x - p1x) * 0.45; cp1y = p1y;
+              cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
+              var path = svgEl_('path', {
+                d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
+                'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
+                opacity: 0.6
+              });
+              svgEl.insertBefore(path, svgEl.firstChild);
+            });
+          }
+
+          // Arrowhead markers
+          var defs = svgEl_('defs', {});
+          ['arrow-in', 'arrow-out'].forEach(function(id) {
+            var marker = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
+              refX: 5, refY: 3, orient: 'auto'});
+            var poly = svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'});
+            marker.appendChild(poly);
+            defs.appendChild(marker);
+          });
+          svgEl.insertBefore(defs, svgEl.firstChild);
+
+          drawNodes(upstream, true, criticColor);
+          drawNodes(downstream, false, downColor);
+        })();
+        </script>
+        {% else %}
+        <div class="sc-empty">No supply chain data yet. Run <code>python main.py --refresh-supply-chain</code> to discover relationships.</div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>{# end tab-content #}
+  {% endfor %}
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- MACRO & GEO TAB                               -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-macro">
+
+    <!-- AI market narrative -->
+    {% if ctx.news.ai_summary %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Market Narrative</span></div>
+      <div class="card">
+        <div class="ai-block" style="border-top:none;">
+          <div class="ai-label">AI Summary</div>
+          <div class="ai-text">{{ ctx.news.ai_summary }}</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Peer comparison table -->
+    {% if ctx.peer_table %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Peer Comparison</span></div>
+      <div class="card">
+        <table class="peer-table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Price</th>
+              <th>Mkt Cap</th>
+              <th>P/E</th>
+              <th>Fwd P/E</th>
+              <th>EV/EBITDA</th>
+              <th>Gross Mgn</th>
+              <th>Rev Grwth</th>
+              <th>D/E</th>
+              <th>FCF Yield</th>
+              <th>Short %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in ctx.peer_table %}
+            <tr>
+              <td>{{ row.symbol }}</td>
+              <td>{{ fmt_price(row.current_price) }}</td>
+              <td>{{ fmt_b(row.market_cap) }}</td>
+              <td>{{ "%.1f×"|format(row.pe_ratio) if row.pe_ratio else "—" }}</td>
+              <td>{{ "%.1f×"|format(row.forward_pe) if row.forward_pe else "—" }}</td>
+              <td>{{ "%.1f×"|format(row.ev_ebitda) if row.ev_ebitda else "—" }}</td>
+              <td>{{ fmt_pct(row.gross_margin) }}</td>
+              <td>
+                {% if row.revenue_growth is not none %}
+                <span class="{{ 'upside-positive' if row.revenue_growth >= 0 else 'upside-negative' }}">
+                  {{ "%+.1f"|format(row.revenue_growth * 100) }}%
+                </span>
+                {% else %}—{% endif %}
+              </td>
+              <td>{{ "%.2f"|format(row.debt_to_equity) if row.debt_to_equity else "—" }}</td>
+              <td>{{ fmt_pct(row.fcf_yield) }}</td>
+              <td>
+                {% if row.short_percent is not none %}
+                <span class="{{ 'short-high' if row.short_percent > 0.10 else ('short-mid' if row.short_percent > 0.05 else 'short-low') }}">
+                  {{ "%.1f"|format(row.short_percent * 100) }}%
+                </span>
+                {% else %}—{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Macro news -->
+    {% if ctx.news.macro_news %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Macro &amp; Sector News</span></div>
+      <div class="card">
+        {% for item in ctx.news.macro_news %}
+        <div class="news-item">
+          <div class="news-title">
+            <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+          </div>
+          <div class="news-meta-row">
+            <span class="source-tag source-{{ item.source.lower().replace(' ','') }}">{{ item.source }}</span>
+            <span class="news-date">{{ item.published }}</span>
+          </div>
+          {% if item.summary %}<div class="news-summary">{{ item.summary[:240] }}…</div>{% endif %}
+          {% if item.relevant_tickers %}
+          <div class="ticker-tags">
+            {% for t in item.relevant_tickers %}<span class="ticker-tag">{{ t }}</span>{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Flagged tickers -->
+    {% if ctx.news.flagged_tickers %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Tickers to Watch</span></div>
+      <div class="card" style="padding:14px 16px;">
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">Claude flagged these based on news relevance to your portfolio's supply chain and markets:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          {% for sym in ctx.news.flagged_tickers %}
+          <span class="flag-chip">{{ sym }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Portfolio Themes -->
+    {% if ctx.themes %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Themes</span></div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          {% for theme in ctx.themes %}
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+              <span class="theme-chip">{{ theme.name }}</span>
+              <span style="font-size:12px;color:var(--text-secondary);">{{ theme.description }}</span>
+            </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              {% for sym in theme.tickers %}
+              <span class="ticker-tag">{{ sym }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Supply Chain Network (all tickers) -->
+    {% if ctx.supply_chain_detail %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Supply Chain Network</span></div>
+      <div class="card">
+        <div class="sc-diagram-wrap">
+          <svg id="sc-network-svg" class="sc-svg" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <script>
+        (function() {
+          var scDetail = {{ ctx.supply_chain_detail | tojson }};
+          var symbols = {{ ctx.watchlist_symbols | tojson }};
+          var svgEl = document.getElementById('sc-network-svg');
+          if (!svgEl || !symbols.length) return;
+
+          var NODE_W = 130, NODE_H = 48, NODE_RX = 7;
+          var CENTER_W = 100, CENTER_H = 56;
+          var COL_GAP = 70, ROW_GAP = 10;
+
+          // Collect all upstream/downstream nodes across all tickers
+          var upstreamSet = {}, downstreamSet = {};
+          symbols.forEach(function(sym) {
+            var sc = scDetail[sym] || {};
+            (sc.upstream || []).forEach(function(n) { upstreamSet[n.ticker] = n; });
+            (sc.downstream || []).forEach(function(n) { downstreamSet[n.ticker] = n; });
+          });
+          // Remove portfolio tickers from satellite sets
+          symbols.forEach(function(sym) { delete upstreamSet[sym]; delete downstreamSet[sym]; });
+
+          var upNodes = Object.values(upstreamSet);
+          var downNodes = Object.values(downstreamSet);
+          var centerNodes = symbols;
+
+          var maxRows = Math.max(upNodes.length, downNodes.length, centerNodes.length, 1);
+          var totalH = maxRows * (NODE_H + ROW_GAP) - ROW_GAP + 40;
+          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
+          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
+          svgEl.setAttribute('height', totalH);
+
+          function svgEl_(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (var k in attrs) el.setAttribute(k, attrs[k]);
+            return el;
+          }
+          function addText(parent, x, y, text, style) {
+            var t = svgEl_('text', {x: x, y: y, style: style || ''});
+            t.textContent = text;
+            parent.appendChild(t);
+          }
+
+          var criticColor = {
+            'high': {stroke: '#dc2626', fill: '#fef2f2'},
+            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+          var downColor = {
+            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
+            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+
+          // Draw center column (portfolio tickers)
+          var cx = NODE_W + COL_GAP + 20;
+          var centerStartY = totalH / 2 - (centerNodes.length * (CENTER_H + ROW_GAP) - ROW_GAP) / 2;
+          var centerMids = {};
+          centerNodes.forEach(function(sym, i) {
+            var cy = centerStartY + i * (CENTER_H + ROW_GAP);
+            centerMids[sym] = cy + CENTER_H / 2;
+            var g = svgEl_('g', {});
+            g.appendChild(svgEl_('rect', {
+              x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
+              fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
+            }));
+            addText(g, cx + CENTER_W/2, cy + 24, sym,
+              'font-size:12px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+            svgEl.appendChild(g);
+          });
+
+          // Arrowhead markers
+          var defs = svgEl_('defs', {});
+          ['arr-in','arr-out'].forEach(function(id) {
+            var m = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
+              refX: 5, refY: 3, orient: 'auto'});
+            m.appendChild(svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'}));
+            defs.appendChild(m);
+          });
+          svgEl.insertBefore(defs, svgEl.firstChild);
+
+          function drawSatellites(nodes, isLeft, colorMap) {
+            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
+            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
+            var startY = totalH / 2 - totalNodesH / 2;
+            nodes.forEach(function(node, i) {
+              var ny = startY + i * (NODE_H + ROW_GAP);
+              var nc = colorMap[node.criticality] || colorMap['low'];
+              var g = svgEl_('g', {});
+              g.appendChild(svgEl_('rect', {
+                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
+                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+              }));
+              addText(g, colX + NODE_W/2, ny + 16, node.ticker || '',
+                'font-size:10px;font-weight:700;fill:#111827;text-anchor:middle;');
+              addText(g, colX + NODE_W/2, ny + 29, (node.name || '').substring(0, 20),
+                'font-size:8px;fill:#6b7280;text-anchor:middle;');
+              addText(g, colX + NODE_W/2, ny + 41, (node.relationship || '').substring(0, 24),
+                'font-size:7px;fill:#9ca3af;text-anchor:middle;');
+              svgEl.appendChild(g);
+
+              var nodeMidY = ny + NODE_H / 2;
+              // Draw arrows to all related center tickers
+              symbols.forEach(function(sym) {
+                var sc = scDetail[sym] || {};
+                var list = isLeft ? (sc.upstream || []) : (sc.downstream || []);
+                var found = list.find(function(x) { return x.ticker === node.ticker; });
+                if (!found) return;
+                var cmy = centerMids[sym];
+                var p1x, p1y, p2x, p2y;
+                if (isLeft) {
+                  p1x = colX + NODE_W; p1y = nodeMidY;
+                  p2x = cx; p2y = cmy;
+                } else {
+                  p1x = cx + CENTER_W; p1y = cmy;
+                  p2x = colX; p2y = nodeMidY;
+                }
+                var cp1x = p1x + (p2x - p1x) * 0.45, cp1y = p1y;
+                var cp2x = p1x + (p2x - p1x) * 0.55, cp2y = p2y;
+                var path = svgEl_('path', {
+                  d: 'M'+p1x+','+p1y+' C'+cp1x+','+cp1y+' '+cp2x+','+cp2y+' '+p2x+','+p2y,
+                  fill: 'none', stroke: nc.stroke, 'stroke-width': 1,
+                  'marker-end': isLeft ? 'url(#arr-in)' : 'url(#arr-out)',
+                  opacity: 0.4
+                });
+                svgEl.insertBefore(path, svgEl.firstChild);
+              });
+            });
+          }
+
+          drawSatellites(upNodes, true, criticColor);
+          drawSatellites(downNodes, false, downColor);
+        })();
+        </script>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Geopolitical themes — full list -->
+    {% if ctx.geopolitical_themes %}
+    <div class="section">
+      <div class="section-header"><span class="section-title">Geopolitical Risk Themes</span></div>
+      {% if ctx.geopolitical_summary %}
+      <div class="card" style="margin-bottom:12px;">
+        <div class="ai-block" style="border-top:none;">
+          <div class="ai-label">Portfolio-Level Summary</div>
+          <div class="ai-text">{{ ctx.geopolitical_summary }}</div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="card">
+        {% for theme in ctx.geopolitical_themes %}
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">{{ theme.theme }}</span>
+            <span class="pill risk-pill
+              {%- if theme.risk_level == 'High' %} risk-high
+              {%- elif theme.risk_level == 'Medium-High' %} risk-medium-high
+              {%- elif theme.risk_level == 'Medium' %} risk-medium
+              {%- else %} risk-low{%- endif %}">
+              {{ theme.risk_level }}
+            </span>
+          </div>
+          <div class="geo-tickers">
+            {% for sym in theme.affected_tickers %}<span class="ticker-tag">{{ sym }}</span>{% endfor %}
+          </div>
+          <div class="geo-analysis">{{ theme.ai_analysis }}</div>
+          {% if theme.source_headlines %}
+          <div class="geo-headlines">
+            {% for hl in theme.source_headlines %}<div class="geo-headline">{{ hl }}</div>{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>{# end macro tab #}
+
+  <!-- Footer -->
+  <div style="margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <span>Data: Financial Modeling Prep &bull; Yahoo Finance &bull; Wall Street Journal &bull; yfinance</span>
+    <span>For informational purposes only. Not investment advice.</span>
+  </div>
+
+</div><!-- end .page -->
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      const el = document.getElementById('tab-' + target);
+      if (el) el.classList.add('active');
+    });
+  });
+</script>
+
+<script>
+const priceHistory = {
+  {% for sym, points in ctx.price_history.items() %}
+  "{{ sym }}": [{{ points | map(attribute='close') | join(', ') }}],
+  {% endfor %}
+};
+
+function drawSparkline(canvasId, data, color) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !data || !data.length) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = max - min || 1;
+  ctx.clearRect(0, 0, w, h);
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * h * 0.85 - h * 0.075;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = color || '#2563eb';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+  ctx.fillStyle = color ? color + '20' : '#2563eb20';
+  ctx.fill();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  {% for sym in ctx.watchlist_symbols %}
+  if (priceHistory["{{ sym }}"]) {
+    const pts = priceHistory["{{ sym }}"];
+    const first = pts[0], last = pts[pts.length - 1];
+    const color = last >= first ? '#16a34a' : '#dc2626';
+    drawSparkline('spark-{{ sym }}', pts, color);
+  }
+  {% endfor %}
+});
+</script>
+
+</body>
+</html>

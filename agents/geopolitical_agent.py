@@ -1,0 +1,102 @@
+import json
+import logging
+
+from .base_agent import BaseAgent
+from models.report import GeopoliticalTheme, NewsSection
+
+logger = logging.getLogger(__name__)
+
+SYSTEM = """You are a geopolitical risk analyst specializing in technology and financial markets.
+Given recent news headlines and a portfolio of stocks, identify distinct geopolitical themes
+that could materially affect the portfolio.
+
+For each theme:
+- Name the theme concisely (e.g. "US-China Semiconductor Export Controls")
+- List which portfolio tickers (and any flagged tickers) are affected
+- Assign risk level: Low / Medium / Medium-High / High
+- Write a 2-3 sentence analysis of the risk
+
+Return a JSON object with this exact structure:
+{
+  "themes": [
+    {
+      "theme": "...",
+      "affected_tickers": ["NVDA", "TSM"],
+      "risk_level": "Medium-High",
+      "analysis": "...",
+      "source_headlines": ["headline 1", "headline 2"]
+    }
+  ],
+  "portfolio_summary": "2-3 sentence overall geopolitical risk summary for the portfolio"
+}
+
+Focus on: trade policy, sanctions, export controls, geopolitical conflicts, supply chain
+disruptions, regulatory actions by governments. Omit purely domestic business/earnings news."""
+
+
+class GeopoliticalAgent(BaseAgent):
+    def __init__(self, anthropic_api_key: str):
+        super().__init__(anthropic_api_key)
+
+    def run(
+        self,
+        ticker_configs: list[dict],
+        news_section: NewsSection,
+    ) -> tuple[list[GeopoliticalTheme], str]:
+        logger.info("Running geopolitical analysis")
+
+        all_news = (
+            news_section.direct_news
+            + news_section.market_news
+            + news_section.macro_news
+        )
+
+        headlines = [
+            {"title": item.title, "source": item.source, "summary": item.summary[:200]}
+            for item in all_news
+        ]
+
+        portfolio_symbols = [t["symbol"] for t in ticker_configs]
+        flagged = news_section.flagged_tickers
+
+        user_msg = (
+            f"Portfolio tickers: {portfolio_symbols}\n"
+            f"Flagged watch tickers: {flagged}\n\n"
+            f"Recent headlines ({len(headlines)} items):\n"
+            f"{json.dumps(headlines, indent=2)}\n\n"
+            "Identify geopolitical themes and return the JSON response."
+        )
+
+        raw = self._simple_completion(SYSTEM, user_msg, max_tokens=2000)
+
+        data = _extract_json(raw)
+        if data:
+            try:
+                themes = [
+                    GeopoliticalTheme(
+                        theme=t["theme"],
+                        affected_tickers=t.get("affected_tickers", []),
+                        risk_level=t.get("risk_level", "Medium"),
+                        ai_analysis=t.get("analysis", ""),
+                        source_headlines=t.get("source_headlines", []),
+                    )
+                    for t in data.get("themes", [])
+                ]
+                summary = data.get("portfolio_summary", "")
+                return themes, summary
+            except (KeyError, TypeError) as exc:
+                logger.warning("Geopolitical theme parse failed: %s", exc)
+
+        return [], raw
+
+
+def _extract_json(text: str) -> dict | None:
+    import re
+    text = re.sub(r"```(?:json)?\s*", "", text).strip()
+    for start in [i for i, c in enumerate(text) if c == "{"]:
+        for end in [i + 1 for i, c in enumerate(text) if c == "}" and i >= start]:
+            try:
+                return json.loads(text[start:end])
+            except json.JSONDecodeError:
+                continue
+    return None

@@ -1,0 +1,2827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinAgent — 2026-04-01 13:54 UTC</title>
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-light: #f0f1f4;
+      --text: #111827;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --accent-border: #bfdbfe;
+      --green: #16a34a;
+      --green-bg: #f0fdf4;
+      --green-border: #bbf7d0;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      --yellow: #d97706;
+      --yellow-bg: #fffbeb;
+      --yellow-border: #fde68a;
+      --orange: #ea580c;
+      --orange-bg: #fff7ed;
+      --orange-border: #fed7aa;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Header ── */
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 14px; gap: 16px; flex-wrap: wrap; }
+    .header-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+    .header-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; transition: background 0.15s; }
+    .btn:hover { background: var(--bg); text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    /* ── Tab bar ── */
+    .tab-bar { display: flex; gap: 0; overflow-x: auto; padding-bottom: 0; }
+    .tab { padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; user-select: none; }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Page layout ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Section shells ── */
+    .section { margin-bottom: 24px; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+
+    /* ── Analyst ratings table ── */
+    .ratings-table { width: 100%; border-collapse: collapse; }
+    .ratings-table thead th { padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .ratings-table thead th:not(:first-child) { text-align: right; }
+    .ratings-table tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+    .ratings-table tbody td:not(:first-child) { text-align: right; }
+    .ratings-table tbody tr:last-child td { border-bottom: none; }
+    .ratings-table tbody tr:hover { background: var(--bg); }
+    .firm-name { font-weight: 600; font-size: 13px; }
+    .analyst-name { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+    /* Rating pill */
+    .pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+    .pill-buy { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .pill-sell { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .pill-hold { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .pill-neutral { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
+
+    /* Price target upside */
+    .upside-positive { color: var(--green); font-weight: 600; }
+    .upside-negative { color: var(--red); font-weight: 600; }
+
+    /* Performance stars */
+    .perf-stars { color: var(--yellow); font-size: 11px; }
+
+    /* ── AI block ── */
+    .ai-block { padding: 12px 16px; background: var(--accent-light); border-top: 1px solid var(--accent-border); }
+    .ai-label { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+    .ai-text { font-size: 13px; color: #374151; line-height: 1.65; }
+
+    /* ── Ticker hero ── */
+    .ticker-hero { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .ticker-symbol { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .ticker-name { font-size: 13px; color: var(--text-secondary); }
+    .ticker-price { font-size: 20px; font-weight: 700; margin-left: auto; }
+    .ticker-price-sub { font-size: 11px; color: var(--text-muted); text-align: right; }
+
+    /* ── News ── */
+    .news-list { divide-y: var(--border-light); }
+    .news-item { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
+    .news-item:last-child { border-bottom: none; }
+    .news-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
+    .news-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+    .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; }
+    .source-wsj { background: #fef3c7; color: #92400e; }
+    .source-yahoofinance { background: #ede9fe; color: #5b21b6; }
+    .news-date { font-size: 11px; color: var(--text-muted); }
+    .news-summary { font-size: 12px; color: var(--text-secondary); margin-top: 5px; line-height: 1.5; }
+    .ticker-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .ticker-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; background: var(--bg); border: 1px solid var(--border); color: var(--text-secondary); }
+    .full-text-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-left: 2px; }
+
+    /* ── Flagged tickers ── */
+    .flagged-row { padding: 10px 16px; border-top: 1px solid var(--border); background: var(--yellow-bg); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .flagged-label { font-size: 11px; font-weight: 600; color: var(--yellow); }
+    .flag-chip { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: var(--surface); border: 1px solid var(--yellow-border); color: var(--yellow); }
+
+    /* ── Financials ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+    .kpi-cell { background: var(--surface); padding: 12px 14px; }
+    .kpi-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+    .kpi-value { font-size: 15px; font-weight: 700; margin-top: 3px; letter-spacing: -0.3px; }
+    .fin-table { width: 100%; border-collapse: collapse; }
+    .fin-table thead th { padding: 9px 14px; text-align: right; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .fin-table thead th:first-child { text-align: left; }
+    .fin-table tbody td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--border-light); }
+    .fin-table tbody td:first-child { text-align: left; color: var(--text-secondary); font-weight: 500; }
+    .fin-table tbody tr:last-child td { border-bottom: none; }
+    .fin-table tbody tr:hover { background: var(--bg); }
+
+    /* ── Geopolitical ── */
+    .geo-theme { border-bottom: 1px solid var(--border-light); padding: 14px 16px; }
+    .geo-theme:last-child { border-bottom: none; }
+    .geo-header { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+    .geo-name { font-size: 13px; font-weight: 700; flex: 1; }
+    .risk-pill { }
+    .risk-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .risk-medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .risk-medium-high { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+    .risk-high { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .geo-tickers { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+    .geo-analysis { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .geo-headlines { margin-top: 8px; }
+    .geo-headline { font-size: 11px; color: var(--text-muted); padding: 2px 0; display: flex; gap: 6px; }
+    .geo-headline::before { content: "›"; color: var(--text-muted); }
+
+    /* ── Subsection headers ── */
+    .subsec-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); padding: 8px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+
+    /* ── Empty/error states ── */
+    .empty-state { padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+    .error-banner { background: var(--red-bg); border: 1px solid var(--red-border); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 20px; font-size: 12px; color: var(--red); }
+
+    /* ── Macro tab ── */
+    .macro-summary { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── Sparkline ── */
+    .spark-wrap { display: flex; align-items: center; }
+    canvas.sparkline { display: block; }
+
+    /* ── Insider transaction pills ── */
+    .pill-insider-buy { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .pill-insider-sell { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    /* ── Earnings countdown ── */
+    .earnings-soon { color: #d97706; font-weight: 600; }
+    .earnings-far { color: #6b7280; }
+
+    /* ── Short interest ── */
+    .short-high { color: #dc2626; }
+    .short-mid { color: #d97706; }
+    .short-low { color: #16a34a; }
+
+    /* ── Theme chips ── */
+    .theme-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: default; }
+
+    /* ── Archive select ── */
+    .archive-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 12px; cursor: pointer; }
+
+    /* ── Supply Chain diagram ── */
+    .sc-diagram-wrap { padding: 16px; overflow-x: auto; }
+    .sc-svg { width: 100%; min-width: 560px; }
+    .sc-summary { font-size: 12px; color: var(--text-secondary); padding: 0 16px 14px; line-height: 1.55; font-style: italic; }
+    .sc-empty { padding: 16px; color: var(--text-muted); font-size: 13px; text-align: center; }
+
+    /* ── Peer table ── */
+    .peer-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .peer-table thead th { padding: 8px 12px; text-align: right; font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .peer-table thead th:first-child { text-align: left; }
+    .peer-table tbody td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--border-light); }
+    .peer-table tbody td:first-child { text-align: left; font-weight: 600; }
+    .peer-table tbody tr:last-child td { border-bottom: none; }
+    .peer-table tbody tr:hover { background: var(--bg); }
+
+    /* ── Insider table ── */
+    .insider-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .insider-table thead th { padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .insider-table thead th:not(:first-child):not(:nth-child(2)) { text-align: right; }
+    .insider-table tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); }
+    .insider-table tbody td:not(:first-child):not(:nth-child(2)) { text-align: right; }
+    .insider-table tbody tr:last-child td { border-bottom: none; }
+    .insider-table tbody tr:hover { background: var(--bg); }
+    .insider-summary { padding: 8px 14px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--bg); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">FinAgent</div>
+      <div class="header-meta">Updated 2026-04-01 13:54 UTC</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      
+      <select class="archive-select" onchange="if(this.value) window.location.href=this.value">
+        <option value="">History</option>
+        
+        <option value="archive/2026-04-01.html">2026-04-01</option>
+        
+      </select>
+      
+      
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar" id="tabBar">
+    
+    <div class="tab active" data-tab="stock-NVDA">
+      NVDA
+    </div>
+    
+    <div class="tab " data-tab="stock-AAPL">
+      AAPL
+    </div>
+    
+    <div class="tab " data-tab="stock-TSM">
+      TSM
+    </div>
+    
+    <div class="tab" data-tab="macro">Macro &amp; Geo</div>
+  </div>
+</div>
+
+<div class="page">
+
+  
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PER-TICKER TABS                                -->
+  <!-- ═══════════════════════════════════════════════ -->
+  
+  
+  
+  
+  
+  
+  
+
+  <div class="tab-content active" id="tab-stock-NVDA">
+
+    <!-- Ticker hero bar -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="ticker-hero">
+        <div>
+          <div class="ticker-symbol">NVDA</div>
+          <div class="ticker-name">NVIDIA Corporation</div>
+        </div>
+        
+        <div style="margin-left:auto; text-align:right;">
+          <div class="ticker-price">$175.84</div>
+          <div class="ticker-price-sub">Current price</div>
+        </div>
+        
+        <div class="spark-wrap">
+          <canvas id="spark-NVDA" class="sparkline" width="160" height="48"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: ANALYST RATINGS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Analyst Ratings</span>
+      </div>
+      <div class="card">
+        
+        <table class="ratings-table">
+          <thead>
+            <tr>
+              <th>Firm &amp; Analyst</th>
+              <th>Action</th>
+              <th>Rating</th>
+              <th>Price Target</th>
+              <th>PT Upside</th>
+              <th>Analyst Perf.</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Rosenblatt</div>
+                <div class="analyst-name">Kevin Cassidy</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $325.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +84.8%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-23</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Cantor Fitzgerald</div>
+                <div class="analyst-name">C.J. Muse</div>
+              </td>
+              <td style="color:var(--text-secondary)">Reiterates</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $300.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +70.6%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-23</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Raymond James</div>
+                <div class="analyst-name">Srini Pajjuri</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $323.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $291.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +83.7%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-19</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Truist Securities</div>
+                <div class="analyst-name">William Stein</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $287.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $283.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +63.2%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-18</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Rosenblatt</div>
+                <div class="analyst-name">Kevin Cassidy</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $325.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $300.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +84.8%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-18</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        <div class="ai-block">
+          <div class="ai-label">AI Consensus Summary</div>
+          <div class="ai-text">## NVDA Analyst Consensus Rationale
+
+The analyst community maintains a firmly bullish stance on NVIDIA, with a **strong buy** consensus across 56 analysts and a mean price target of $268.22 — representing approximately **53% upside** from the current price of $175.84. Recent actions reflect notable conviction, with high-profile firms including Rosenblatt (twice), Raymond James, and Truist Securities all reiterating or maintaining Strong Buy ratings in the past week, suggesting no deterioration in sentiment despite any near-term price weakness. However, the wide dispersion between the low target of $140.00 (implying ~20% downside) and the high of $380.00 highlights that a minority bear case exists — likely centered on valuation risk, export restrictions, or potential AI spending deceleration — even as the preponderant view remains that NVIDIA&#39;s dominant positioning in AI accelerated computing warrants a significant premium to current levels.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: UPCOMING EARNINGS ── -->
+    
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Upcoming Earnings</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+          <div>
+            <div class="kpi-label">Earnings Date</div>
+            <div class="kpi-value" style="font-size:14px;">2026-05-21</div>
+          </div>
+          
+          <div>
+            <div class="kpi-label">Days Until</div>
+            <div class="kpi-value earnings-far" style="font-size:14px;">
+              in 50 days
+              
+            </div>
+          </div>
+          
+          
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: NEWS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">News</span>
+      </div>
+      <div class="card">
+        
+        
+        
+
+        
+          <div class="empty-state">No recent news found for NVDA</div>
+        
+      </div>
+    </div>
+
+    <!-- ── SECTION: FINANCIALS ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Financial Statements</span>
+      </div>
+      <div class="card">
+        <!-- KPI strip -->
+        <div class="kpi-grid">
+          <div class="kpi-cell">
+            <div class="kpi-label">Market Cap</div>
+            <div class="kpi-value">$4275.25B</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Trailing P/E</div>
+            <div class="kpi-value">35.9×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Forward P/E</div>
+            <div class="kpi-value">15.8×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">EV / EBITDA</div>
+            <div class="kpi-value">31.4×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Debt / Equity</div>
+            <div class="kpi-value">7.25</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">FCF Yield</div>
+            <div class="kpi-value">2.3%</div>
+          </div>
+          
+          <div class="kpi-cell">
+            <div class="kpi-label">Short Float %</div>
+            
+            
+            <div class="kpi-value short-low">
+              1.0%
+            </div>
+            
+          </div>
+          
+        </div>
+
+        <!-- Multi-year table -->
+        
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>2026</th><th>2025</th><th>2024</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Revenue</td><td>$215.94B</td><td>$130.50B</td><td>$60.92B</td></tr>
+            <tr><td>Gross Margin</td><td>71.1%</td><td>75.0%</td><td>72.7%</td></tr>
+            <tr><td>Operating Margin</td><td>60.4%</td><td>62.4%</td><td>54.1%</td></tr>
+            <tr><td>Net Margin</td><td>55.6%</td><td>55.8%</td><td>48.8%</td></tr>
+            <tr><td>Net Income</td><td>$120.07B</td><td>$72.88B</td><td>$29.76B</td></tr>
+            <tr><td>Free Cash Flow</td><td>$96.68B</td><td>$60.85B</td><td>$27.02B</td></tr>
+            <tr><td>Total Debt</td><td>$11.04B</td><td>$9.98B</td><td>$11.06B</td></tr>
+            <tr><td>Cash &amp; Equiv.</td><td>$10.61B</td><td>$8.59B</td><td>$7.28B</td></tr>
+          </tbody>
+        </table>
+        
+
+        <div class="ai-block">
+          <div class="ai-label">AI Analysis</div>
+          <div class="ai-text">## NVIDIA Corporation (NVDA) — Financial Analysis
+
+NVIDIA has delivered extraordinary revenue growth, with sales expanding from $60.92B in FY2024 to $215.94B in FY2026 — a 3.5x increase in just two years — driven overwhelmingly by surging data center and AI accelerator demand, while operating margins have expanded from 54.1% to 60.4%, underscoring powerful operating leverage at scale. Gross margins dipped modestly from 75.0% to 71.1% in FY2026, likely reflecting a richer mix of complex system-level shipments (e.g., NVL rack-scale products) and supply chain costs, though remaining at exceptional levels for a semiconductor company. Cash generation quality is outstanding, with free cash flow nearly tripling from $27.02B to $96.68B over the period, representing a ~44.8% FCF margin in FY2026, and the balance sheet remains manageable with $11.04B in total debt nearly offset by $10.61B in cash, yielding a near-neutral net debt position despite a debt-to-equity ratio of 7.26x that reflects aggressive share buybacks compressing book equity. The primary notable dynamic is the valuation context: at a $4,275B market cap, the trailing P/E of 35.9x compresses sharply to a forward P/E of 15.8x, implying the market is pricing in continued aggressive earnings growth — any deceleration in AI infrastructure spending, export restriction escalation, or competitive displacement in accelerator silicon would represent meaningful fundamental risk to sustaining current financial trajectory.</div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: INSIDER TRANSACTIONS ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Insider Transactions</span>
+      </div>
+      <div class="card">
+        <table class="insider-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Shares</th>
+              <th>Price</th>
+              <th>Total Value</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            <tr>
+              <td>ROBERTSON DONALD F JR</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">5,396</td>
+              <td style="text-align:right;">$174.75</td>
+              <td style="text-align:right;">$942,944</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-03-20</td>
+            </tr>
+            
+            
+            <tr>
+              <td>KRESS COLETTE M.</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">62,650</td>
+              <td style="text-align:right;">$174.89</td>
+              <td style="text-align:right;">$11.0M</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-03-20</td>
+            </tr>
+            
+            
+            <tr>
+              <td>STEVENS MARK A</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">221,682</td>
+              <td style="text-align:right;">$173.68</td>
+              <td style="text-align:right;">$38.5M</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-03-20</td>
+            </tr>
+            
+            
+            <tr>
+              <td>SHAH AARTI S</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">19,000</td>
+              <td style="text-align:right;">$176.71</td>
+              <td style="text-align:right;">$3.4M</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-03-19</td>
+            </tr>
+            
+            
+            <tr>
+              <td>HUANG JEN-HSUN</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">58,962,602</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-03-18</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        
+        <div class="insider-summary">0 buys / 10 sells in the last 30 days</div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: GEOPOLITICAL (filtered to this ticker) ── -->
+    
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Geopolitical Exposure</span>
+      </div>
+      <div class="card">
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">US-China Semiconductor Export Controls</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">TSM</span>
+            
+          </div>
+          <div class="geo-analysis">The U.S. has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly impacting NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100 series) to Chinese customers. TSM faces dual pressure as a key manufacturer for NVDA and other U.S. chipmakers, and must comply with U.S. restrictions while managing its exposure to Chinese foundry clients. Further escalation could materially reduce revenue for both companies and fragment the global semiconductor supply chain.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Taiwan Strait Geopolitical Tension</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">TSM</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">US-China Trade War &amp; Tariff Escalation</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">AAPL</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+          </div>
+          <div class="geo-analysis">Apple generates approximately 20% of its revenue from Greater China and manufactures the majority of its devices through Chinese supply chain partners, making it highly sensitive to tariff escalation or retaliatory trade measures. NVDA also faces demand-side risk in China, which has historically been a significant market for its data center and gaming products. Renewed or expanded tariff regimes could increase production costs for AAPL and reduce addressable market size for both companies.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">China Domestic Technology Nationalism &amp; Market Access</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">AAPL</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+          </div>
+          <div class="geo-analysis">Beijing has been actively promoting domestic alternatives to U.S. technology products, including encouraging state entities and consumers to replace iPhones with domestic brands like Huawei, and pushing for homegrown AI chip solutions to replace NVDA hardware. Regulatory actions such as app store restrictions, data localization requirements, or outright procurement bans on U.S. tech products could meaningfully erode market share for both AAPL and NVDA in China. This trend is structural and likely to persist regardless of short-term diplomatic developments.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="pill risk-pill risk-medium">
+              Medium
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">TSM</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          
+        </div>
+        
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: PORTFOLIO THEMES ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Portfolio Themes</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          
+          <span class="theme-chip" title="Companies at the core of AI compute buildout">AI Infrastructure</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: SUPPLY CHAIN MAP ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Supply Chain Map</span>
+      </div>
+      <div class="card">
+        
+        <div class="sc-diagram-wrap">
+          <svg class="sc-svg" id="sc-svg-NVDA" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        
+        <div class="sc-summary">NVIDIA sits at the critical nexus of the AI infrastructure supply chain, designing cutting-edge GPU accelerators that are entirely dependent on TSMC&#39;s leading-edge foundry capacity and HBM memory from a concentrated set of suppliers (Samsung, SK Hynix, Micron). On the demand side, NVIDIA is the dominant AI compute supplier to the world&#39;s largest hyperscalers and cloud providers, making its revenue highly concentrated among a small number of mega-cap technology companies aggressively investing in AI infrastructure.</div>
+        
+        <script>
+        (function() {
+          var sym = "NVDA";
+          var sc = {"downstream": [{"criticality": "high", "name": "Microsoft Corporation", "relationship": "Major hyperscaler customer purchasing H100/H200 GPU clusters for Azure AI cloud infrastructure and OpenAI partnership", "ticker": "MSFT"}, {"criticality": "high", "name": "Meta Platforms Inc.", "relationship": "Large-scale buyer of H100 GPU clusters for AI model training (LLaMA) and metaverse/recommendation systems", "ticker": "META"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Significant purchaser of NVIDIA data center GPUs for Google Cloud AI services and internal AI research/training", "ticker": "GOOGL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Major customer deploying NVIDIA GPUs across AWS cloud instances (p4, p5 series) for AI/ML workloads", "ticker": "AMZN"}, {"criticality": "medium", "name": "Tesla Inc.", "relationship": "Customer for NVIDIA DRIVE automotive platforms and historically a large GPU buyer for Dojo/AI training infrastructure", "ticker": "TSLA"}, {"criticality": "medium", "name": "Hewlett Packard Enterprise", "relationship": "OEM partner integrating NVIDIA GPUs into enterprise AI servers and HPC systems sold to end customers", "ticker": "HPE"}], "supply_chain_summary": "NVIDIA sits at the critical nexus of the AI infrastructure supply chain, designing cutting-edge GPU accelerators that are entirely dependent on TSMC\u0027s leading-edge foundry capacity and HBM memory from a concentrated set of suppliers (Samsung, SK Hynix, Micron). On the demand side, NVIDIA is the dominant AI compute supplier to the world\u0027s largest hyperscalers and cloud providers, making its revenue highly concentrated among a small number of mega-cap technology companies aggressively investing in AI infrastructure.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary fab partner manufacturing all advanced NVIDIA GPUs (H100, A100, RTX series) on leading-edge nodes (4nm/5nm)", "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "Sole supplier of EUV lithography equipment to TSMC and Samsung, indirectly critical to NVIDIA\u0027s advanced chip production", "ticker": "ASML"}, {"criticality": "high", "name": "Micron Technology", "relationship": "Supplier of GDDR6/GDDR6X memory for GeForce and professional GPU products, and HBM3e for AI accelerators", "ticker": "MU"}, {"criticality": "medium", "name": "Broadcom Inc.", "relationship": "Supplier of high-speed networking ASICs and PCIe switch silicon used in NVIDIA\u0027s NVLink and data center interconnect solutions", "ticker": "AVGO"}, {"criticality": "medium", "name": "Applied Materials", "relationship": "Supplier of wafer fabrication and deposition equipment used across NVIDIA\u0027s foundry partners in chip manufacturing", "ticker": "AMAT"}]};
+          var upstream = sc.upstream || [];
+          var downstream = sc.downstream || [];
+          var svgEl = document.getElementById('sc-svg-' + sym);
+          if (!svgEl) return;
+
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
+          var COL_GAP = 80;
+          var ROW_GAP = 14;
+          var CENTER_W = 110, CENTER_H = 60;
+
+          var criticColor = {
+            'high': {stroke: '#dc2626', fill: '#fef2f2'},
+            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+          var downColor = {
+            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
+            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+
+          var maxRows = Math.max(upstream.length, downstream.length, 1);
+          var totalH = Math.max(maxRows * (NODE_H + ROW_GAP) - ROW_GAP, CENTER_H) + 40;
+          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
+
+          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
+          svgEl.setAttribute('height', totalH);
+
+          function svgEl_(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (var k in attrs) el.setAttribute(k, attrs[k]);
+            return el;
+          }
+          function addText(parent, x, y, text, style) {
+            var t = svgEl_('text', {x: x, y: y, style: style || ''});
+            t.textContent = text;
+            parent.appendChild(t);
+          }
+
+          var cx = NODE_W + COL_GAP + 20;
+          var cy = totalH / 2 - CENTER_H / 2;
+
+          // Draw center node
+          var centerG = svgEl_('g', {});
+          centerG.appendChild(svgEl_('rect', {
+            x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
+            fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
+          }));
+          addText(centerG, cx + CENTER_W/2, cy + 22, sym, 'font-size:14px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+          svgEl.appendChild(centerG);
+
+          function drawNodes(nodes, isLeft, colorMap) {
+            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
+            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
+            var startY = totalH / 2 - totalNodesH / 2;
+            nodes.forEach(function(node, i) {
+              var ny = startY + i * (NODE_H + ROW_GAP);
+              var nc = colorMap[node.criticality] || colorMap['low'];
+              var g = svgEl_('g', {});
+              g.appendChild(svgEl_('rect', {
+                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
+                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+              }));
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
+                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+              var nameText = (node.name || '').substring(0, 20);
+              addText(g, colX + NODE_W/2, ny + 30, nameText,
+                'font-size:9px;fill:#6b7280;text-anchor:middle;');
+              var relText = (node.relationship || '').substring(0, 26);
+              addText(g, colX + NODE_W/2, ny + 44, relText,
+                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              svgEl.appendChild(g);
+
+              // Arrow
+              var nodeRightX = colX + NODE_W;
+              var nodeMidY = ny + NODE_H / 2;
+              var centerMidY = cy + CENTER_H / 2;
+              var p1x, p1y, p2x, p2y, cp1x, cp1y, cp2x, cp2y;
+              if (isLeft) {
+                p1x = nodeRightX; p1y = nodeMidY;
+                p2x = cx; p2y = centerMidY;
+              } else {
+                p1x = cx + CENTER_W; p1y = centerMidY;
+                p2x = colX; p2y = nodeMidY;
+              }
+              cp1x = p1x + (p2x - p1x) * 0.45; cp1y = p1y;
+              cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
+              var path = svgEl_('path', {
+                d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
+                'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
+                opacity: 0.6
+              });
+              svgEl.insertBefore(path, svgEl.firstChild);
+            });
+          }
+
+          // Arrowhead markers
+          var defs = svgEl_('defs', {});
+          ['arrow-in', 'arrow-out'].forEach(function(id) {
+            var marker = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
+              refX: 5, refY: 3, orient: 'auto'});
+            var poly = svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'});
+            marker.appendChild(poly);
+            defs.appendChild(marker);
+          });
+          svgEl.insertBefore(defs, svgEl.firstChild);
+
+          drawNodes(upstream, true, criticColor);
+          drawNodes(downstream, false, downColor);
+        })();
+        </script>
+        
+      </div>
+    </div>
+
+  </div>
+  
+  
+  
+  
+  
+  
+  
+
+  <div class="tab-content " id="tab-stock-AAPL">
+
+    <!-- Ticker hero bar -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="ticker-hero">
+        <div>
+          <div class="ticker-symbol">AAPL</div>
+          <div class="ticker-name">Apple Inc.</div>
+        </div>
+        
+        <div style="margin-left:auto; text-align:right;">
+          <div class="ticker-price">$254.70</div>
+          <div class="ticker-price-sub">Current price</div>
+        </div>
+        
+        <div class="spark-wrap">
+          <canvas id="spark-AAPL" class="sparkline" width="160" height="48"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: ANALYST RATINGS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Analyst Ratings</span>
+      </div>
+      <div class="card">
+        
+        <table class="ratings-table">
+          <thead>
+            <tr>
+              <th>Firm &amp; Analyst</th>
+              <th>Action</th>
+              <th>Rating</th>
+              <th>Price Target</th>
+              <th>PT Upside</th>
+              <th>Analyst Perf.</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Wedbush</div>
+                <div class="analyst-name">Dan Ives</div>
+              </td>
+              <td style="color:var(--text-secondary)">Reiterates</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $350.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +37.4%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-31</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Wedbush</div>
+                <div class="analyst-name">Daniel Ives</div>
+              </td>
+              <td style="color:var(--text-secondary)">Reiterates</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $350.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +37.4%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-27</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Morgan Stanley</div>
+                <div class="analyst-name">Erik Woodring</div>
+              </td>
+              <td style="color:var(--text-secondary)">Reiterates</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $315.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +23.7%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-23</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">B of A Securities</div>
+                <div class="analyst-name">Wamsi Mohan</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $320.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $325.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +25.6%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-23</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Wedbush</div>
+                <div class="analyst-name">Daniel Ives</div>
+              </td>
+              <td style="color:var(--text-secondary)">Reiterates</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $350.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +37.4%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-03-05</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        <div class="ai-block">
+          <div class="ai-label">AI Consensus Summary</div>
+          <div class="ai-text">## AAPL Analyst Consensus Rationale
+
+The analyst community maintains a broadly constructive stance on Apple, with a consensus **Buy** recommendation (mean score of 1.90/5) across 41 analysts and a mean price target of **$295.31** — implying approximately **16% upside** from the current price of $254.70. Recent actions reflect notable conviction among top-tier firms, with Wedbush reiterating its Buy rating on multiple occasions and both Morgan Stanley and B of A Securities (the latter at Strong Buy) affirming positive views in late March 2026, suggesting no meaningful deterioration in the bull case. However, the wide price target range of **$205–$350** signals meaningful dispersion in analyst views, with the bear case implying roughly 20% downside, likely reflecting macro uncertainty, valuation concerns, or questions around the pace of AI-driven revenue contribution.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: UPCOMING EARNINGS ── -->
+    
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Upcoming Earnings</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+          <div>
+            <div class="kpi-label">Earnings Date</div>
+            <div class="kpi-value" style="font-size:14px;">2026-05-01</div>
+          </div>
+          
+          <div>
+            <div class="kpi-label">Days Until</div>
+            <div class="kpi-value earnings-far" style="font-size:14px;">
+              in 30 days
+              
+            </div>
+          </div>
+          
+          
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: NEWS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">News</span>
+      </div>
+      <div class="card">
+        
+        
+        
+
+        
+          <div class="empty-state">No recent news found for AAPL</div>
+        
+      </div>
+    </div>
+
+    <!-- ── SECTION: FINANCIALS ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Financial Statements</span>
+      </div>
+      <div class="card">
+        <!-- KPI strip -->
+        <div class="kpi-grid">
+          <div class="kpi-cell">
+            <div class="kpi-label">Market Cap</div>
+            <div class="kpi-value">$3743.56B</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Trailing P/E</div>
+            <div class="kpi-value">32.3×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Forward P/E</div>
+            <div class="kpi-value">27.3×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">EV / EBITDA</div>
+            <div class="kpi-value">24.5×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Debt / Equity</div>
+            <div class="kpi-value">102.63</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">FCF Yield</div>
+            <div class="kpi-value">2.6%</div>
+          </div>
+          
+          <div class="kpi-cell">
+            <div class="kpi-label">Short Float %</div>
+            
+            
+            <div class="kpi-value short-low">
+              0.9%
+            </div>
+            
+          </div>
+          
+        </div>
+
+        <!-- Multi-year table -->
+        
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>2025</th><th>2024</th><th>2023</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Revenue</td><td>$416.16B</td><td>$391.04B</td><td>$383.29B</td></tr>
+            <tr><td>Gross Margin</td><td>46.9%</td><td>46.2%</td><td>44.1%</td></tr>
+            <tr><td>Operating Margin</td><td>32.0%</td><td>31.5%</td><td>29.8%</td></tr>
+            <tr><td>Net Margin</td><td>26.9%</td><td>24.0%</td><td>25.3%</td></tr>
+            <tr><td>Net Income</td><td>$112.01B</td><td>$93.74B</td><td>$97.00B</td></tr>
+            <tr><td>Free Cash Flow</td><td>$98.77B</td><td>$108.81B</td><td>$99.58B</td></tr>
+            <tr><td>Total Debt</td><td>$98.66B</td><td>$106.63B</td><td>$111.09B</td></tr>
+            <tr><td>Cash &amp; Equiv.</td><td>$35.93B</td><td>$29.94B</td><td>$29.96B</td></tr>
+          </tbody>
+        </table>
+        
+
+        <div class="ai-block">
+          <div class="ai-label">AI Analysis</div>
+          <div class="ai-text">## Apple Inc. (AAPL) — Financial Analysis
+
+Apple has demonstrated consistent top-line growth and meaningful margin expansion over the three-year period, with revenue rising from $383.3B in 2023 to $416.2B in 2025 (+8.6% cumulative) while gross margins improved 280 basis points to 46.9% and operating margins expanded from 29.8% to 32.0%, reflecting favorable Services mix shift and disciplined cost management. Balance sheet leverage remains elevated — net debt stands at approximately $62.7B in 2025 (total debt of $98.7B against cash of $35.9B), and a debt-to-equity ratio of 102.6x signals that Apple&#39;s aggressive share buyback program has deeply eroded book equity, though this is a structural feature of its capital return strategy rather than a distress indicator given its robust earnings power. Free cash flow quality is strong and consistent, averaging approximately $102.4B annually across the three years, with FCF conversion relative to net income well above 1.0x, underscoring that reported earnings are solidly backed by cash — notably, the 2025 FCF of $98.8B represents a ~26.3% FCF yield on revenue despite moderating slightly from the 2024 peak of $108.8B. A key highlight is the net margin expansion to 26.9% in 2025 (from 24.0% in 2024), though investors should monitor whether debt reduction keeps pace with cash generation, as total debt has declined modestly from $111.1B to $98.7B over the period while the forward P/E of 27.3x and EV/EBITDA of 24.5x leave limited margin for error if Services growth decelerates.</div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: INSIDER TRANSACTIONS ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Insider Transactions</span>
+      </div>
+      <div class="card">
+        <table class="insider-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Shares</th>
+              <th>Price</th>
+              <th>Total Value</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            <tr>
+              <td>NEWSTEAD JENNIFER</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">60,208</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-03-13</td>
+            </tr>
+            
+            
+            <tr>
+              <td>LEVINSON ARTHUR D</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">1,113</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-02-26</td>
+            </tr>
+            
+            
+            <tr>
+              <td>LEVINSON ARTHUR D</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">1,113</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-01-30</td>
+            </tr>
+            
+            
+            <tr>
+              <td>JUNG ANDREA</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">1,255</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-01-30</td>
+            </tr>
+            
+            
+            <tr>
+              <td>WAGNER SUSAN L</td>
+              <td>
+                <span class="pill pill-insider-sell">
+                  Sell
+                </span>
+              </td>
+              <td style="text-align:right;">1,255</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;">—</td>
+              <td style="text-align:right;color:var(--text-muted);">2026-01-30</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        
+        <div class="insider-summary">0 buys / 10 sells in the last 30 days</div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: GEOPOLITICAL (filtered to this ticker) ── -->
+    
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Geopolitical Exposure</span>
+      </div>
+      <div class="card">
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Taiwan Strait Geopolitical Tension</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">TSM</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">US-China Trade War &amp; Tariff Escalation</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">AAPL</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+          </div>
+          <div class="geo-analysis">Apple generates approximately 20% of its revenue from Greater China and manufactures the majority of its devices through Chinese supply chain partners, making it highly sensitive to tariff escalation or retaliatory trade measures. NVDA also faces demand-side risk in China, which has historically been a significant market for its data center and gaming products. Renewed or expanded tariff regimes could increase production costs for AAPL and reduce addressable market size for both companies.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">China Domestic Technology Nationalism &amp; Market Access</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">AAPL</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+          </div>
+          <div class="geo-analysis">Beijing has been actively promoting domestic alternatives to U.S. technology products, including encouraging state entities and consumers to replace iPhones with domestic brands like Huawei, and pushing for homegrown AI chip solutions to replace NVDA hardware. Regulatory actions such as app store restrictions, data localization requirements, or outright procurement bans on U.S. tech products could meaningfully erode market share for both AAPL and NVDA in China. This trend is structural and likely to persist regardless of short-term diplomatic developments.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="pill risk-pill risk-medium">
+              Medium
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">TSM</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">India Manufacturing Expansion &amp; Geopolitical Pivot</span>
+            <span class="pill risk-pill risk-low">
+              Low
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">Apple has been accelerating its supply chain diversification into India, with partners like Foxconn and Tata ramping iPhone production to reduce dependence on China. Geopolitically, this aligns with U.S.-India strategic partnership deepening under the Indo-Pacific Economic Framework, providing a relatively stable and supportive environment. While execution and infrastructure risks remain, this trend is broadly risk-reducing for AAPL&#39;s long-term supply chain geopolitical exposure.</div>
+          
+        </div>
+        
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: PORTFOLIO THEMES ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Portfolio Themes</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          
+          <span class="theme-chip" title="Supply chain exposure to Taiwan strait tension">Taiwan Geopolitical Risk</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: SUPPLY CHAIN MAP ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Supply Chain Map</span>
+      </div>
+      <div class="card">
+        
+        <div class="sc-diagram-wrap">
+          <svg class="sc-svg" id="sc-svg-AAPL" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        
+        <div class="sc-summary">Apple sits at the apex of a highly complex global supply chain, acting as a powerful demand-side orchestrator that designs its own silicon and outsources manufacturing to a concentrated set of critical partners — most notably TSMC for chips and Samsung for displays and memory. On the downstream side, Apple distributes its products through major telecom carriers and retailers while generating substantial high-margin services revenue from platform participants like Google, making it both a hardware seller and a platform gatekeeper.</div>
+        
+        <script>
+        (function() {
+          var sym = "AAPL";
+          var sc = {"downstream": [{"criticality": "high", "name": "Verizon Communications", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans", "ticker": "VZ"}, {"criticality": "high", "name": "AT\u0026T Inc.", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans", "ticker": "T"}, {"criticality": "high", "name": "T-Mobile US", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales; largest iPhone carrier partner", "ticker": "TMUS"}, {"criticality": "medium", "name": "Amazon.com Inc.", "relationship": "Significant third-party online retailer and distribution channel for Apple hardware and accessories", "ticker": "AMZN"}, {"criticality": "medium", "name": "Walmart Inc.", "relationship": "Large brick-and-mortar retail distribution channel for Apple devices and accessories", "ticker": "WMT"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Pays Apple an estimated $15-20B annually as default search engine on Safari/iOS, a major services revenue source", "ticker": "GOOGL"}], "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a powerful demand-side orchestrator that designs its own silicon and outsources manufacturing to a concentrated set of critical partners \u2014 most notably TSMC for chips and Samsung for displays and memory. On the downstream side, Apple distributes its products through major telecom carriers and retailers while generating substantial high-margin services revenue from platform participants like Google, making it both a hardware seller and a platform gatekeeper.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary fabricator of Apple Silicon (A-series, M-series chips) on leading-edge nodes", "ticker": "TSM"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Supplier of 5G modem chipsets used in iPhone lineup", "ticker": "QCOM"}, {"criticality": "medium", "name": "Broadcom Inc.", "relationship": "Supplier of Wi-Fi, Bluetooth, and RF semiconductor components across Apple product lines", "ticker": "AVGO"}, {"criticality": "medium", "name": "Cirrus Logic Inc.", "relationship": "Sole-source supplier of audio chips and haptic controllers for iPhone and iPad", "ticker": "CRUS"}, {"criticality": "low", "name": "Honeywell International", "relationship": "Supplier of specialty materials and sensor components used in device manufacturing", "ticker": "HON"}]};
+          var upstream = sc.upstream || [];
+          var downstream = sc.downstream || [];
+          var svgEl = document.getElementById('sc-svg-' + sym);
+          if (!svgEl) return;
+
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
+          var COL_GAP = 80;
+          var ROW_GAP = 14;
+          var CENTER_W = 110, CENTER_H = 60;
+
+          var criticColor = {
+            'high': {stroke: '#dc2626', fill: '#fef2f2'},
+            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+          var downColor = {
+            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
+            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+
+          var maxRows = Math.max(upstream.length, downstream.length, 1);
+          var totalH = Math.max(maxRows * (NODE_H + ROW_GAP) - ROW_GAP, CENTER_H) + 40;
+          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
+
+          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
+          svgEl.setAttribute('height', totalH);
+
+          function svgEl_(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (var k in attrs) el.setAttribute(k, attrs[k]);
+            return el;
+          }
+          function addText(parent, x, y, text, style) {
+            var t = svgEl_('text', {x: x, y: y, style: style || ''});
+            t.textContent = text;
+            parent.appendChild(t);
+          }
+
+          var cx = NODE_W + COL_GAP + 20;
+          var cy = totalH / 2 - CENTER_H / 2;
+
+          // Draw center node
+          var centerG = svgEl_('g', {});
+          centerG.appendChild(svgEl_('rect', {
+            x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
+            fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
+          }));
+          addText(centerG, cx + CENTER_W/2, cy + 22, sym, 'font-size:14px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+          svgEl.appendChild(centerG);
+
+          function drawNodes(nodes, isLeft, colorMap) {
+            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
+            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
+            var startY = totalH / 2 - totalNodesH / 2;
+            nodes.forEach(function(node, i) {
+              var ny = startY + i * (NODE_H + ROW_GAP);
+              var nc = colorMap[node.criticality] || colorMap['low'];
+              var g = svgEl_('g', {});
+              g.appendChild(svgEl_('rect', {
+                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
+                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+              }));
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
+                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+              var nameText = (node.name || '').substring(0, 20);
+              addText(g, colX + NODE_W/2, ny + 30, nameText,
+                'font-size:9px;fill:#6b7280;text-anchor:middle;');
+              var relText = (node.relationship || '').substring(0, 26);
+              addText(g, colX + NODE_W/2, ny + 44, relText,
+                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              svgEl.appendChild(g);
+
+              // Arrow
+              var nodeRightX = colX + NODE_W;
+              var nodeMidY = ny + NODE_H / 2;
+              var centerMidY = cy + CENTER_H / 2;
+              var p1x, p1y, p2x, p2y, cp1x, cp1y, cp2x, cp2y;
+              if (isLeft) {
+                p1x = nodeRightX; p1y = nodeMidY;
+                p2x = cx; p2y = centerMidY;
+              } else {
+                p1x = cx + CENTER_W; p1y = centerMidY;
+                p2x = colX; p2y = nodeMidY;
+              }
+              cp1x = p1x + (p2x - p1x) * 0.45; cp1y = p1y;
+              cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
+              var path = svgEl_('path', {
+                d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
+                'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
+                opacity: 0.6
+              });
+              svgEl.insertBefore(path, svgEl.firstChild);
+            });
+          }
+
+          // Arrowhead markers
+          var defs = svgEl_('defs', {});
+          ['arrow-in', 'arrow-out'].forEach(function(id) {
+            var marker = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
+              refX: 5, refY: 3, orient: 'auto'});
+            var poly = svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'});
+            marker.appendChild(poly);
+            defs.appendChild(marker);
+          });
+          svgEl.insertBefore(defs, svgEl.firstChild);
+
+          drawNodes(upstream, true, criticColor);
+          drawNodes(downstream, false, downColor);
+        })();
+        </script>
+        
+      </div>
+    </div>
+
+  </div>
+  
+  
+  
+  
+  
+  
+  
+
+  <div class="tab-content " id="tab-stock-TSM">
+
+    <!-- Ticker hero bar -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="ticker-hero">
+        <div>
+          <div class="ticker-symbol">TSM</div>
+          <div class="ticker-name">Taiwan Semiconductor Manufacturing</div>
+        </div>
+        
+        <div style="margin-left:auto; text-align:right;">
+          <div class="ticker-price">$345.82</div>
+          <div class="ticker-price-sub">Current price</div>
+        </div>
+        
+        <div class="spark-wrap">
+          <canvas id="spark-TSM" class="sparkline" width="160" height="48"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: ANALYST RATINGS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Analyst Ratings</span>
+      </div>
+      <div class="card">
+        
+        <table class="ratings-table">
+          <thead>
+            <tr>
+              <th>Firm &amp; Analyst</th>
+              <th>Action</th>
+              <th>Rating</th>
+              <th>Price Target</th>
+              <th>PT Upside</th>
+              <th>Analyst Perf.</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">DA Davidson</div>
+                <div class="analyst-name">Gil Luria</div>
+              </td>
+              <td style="color:var(--text-secondary)">Initiates</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $450.00
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +30.1%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-02-13</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Barclays</div>
+                <div class="analyst-name">Simon Coles</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $450.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $380.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +30.1%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-01-16</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">TD Cowen</div>
+                <div class="analyst-name">Krish Sankar</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-hold">
+                  Hold
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $370.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $325.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +7.0%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-01-16</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Needham</div>
+                <div class="analyst-name">Charles Shi</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Strong Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $410.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $360.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-positive">
+                  +18.6%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2026-01-15</td>
+            </tr>
+            
+            
+            
+              
+            
+            <tr>
+              <td>
+                <div class="firm-name">Bernstein</div>
+                <div class="analyst-name">Mark Li</div>
+              </td>
+              <td style="color:var(--text-secondary)">Maintains</td>
+              <td>
+                
+                <span class="pill pill-buy">
+                  Buy
+                </span>
+                
+                
+              </td>
+              <td>
+                
+                $330.00
+                
+                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $290.00</span>
+                
+                
+              </td>
+              <td>
+                
+                <span class="upside-negative">
+                  -4.6%
+                </span>
+                
+              </td>
+              <td>
+                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
+              </td>
+              <td style="color:var(--text-muted)">2025-12-08</td>
+            </tr>
+            
+          </tbody>
+        </table>
+        
+        <div class="ai-block">
+          <div class="ai-label">AI Consensus Summary</div>
+          <div class="ai-text">## TSM Analyst Consensus Rationale
+
+Analyst sentiment on Taiwan Semiconductor Manufacturing remains broadly constructive, with the 18-analyst consensus price target of $430.65 implying approximately 24.5% upside from the current price of $345.82, and the bull case extending as high as $520. Recent coverage is dominated by bullish ratings — including a fresh **Strong Buy** initiation from DA Davidson in February 2026 and maintained Strong Buy and Buy ratings from Needham, Barclays, and Bernstein — reflecting confidence in TSMC&#39;s leading-edge process technology and sustained AI-driven semiconductor demand. The lone cautionary note comes from TD Cowen&#39;s maintained **Hold**, and the relatively tight low-end price target of $351 suggests some analysts see limited near-term upside, likely reflecting concerns around geopolitical risk tied to Taiwan and potential cyclical demand variability.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION: UPCOMING EARNINGS ── -->
+    
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Upcoming Earnings</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+          <div>
+            <div class="kpi-label">Earnings Date</div>
+            <div class="kpi-value" style="font-size:14px;">2026-04-16</div>
+          </div>
+          
+          <div>
+            <div class="kpi-label">Days Until</div>
+            <div class="kpi-value earnings-far" style="font-size:14px;">
+              in 15 days
+              
+            </div>
+          </div>
+          
+          
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: NEWS ── -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">News</span>
+      </div>
+      <div class="card">
+        
+        
+        
+
+        
+          <div class="empty-state">No recent news found for TSM</div>
+        
+      </div>
+    </div>
+
+    <!-- ── SECTION: FINANCIALS ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Financial Statements</span>
+      </div>
+      <div class="card">
+        <!-- KPI strip -->
+        <div class="kpi-grid">
+          <div class="kpi-cell">
+            <div class="kpi-label">Market Cap</div>
+            <div class="kpi-value">$1792.20B</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Trailing P/E</div>
+            <div class="kpi-value">33.4×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Forward P/E</div>
+            <div class="kpi-value">19.3×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">EV / EBITDA</div>
+            <div class="kpi-value">2.6×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">Debt / Equity</div>
+            <div class="kpi-value">19.57</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-label">FCF Yield</div>
+            <div class="kpi-value">55.4%</div>
+          </div>
+          
+          <div class="kpi-cell">
+            <div class="kpi-label">Short Float %</div>
+            
+            
+            <div class="kpi-value short-low">
+              0.4%
+            </div>
+            
+          </div>
+          
+        </div>
+
+        <!-- Multi-year table -->
+        
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>2025</th><th>2024</th><th>2023</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Revenue</td><td>$3809.05B</td><td>$2894.31B</td><td>$2161.74B</td></tr>
+            <tr><td>Gross Margin</td><td>59.9%</td><td>56.1%</td><td>54.4%</td></tr>
+            <tr><td>Operating Margin</td><td>50.8%</td><td>45.7%</td><td>42.6%</td></tr>
+            <tr><td>Net Margin</td><td>45.1%</td><td>40.5%</td><td>39.4%</td></tr>
+            <tr><td>Net Income</td><td>$1717.88B</td><td>$1173.27B</td><td>$851.74B</td></tr>
+            <tr><td>Free Cash Flow</td><td>$992.38B</td><td>$861.20B</td><td>$286.57B</td></tr>
+            <tr><td>Total Debt</td><td>$1064.58B</td><td>$1047.04B</td><td>$956.26B</td></tr>
+            <tr><td>Cash &amp; Equiv.</td><td>$2767.86B</td><td>$2127.63B</td><td>$1465.43B</td></tr>
+          </tbody>
+        </table>
+        
+
+        <div class="ai-block">
+          <div class="ai-label">AI Analysis</div>
+          <div class="ai-text">## TSMC Financial Analysis (2023–2025, figures in TWD billions)
+
+TSMC has delivered exceptional top-line growth, with revenue expanding 76% over three years from TWD 2,161.74B to TWD 3,809.05B, while margins have expanded meaningfully across all metrics — gross margin improved from 54.4% to 59.9%, operating margin from 42.6% to 50.8%, and net margin from 39.4% to 45.1% — reflecting strong pricing power and operating leverage driven by surging AI and advanced-node demand. Balance sheet health is robust: net cash is strongly positive at approximately TWD 1,703.28B (cash of TWD 2,767.86B against total debt of TWD 1,064.58B), and cash has nearly doubled over the period, while the debt-to-equity ratio of 19.6 warrants monitoring but is characteristic of a capital-intensive semiconductor foundry funding aggressive capacity expansion. Free cash flow quality is a notable highlight, with FCF surging from TWD 286.57B in 2023 to TWD 992.38B in 2025 — a 246% increase — as heavy capex cycles begin to moderate relative to revenue growth, signaling improving capital efficiency. A modest red flag is the wide gap between trailing P/E (33.4x) and forward P/E (19.3x), which implies the market is pricing in continued sharp earnings growth; the unusually low EV/EBITDA of 2.6x likely reflects currency or definitional inconsistencies in the inputs and warrants independent verification before use in valuation conclusions.</div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: INSIDER TRANSACTIONS ── -->
+    
+
+    <!-- ── SECTION: GEOPOLITICAL (filtered to this ticker) ── -->
+    
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Geopolitical Exposure</span>
+      </div>
+      <div class="card">
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">US-China Semiconductor Export Controls</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">TSM</span>
+            
+          </div>
+          <div class="geo-analysis">The U.S. has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly impacting NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100 series) to Chinese customers. TSM faces dual pressure as a key manufacturer for NVDA and other U.S. chipmakers, and must comply with U.S. restrictions while managing its exposure to Chinese foundry clients. Further escalation could materially reduce revenue for both companies and fragment the global semiconductor supply chain.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Taiwan Strait Geopolitical Tension</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">TSM</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="pill risk-pill risk-medium">
+              Medium
+            </span>
+          </div>
+          <div class="geo-tickers">
+            
+            <span class="ticker-tag">TSM</span>
+            
+            <span class="ticker-tag">NVDA</span>
+            
+            <span class="ticker-tag">AAPL</span>
+            
+          </div>
+          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          
+        </div>
+        
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: PORTFOLIO THEMES ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Portfolio Themes</span>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          
+          <span class="theme-chip" title="Companies at the core of AI compute buildout">AI Infrastructure</span>
+          
+          <span class="theme-chip" title="Supply chain exposure to Taiwan strait tension">Taiwan Geopolitical Risk</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- ── SECTION: SUPPLY CHAIN MAP ── -->
+    
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Supply Chain Map</span>
+      </div>
+      <div class="card">
+        
+        <div class="sc-diagram-wrap">
+          <svg class="sc-svg" id="sc-svg-TSM" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        
+        <div class="sc-summary">TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world&#39;s dominant pure-play foundry, manufacturing chips designed by fabless companies on leading-edge nodes that no other foundry can replicate at scale. Its upstream dependency on a small set of highly specialized equipment makers (particularly ASML for EUV) and its downstream concentration among a few hyperscale and fabless giants make it both extraordinarily powerful and geopolitically sensitive.</div>
+        
+        <script>
+        (function() {
+          var sym = "TSM";
+          var sc = {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest single customer, sole manufacturer of A-series and M-series chips for iPhone, iPad, and Mac; estimated ~25% of TSMC revenue", "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Major fabless customer for GPU and AI accelerator chips (H100, B100) on leading-edge nodes; rapidly growing revenue share", "ticker": "NVDA"}, {"criticality": "high", "name": "Advanced Micro Devices Inc.", "relationship": "Key fabless customer for Ryzen/EPYC CPUs and Radeon GPUs manufactured exclusively at TSMC on 5nm/4nm nodes", "ticker": "AMD"}, {"criticality": "high", "name": "Qualcomm Incorporated", "relationship": "Major customer for Snapdragon mobile SoCs and RF semiconductor products on advanced nodes", "ticker": "QCOM"}, {"criticality": "medium", "name": "Intel Corporation", "relationship": "Growing customer outsourcing select products including Meteor Lake tiles and future foundry orders to TSMC", "ticker": "INTC"}, {"criticality": "medium", "name": "Marvell Technology Inc.", "relationship": "Customer for custom AI/cloud silicon and networking chips manufactured at TSMC advanced nodes", "ticker": "MRVL"}], "supply_chain_summary": "TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world\u0027s dominant pure-play foundry, manufacturing chips designed by fabless companies on leading-edge nodes that no other foundry can replicate at scale. Its upstream dependency on a small set of highly specialized equipment makers (particularly ASML for EUV) and its downstream concentration among a few hyperscale and fabless giants make it both extraordinarily powerful and geopolitically sensitive.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Sole supplier of EUV lithography equipment, critical for leading-edge 5nm/3nm/2nm node manufacturing", "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Leading supplier of wafer fabrication equipment including CVD, PVD, and etch systems", "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Key supplier of etch and deposition equipment essential for advanced node wafer processing", "ticker": "LRCX"}, {"criticality": "medium", "name": "KLA Corporation", "relationship": "Primary supplier of process control, wafer inspection, and metrology equipment", "ticker": "KLAC"}, {"criticality": "low", "name": "Emerson Electric Co.", "relationship": "Supplier of specialty industrial gases and chemical delivery systems used in fab operations", "ticker": "EMR"}, {"criticality": "medium", "name": "Ferrotec Holdings (via chemical suppliers)", "relationship": "Supplier of ultra-pure chemicals and silicon wafer materials for wafer fabrication", "ticker": "FSI"}]};
+          var upstream = sc.upstream || [];
+          var downstream = sc.downstream || [];
+          var svgEl = document.getElementById('sc-svg-' + sym);
+          if (!svgEl) return;
+
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
+          var COL_GAP = 80;
+          var ROW_GAP = 14;
+          var CENTER_W = 110, CENTER_H = 60;
+
+          var criticColor = {
+            'high': {stroke: '#dc2626', fill: '#fef2f2'},
+            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+          var downColor = {
+            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
+            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+
+          var maxRows = Math.max(upstream.length, downstream.length, 1);
+          var totalH = Math.max(maxRows * (NODE_H + ROW_GAP) - ROW_GAP, CENTER_H) + 40;
+          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
+
+          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
+          svgEl.setAttribute('height', totalH);
+
+          function svgEl_(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (var k in attrs) el.setAttribute(k, attrs[k]);
+            return el;
+          }
+          function addText(parent, x, y, text, style) {
+            var t = svgEl_('text', {x: x, y: y, style: style || ''});
+            t.textContent = text;
+            parent.appendChild(t);
+          }
+
+          var cx = NODE_W + COL_GAP + 20;
+          var cy = totalH / 2 - CENTER_H / 2;
+
+          // Draw center node
+          var centerG = svgEl_('g', {});
+          centerG.appendChild(svgEl_('rect', {
+            x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
+            fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
+          }));
+          addText(centerG, cx + CENTER_W/2, cy + 22, sym, 'font-size:14px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+          svgEl.appendChild(centerG);
+
+          function drawNodes(nodes, isLeft, colorMap) {
+            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
+            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
+            var startY = totalH / 2 - totalNodesH / 2;
+            nodes.forEach(function(node, i) {
+              var ny = startY + i * (NODE_H + ROW_GAP);
+              var nc = colorMap[node.criticality] || colorMap['low'];
+              var g = svgEl_('g', {});
+              g.appendChild(svgEl_('rect', {
+                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
+                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+              }));
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
+                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+              var nameText = (node.name || '').substring(0, 20);
+              addText(g, colX + NODE_W/2, ny + 30, nameText,
+                'font-size:9px;fill:#6b7280;text-anchor:middle;');
+              var relText = (node.relationship || '').substring(0, 26);
+              addText(g, colX + NODE_W/2, ny + 44, relText,
+                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              svgEl.appendChild(g);
+
+              // Arrow
+              var nodeRightX = colX + NODE_W;
+              var nodeMidY = ny + NODE_H / 2;
+              var centerMidY = cy + CENTER_H / 2;
+              var p1x, p1y, p2x, p2y, cp1x, cp1y, cp2x, cp2y;
+              if (isLeft) {
+                p1x = nodeRightX; p1y = nodeMidY;
+                p2x = cx; p2y = centerMidY;
+              } else {
+                p1x = cx + CENTER_W; p1y = centerMidY;
+                p2x = colX; p2y = nodeMidY;
+              }
+              cp1x = p1x + (p2x - p1x) * 0.45; cp1y = p1y;
+              cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
+              var path = svgEl_('path', {
+                d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
+                'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
+                opacity: 0.6
+              });
+              svgEl.insertBefore(path, svgEl.firstChild);
+            });
+          }
+
+          // Arrowhead markers
+          var defs = svgEl_('defs', {});
+          ['arrow-in', 'arrow-out'].forEach(function(id) {
+            var marker = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
+              refX: 5, refY: 3, orient: 'auto'});
+            var poly = svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'});
+            marker.appendChild(poly);
+            defs.appendChild(marker);
+          });
+          svgEl.insertBefore(defs, svgEl.firstChild);
+
+          drawNodes(upstream, true, criticColor);
+          drawNodes(downstream, false, downColor);
+        })();
+        </script>
+        
+      </div>
+    </div>
+
+  </div>
+  
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- MACRO & GEO TAB                               -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-macro">
+
+    <!-- AI market narrative -->
+    
+
+    <!-- Peer comparison table -->
+    
+    <div class="section">
+      <div class="section-header"><span class="section-title">Peer Comparison</span></div>
+      <div class="card">
+        <table class="peer-table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Price</th>
+              <th>Mkt Cap</th>
+              <th>P/E</th>
+              <th>Fwd P/E</th>
+              <th>EV/EBITDA</th>
+              <th>Gross Mgn</th>
+              <th>Rev Grwth</th>
+              <th>D/E</th>
+              <th>FCF Yield</th>
+              <th>Short %</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>NVDA</td>
+              <td>$175.90</td>
+              <td>$4275.25B</td>
+              <td>35.9×</td>
+              <td>15.8×</td>
+              <td>31.4×</td>
+              <td>71.1%</td>
+              <td>
+                
+                <span class="upside-positive">
+                  +65.5%
+                </span>
+                
+              </td>
+              <td>7.25</td>
+              <td>2.3%</td>
+              <td>
+                
+                <span class="short-low">
+                  1.0%
+                </span>
+                
+              </td>
+            </tr>
+            
+            <tr>
+              <td>AAPL</td>
+              <td>$254.70</td>
+              <td>$3743.56B</td>
+              <td>32.3×</td>
+              <td>27.3×</td>
+              <td>24.5×</td>
+              <td>46.9%</td>
+              <td>
+                
+                <span class="upside-positive">
+                  +6.4%
+                </span>
+                
+              </td>
+              <td>102.63</td>
+              <td>2.6%</td>
+              <td>
+                
+                <span class="short-low">
+                  0.9%
+                </span>
+                
+              </td>
+            </tr>
+            
+            <tr>
+              <td>TSM</td>
+              <td>$345.55</td>
+              <td>$1792.20B</td>
+              <td>33.4×</td>
+              <td>19.3×</td>
+              <td>2.6×</td>
+              <td>59.9%</td>
+              <td>
+                
+                <span class="upside-positive">
+                  +31.6%
+                </span>
+                
+              </td>
+              <td>19.57</td>
+              <td>55.4%</td>
+              <td>
+                
+                <span class="short-low">
+                  0.4%
+                </span>
+                
+              </td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+
+    <!-- Macro news -->
+    
+
+    <!-- Flagged tickers -->
+    
+
+    <!-- Portfolio Themes -->
+    
+    <div class="section">
+      <div class="section-header"><span class="section-title">Themes</span></div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+              <span class="theme-chip">AI Infrastructure</span>
+              <span style="font-size:12px;color:var(--text-secondary);">Companies at the core of AI compute buildout</span>
+            </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              
+              <span class="ticker-tag">NVDA</span>
+              
+              <span class="ticker-tag">TSM</span>
+              
+            </div>
+          </div>
+          
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+              <span class="theme-chip">Taiwan Geopolitical Risk</span>
+              <span style="font-size:12px;color:var(--text-secondary);">Supply chain exposure to Taiwan strait tension</span>
+            </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              
+              <span class="ticker-tag">TSM</span>
+              
+              <span class="ticker-tag">AAPL</span>
+              
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Supply Chain Network (all tickers) -->
+    
+    <div class="section">
+      <div class="section-header"><span class="section-title">Supply Chain Network</span></div>
+      <div class="card">
+        <div class="sc-diagram-wrap">
+          <svg id="sc-network-svg" class="sc-svg" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <script>
+        (function() {
+          var scDetail = {"AAPL": {"downstream": [{"criticality": "high", "name": "Verizon Communications", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans", "ticker": "VZ"}, {"criticality": "high", "name": "AT\u0026T Inc.", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans", "ticker": "T"}, {"criticality": "high", "name": "T-Mobile US", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales; largest iPhone carrier partner", "ticker": "TMUS"}, {"criticality": "medium", "name": "Amazon.com Inc.", "relationship": "Significant third-party online retailer and distribution channel for Apple hardware and accessories", "ticker": "AMZN"}, {"criticality": "medium", "name": "Walmart Inc.", "relationship": "Large brick-and-mortar retail distribution channel for Apple devices and accessories", "ticker": "WMT"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Pays Apple an estimated $15-20B annually as default search engine on Safari/iOS, a major services revenue source", "ticker": "GOOGL"}], "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a powerful demand-side orchestrator that designs its own silicon and outsources manufacturing to a concentrated set of critical partners \u2014 most notably TSMC for chips and Samsung for displays and memory. On the downstream side, Apple distributes its products through major telecom carriers and retailers while generating substantial high-margin services revenue from platform participants like Google, making it both a hardware seller and a platform gatekeeper.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary fabricator of Apple Silicon (A-series, M-series chips) on leading-edge nodes", "ticker": "TSM"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Supplier of 5G modem chipsets used in iPhone lineup", "ticker": "QCOM"}, {"criticality": "medium", "name": "Broadcom Inc.", "relationship": "Supplier of Wi-Fi, Bluetooth, and RF semiconductor components across Apple product lines", "ticker": "AVGO"}, {"criticality": "medium", "name": "Cirrus Logic Inc.", "relationship": "Sole-source supplier of audio chips and haptic controllers for iPhone and iPad", "ticker": "CRUS"}, {"criticality": "low", "name": "Honeywell International", "relationship": "Supplier of specialty materials and sensor components used in device manufacturing", "ticker": "HON"}]}, "NVDA": {"downstream": [{"criticality": "high", "name": "Microsoft Corporation", "relationship": "Major hyperscaler customer purchasing H100/H200 GPU clusters for Azure AI cloud infrastructure and OpenAI partnership", "ticker": "MSFT"}, {"criticality": "high", "name": "Meta Platforms Inc.", "relationship": "Large-scale buyer of H100 GPU clusters for AI model training (LLaMA) and metaverse/recommendation systems", "ticker": "META"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Significant purchaser of NVIDIA data center GPUs for Google Cloud AI services and internal AI research/training", "ticker": "GOOGL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Major customer deploying NVIDIA GPUs across AWS cloud instances (p4, p5 series) for AI/ML workloads", "ticker": "AMZN"}, {"criticality": "medium", "name": "Tesla Inc.", "relationship": "Customer for NVIDIA DRIVE automotive platforms and historically a large GPU buyer for Dojo/AI training infrastructure", "ticker": "TSLA"}, {"criticality": "medium", "name": "Hewlett Packard Enterprise", "relationship": "OEM partner integrating NVIDIA GPUs into enterprise AI servers and HPC systems sold to end customers", "ticker": "HPE"}], "supply_chain_summary": "NVIDIA sits at the critical nexus of the AI infrastructure supply chain, designing cutting-edge GPU accelerators that are entirely dependent on TSMC\u0027s leading-edge foundry capacity and HBM memory from a concentrated set of suppliers (Samsung, SK Hynix, Micron). On the demand side, NVIDIA is the dominant AI compute supplier to the world\u0027s largest hyperscalers and cloud providers, making its revenue highly concentrated among a small number of mega-cap technology companies aggressively investing in AI infrastructure.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary fab partner manufacturing all advanced NVIDIA GPUs (H100, A100, RTX series) on leading-edge nodes (4nm/5nm)", "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "Sole supplier of EUV lithography equipment to TSMC and Samsung, indirectly critical to NVIDIA\u0027s advanced chip production", "ticker": "ASML"}, {"criticality": "high", "name": "Micron Technology", "relationship": "Supplier of GDDR6/GDDR6X memory for GeForce and professional GPU products, and HBM3e for AI accelerators", "ticker": "MU"}, {"criticality": "medium", "name": "Broadcom Inc.", "relationship": "Supplier of high-speed networking ASICs and PCIe switch silicon used in NVIDIA\u0027s NVLink and data center interconnect solutions", "ticker": "AVGO"}, {"criticality": "medium", "name": "Applied Materials", "relationship": "Supplier of wafer fabrication and deposition equipment used across NVIDIA\u0027s foundry partners in chip manufacturing", "ticker": "AMAT"}]}, "TSM": {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest single customer, sole manufacturer of A-series and M-series chips for iPhone, iPad, and Mac; estimated ~25% of TSMC revenue", "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Major fabless customer for GPU and AI accelerator chips (H100, B100) on leading-edge nodes; rapidly growing revenue share", "ticker": "NVDA"}, {"criticality": "high", "name": "Advanced Micro Devices Inc.", "relationship": "Key fabless customer for Ryzen/EPYC CPUs and Radeon GPUs manufactured exclusively at TSMC on 5nm/4nm nodes", "ticker": "AMD"}, {"criticality": "high", "name": "Qualcomm Incorporated", "relationship": "Major customer for Snapdragon mobile SoCs and RF semiconductor products on advanced nodes", "ticker": "QCOM"}, {"criticality": "medium", "name": "Intel Corporation", "relationship": "Growing customer outsourcing select products including Meteor Lake tiles and future foundry orders to TSMC", "ticker": "INTC"}, {"criticality": "medium", "name": "Marvell Technology Inc.", "relationship": "Customer for custom AI/cloud silicon and networking chips manufactured at TSMC advanced nodes", "ticker": "MRVL"}], "supply_chain_summary": "TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world\u0027s dominant pure-play foundry, manufacturing chips designed by fabless companies on leading-edge nodes that no other foundry can replicate at scale. Its upstream dependency on a small set of highly specialized equipment makers (particularly ASML for EUV) and its downstream concentration among a few hyperscale and fabless giants make it both extraordinarily powerful and geopolitically sensitive.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Sole supplier of EUV lithography equipment, critical for leading-edge 5nm/3nm/2nm node manufacturing", "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Leading supplier of wafer fabrication equipment including CVD, PVD, and etch systems", "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Key supplier of etch and deposition equipment essential for advanced node wafer processing", "ticker": "LRCX"}, {"criticality": "medium", "name": "KLA Corporation", "relationship": "Primary supplier of process control, wafer inspection, and metrology equipment", "ticker": "KLAC"}, {"criticality": "low", "name": "Emerson Electric Co.", "relationship": "Supplier of specialty industrial gases and chemical delivery systems used in fab operations", "ticker": "EMR"}, {"criticality": "medium", "name": "Ferrotec Holdings (via chemical suppliers)", "relationship": "Supplier of ultra-pure chemicals and silicon wafer materials for wafer fabrication", "ticker": "FSI"}]}};
+          var symbols = ["NVDA", "AAPL", "TSM"];
+          var svgEl = document.getElementById('sc-network-svg');
+          if (!svgEl || !symbols.length) return;
+
+          var NODE_W = 130, NODE_H = 48, NODE_RX = 7;
+          var CENTER_W = 100, CENTER_H = 56;
+          var COL_GAP = 70, ROW_GAP = 10;
+
+          // Collect all upstream/downstream nodes across all tickers
+          var upstreamSet = {}, downstreamSet = {};
+          symbols.forEach(function(sym) {
+            var sc = scDetail[sym] || {};
+            (sc.upstream || []).forEach(function(n) { upstreamSet[n.ticker] = n; });
+            (sc.downstream || []).forEach(function(n) { downstreamSet[n.ticker] = n; });
+          });
+          // Remove portfolio tickers from satellite sets
+          symbols.forEach(function(sym) { delete upstreamSet[sym]; delete downstreamSet[sym]; });
+
+          var upNodes = Object.values(upstreamSet);
+          var downNodes = Object.values(downstreamSet);
+          var centerNodes = symbols;
+
+          var maxRows = Math.max(upNodes.length, downNodes.length, centerNodes.length, 1);
+          var totalH = maxRows * (NODE_H + ROW_GAP) - ROW_GAP + 40;
+          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
+          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
+          svgEl.setAttribute('height', totalH);
+
+          function svgEl_(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (var k in attrs) el.setAttribute(k, attrs[k]);
+            return el;
+          }
+          function addText(parent, x, y, text, style) {
+            var t = svgEl_('text', {x: x, y: y, style: style || ''});
+            t.textContent = text;
+            parent.appendChild(t);
+          }
+
+          var criticColor = {
+            'high': {stroke: '#dc2626', fill: '#fef2f2'},
+            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+          var downColor = {
+            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
+            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
+            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
+          };
+
+          // Draw center column (portfolio tickers)
+          var cx = NODE_W + COL_GAP + 20;
+          var centerStartY = totalH / 2 - (centerNodes.length * (CENTER_H + ROW_GAP) - ROW_GAP) / 2;
+          var centerMids = {};
+          centerNodes.forEach(function(sym, i) {
+            var cy = centerStartY + i * (CENTER_H + ROW_GAP);
+            centerMids[sym] = cy + CENTER_H / 2;
+            var g = svgEl_('g', {});
+            g.appendChild(svgEl_('rect', {
+              x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
+              fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
+            }));
+            addText(g, cx + CENTER_W/2, cy + 24, sym,
+              'font-size:12px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+            svgEl.appendChild(g);
+          });
+
+          // Arrowhead markers
+          var defs = svgEl_('defs', {});
+          ['arr-in','arr-out'].forEach(function(id) {
+            var m = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
+              refX: 5, refY: 3, orient: 'auto'});
+            m.appendChild(svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'}));
+            defs.appendChild(m);
+          });
+          svgEl.insertBefore(defs, svgEl.firstChild);
+
+          function drawSatellites(nodes, isLeft, colorMap) {
+            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
+            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
+            var startY = totalH / 2 - totalNodesH / 2;
+            nodes.forEach(function(node, i) {
+              var ny = startY + i * (NODE_H + ROW_GAP);
+              var nc = colorMap[node.criticality] || colorMap['low'];
+              var g = svgEl_('g', {});
+              g.appendChild(svgEl_('rect', {
+                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
+                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+              }));
+              addText(g, colX + NODE_W/2, ny + 16, node.ticker || '',
+                'font-size:10px;font-weight:700;fill:#111827;text-anchor:middle;');
+              addText(g, colX + NODE_W/2, ny + 29, (node.name || '').substring(0, 20),
+                'font-size:8px;fill:#6b7280;text-anchor:middle;');
+              addText(g, colX + NODE_W/2, ny + 41, (node.relationship || '').substring(0, 24),
+                'font-size:7px;fill:#9ca3af;text-anchor:middle;');
+              svgEl.appendChild(g);
+
+              var nodeMidY = ny + NODE_H / 2;
+              // Draw arrows to all related center tickers
+              symbols.forEach(function(sym) {
+                var sc = scDetail[sym] || {};
+                var list = isLeft ? (sc.upstream || []) : (sc.downstream || []);
+                var found = list.find(function(x) { return x.ticker === node.ticker; });
+                if (!found) return;
+                var cmy = centerMids[sym];
+                var p1x, p1y, p2x, p2y;
+                if (isLeft) {
+                  p1x = colX + NODE_W; p1y = nodeMidY;
+                  p2x = cx; p2y = cmy;
+                } else {
+                  p1x = cx + CENTER_W; p1y = cmy;
+                  p2x = colX; p2y = nodeMidY;
+                }
+                var cp1x = p1x + (p2x - p1x) * 0.45, cp1y = p1y;
+                var cp2x = p1x + (p2x - p1x) * 0.55, cp2y = p2y;
+                var path = svgEl_('path', {
+                  d: 'M'+p1x+','+p1y+' C'+cp1x+','+cp1y+' '+cp2x+','+cp2y+' '+p2x+','+p2y,
+                  fill: 'none', stroke: nc.stroke, 'stroke-width': 1,
+                  'marker-end': isLeft ? 'url(#arr-in)' : 'url(#arr-out)',
+                  opacity: 0.4
+                });
+                svgEl.insertBefore(path, svgEl.firstChild);
+              });
+            });
+          }
+
+          drawSatellites(upNodes, true, criticColor);
+          drawSatellites(downNodes, false, downColor);
+        })();
+        </script>
+      </div>
+    </div>
+    
+
+    <!-- Geopolitical themes — full list -->
+    
+    <div class="section">
+      <div class="section-header"><span class="section-title">Geopolitical Risk Themes</span></div>
+      
+      <div class="card" style="margin-bottom:12px;">
+        <div class="ai-block" style="border-top:none;">
+          <div class="ai-label">Portfolio-Level Summary</div>
+          <div class="ai-text">This portfolio carries elevated geopolitical risk, primarily concentrated around U.S.-China tensions and Taiwan Strait stability, with all three tickers—NVDA, AAPL, and TSM—materially exposed to one or more of these structural fault lines. The semiconductor supply chain&#39;s geographic concentration in Taiwan represents the single highest-severity tail risk, while ongoing export controls and China market-access restrictions create persistent medium-to-high headwinds for near-term revenue. Investors should monitor U.S.-China diplomatic developments, Taiwan Strait military activity, and any expansion of U.S. Bureau of Industry and Security (BIS) entity list actions as key leading indicators for this portfolio&#39;s geopolitical risk profile. Note: this analysis is based on established structural geopolitical dynamics as no current news headlines were provided.</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">US-China Semiconductor Export Controls</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            <span class="ticker-tag">NVDA</span><span class="ticker-tag">TSM</span>
+          </div>
+          <div class="geo-analysis">The U.S. has progressively tightened export controls on advanced semiconductors and chip-making equipment to China, directly impacting NVDA&#39;s ability to sell high-performance AI GPUs (e.g., A100, H100 series) to Chinese customers. TSM faces dual pressure as a key manufacturer for NVDA and other U.S. chipmakers, and must comply with U.S. restrictions while managing its exposure to Chinese foundry clients. Further escalation could materially reduce revenue for both companies and fragment the global semiconductor supply chain.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Taiwan Strait Geopolitical Tension</span>
+            <span class="pill risk-pill risk-high">
+              High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            <span class="ticker-tag">TSM</span><span class="ticker-tag">NVDA</span><span class="ticker-tag">AAPL</span>
+          </div>
+          <div class="geo-analysis">Taiwan Semiconductor Manufacturing Company (TSM) produces the vast majority of the world&#39;s most advanced chips, making it uniquely exposed to any military or political escalation in the Taiwan Strait. NVDA relies on TSM for production of its leading-edge GPUs, and AAPL depends on TSM for its A-series and M-series chips powering iPhones and Macs. A conflict or naval blockade scenario would represent a catastrophic supply chain disruption with no short-term alternative manufacturing capacity available globally.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">US-China Trade War &amp; Tariff Escalation</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            <span class="ticker-tag">AAPL</span><span class="ticker-tag">NVDA</span>
+          </div>
+          <div class="geo-analysis">Apple generates approximately 20% of its revenue from Greater China and manufactures the majority of its devices through Chinese supply chain partners, making it highly sensitive to tariff escalation or retaliatory trade measures. NVDA also faces demand-side risk in China, which has historically been a significant market for its data center and gaming products. Renewed or expanded tariff regimes could increase production costs for AAPL and reduce addressable market size for both companies.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">China Domestic Technology Nationalism &amp; Market Access</span>
+            <span class="pill risk-pill risk-medium-high">
+              Medium-High
+            </span>
+          </div>
+          <div class="geo-tickers">
+            <span class="ticker-tag">AAPL</span><span class="ticker-tag">NVDA</span>
+          </div>
+          <div class="geo-analysis">Beijing has been actively promoting domestic alternatives to U.S. technology products, including encouraging state entities and consumers to replace iPhones with domestic brands like Huawei, and pushing for homegrown AI chip solutions to replace NVDA hardware. Regulatory actions such as app store restrictions, data localization requirements, or outright procurement bans on U.S. tech products could meaningfully erode market share for both AAPL and NVDA in China. This trend is structural and likely to persist regardless of short-term diplomatic developments.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">Allied Semiconductor Supply Chain Reshoring (CHIPS Act &amp; Geopolitical Diversification)</span>
+            <span class="pill risk-pill risk-medium">
+              Medium
+            </span>
+          </div>
+          <div class="geo-tickers">
+            <span class="ticker-tag">TSM</span><span class="ticker-tag">NVDA</span><span class="ticker-tag">AAPL</span>
+          </div>
+          <div class="geo-analysis">The U.S. CHIPS and Science Act and similar legislation in Europe and Japan are incentivizing TSM and other chipmakers to build fabrication capacity outside of Taiwan, which TSM is pursuing with fabs in Arizona, Japan, and Germany. While this diversification reduces long-term geopolitical concentration risk for NVDA and AAPL as customers, near-term execution challenges—including higher manufacturing costs, labor shortages, and construction delays—could pressure margins and timelines. This theme represents both a risk mitigation opportunity and a transitional operational risk.</div>
+          
+        </div>
+        
+        <div class="geo-theme">
+          <div class="geo-header">
+            <span class="geo-name">India Manufacturing Expansion &amp; Geopolitical Pivot</span>
+            <span class="pill risk-pill risk-low">
+              Low
+            </span>
+          </div>
+          <div class="geo-tickers">
+            <span class="ticker-tag">AAPL</span>
+          </div>
+          <div class="geo-analysis">Apple has been accelerating its supply chain diversification into India, with partners like Foxconn and Tata ramping iPhone production to reduce dependence on China. Geopolitically, this aligns with U.S.-India strategic partnership deepening under the Indo-Pacific Economic Framework, providing a relatively stable and supportive environment. While execution and infrastructure risks remain, this trend is broadly risk-reducing for AAPL&#39;s long-term supply chain geopolitical exposure.</div>
+          
+        </div>
+        
+      </div>
+    </div>
+    
+
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <span>Data: Financial Modeling Prep &bull; Yahoo Finance &bull; Wall Street Journal &bull; yfinance</span>
+    <span>For informational purposes only. Not investment advice.</span>
+  </div>
+
+</div><!-- end .page -->
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      const el = document.getElementById('tab-' + target);
+      if (el) el.classList.add('active');
+    });
+  });
+</script>
+
+<script>
+const priceHistory = {
+  
+  "AAPL": [270.75665283203125, 267.0101623535156, 262.1147155761719, 260.08660888671875, 258.7978515625, 259.1275329589844, 260.0067138671875, 260.8059387207031, 259.71697998046875, 257.9685974121094, 255.29112243652344, 246.46937561035156, 247.41848754882812, 248.1178436279297, 247.80812072753906, 255.17123413085938, 258.0285339355469, 256.2002868652344, 258.0385437011719, 259.2374267578125, 269.7575988769531, 269.22808837890625, 276.23150634765625, 275.6520690917969, 277.8599853515625, 274.6199951171875, 273.67999267578125, 275.5, 261.7300109863281, 255.77999877929688, 263.8800048828125, 264.3500061035156, 260.5799865722656, 264.5799865722656, 266.17999267578125, 272.1400146484375, 274.2300109863281, 272.95001220703125, 264.17999267578125, 264.7200012207031, 263.75, 262.5199890136719, 260.2900085449219, 257.4599914550781, 259.8800048828125, 260.8299865722656, 260.80999755859375, 255.75999450683594, 250.1199951171875, 252.82000732421875, 254.22999572753906, 249.94000244140625, 248.9600067138672, 247.99000549316406, 251.49000549316406, 251.63999938964844, 252.6199951171875, 252.88999938964844, 248.8000030517578, 246.6300048828125, 253.7899932861328, 254.74000549316406],
+  
+  "NVDA": [188.83978271484375, 188.1098175048828, 187.22987365722656, 189.09976196289062, 185.0299835205078, 184.84999084472656, 184.92999267578125, 185.79994201660156, 183.1300811767578, 187.03988647460938, 186.21990966796875, 178.06036376953125, 183.31008911132812, 184.82998657226562, 187.6598358154297, 186.4599151611328, 188.50979614257812, 191.5096435546875, 192.49957275390625, 191.11965942382812, 185.59996032714844, 180.33023071289062, 174.18057250976562, 171.87069702148438, 185.39996337890625, 190.0297088623047, 188.52978515625, 190.0397186279297, 186.9298858642578, 182.80010986328125, 184.95999145507812, 187.96981811523438, 187.88983154296875, 189.8097381591797, 191.53964233398438, 192.83956909179688, 195.54940795898438, 184.87998962402344, 177.180419921875, 182.47012329101562, 180.04025268554688, 183.03009033203125, 183.330078125, 177.8103790283203, 182.64010620117188, 184.760009765625, 186.02999877929688, 183.13999938964844, 180.25, 183.22000122070312, 181.92999267578125, 180.39999389648438, 178.55999755859375, 172.6999969482422, 175.63999938964844, 175.1999969482422, 178.67999267578125, 171.24000549316406, 167.52000427246094, 165.1699981689453, 174.39999389648438, 175.80999755859375],
+  
+  "TSM": [318.7119140625, 321.3445129394531, 326.50994873046875, 317.7845458984375, 317.1164245605469, 322.72064208984375, 330.8377685546875, 330.2793273925781, 326.19085693359375, 340.6800537109375, 341.4378967285156, 326.24072265625, 325.2036437988281, 326.45013427734375, 333.9290466308594, 331.7751159667969, 337.3893127441406, 341.3381652832031, 338.59588623046875, 329.63116455078125, 340.40081787109375, 334.80657958984375, 324.82470703125, 329.8006896972656, 347.8697814941406, 354.4113464355469, 360.89306640625, 373.0388488769531, 367.065673828125, 365.33056640625, 363.1766662597656, 361.2420959472656, 359.3773498535156, 369.49884033203125, 369.000244140625, 384.66607666015625, 386.6405334472656, 375.751220703125, 373.5274658203125, 368.07281494140625, 352.13775634765625, 356.4356384277344, 352.8656921386719, 337.9377746582031, 347.72021484375, 346.1147155761719, 353.563720703125, 335.7638854980469, 337.359375, 339.2740173339844, 345.9800109863281, 339.57000732421875, 338.7900085449219, 329.239990234375, 338.45001220703125, 343.25, 347.75, 326.1099853515625, 326.739990234375, 316.5, 337.95001220703125, 345.29998779296875],
+  
+};
+
+function drawSparkline(canvasId, data, color) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !data || !data.length) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = max - min || 1;
+  ctx.clearRect(0, 0, w, h);
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * h * 0.85 - h * 0.075;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = color || '#2563eb';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+  ctx.fillStyle = color ? color + '20' : '#2563eb20';
+  ctx.fill();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  
+  if (priceHistory["NVDA"]) {
+    const pts = priceHistory["NVDA"];
+    const first = pts[0], last = pts[pts.length - 1];
+    const color = last >= first ? '#16a34a' : '#dc2626';
+    drawSparkline('spark-NVDA', pts, color);
+  }
+  
+  if (priceHistory["AAPL"]) {
+    const pts = priceHistory["AAPL"];
+    const first = pts[0], last = pts[pts.length - 1];
+    const color = last >= first ? '#16a34a' : '#dc2626';
+    drawSparkline('spark-AAPL', pts, color);
+  }
+  
+  if (priceHistory["TSM"]) {
+    const pts = priceHistory["TSM"];
+    const first = pts[0], last = pts[pts.length - 1];
+    const color = last >= first ? '#16a34a' : '#dc2626';
+    drawSparkline('spark-TSM', pts, color);
+  }
+  
+});
+</script>
+
+</body>
+</html>

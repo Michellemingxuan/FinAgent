@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinAgent — Trigger Update</title>
+  <style>
+    :root {
+      --bg: #f8f9fb; --surface: #fff; --border: #e5e7eb;
+      --text: #111827; --muted: #6b7280; --accent: #2563eb;
+      --green: #16a34a; --red: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+           font-size: 14px; color: var(--text); min-height: 100vh;
+           display: flex; align-items: center; justify-content: center; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 32px; max-width: 420px; width: 90%; box-shadow: 0 4px 16px rgb(0 0 0 / 0.06); }
+    .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: var(--muted); margin-bottom: 5px; }
+    input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px;
+            font-size: 13px; font-family: monospace; color: var(--text);
+            background: var(--bg); margin-bottom: 16px; outline: none; }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1); }
+    .hint { font-size: 11px; color: var(--muted); margin-top: -12px; margin-bottom: 16px; }
+    .hint a { color: var(--accent); }
+    .btn { width: 100%; padding: 11px; background: var(--accent); color: #fff; border: none;
+           border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer;
+           transition: background 0.15s; }
+    .btn:hover { background: #1d4ed8; }
+    .btn:disabled { background: var(--muted); cursor: not-allowed; }
+    .status { margin-top: 16px; padding: 10px 14px; border-radius: 6px; font-size: 13px;
+              display: none; }
+    .status.success { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
+    .status.error   { background: #fef2f2; color: var(--red);   border: 1px solid #fecaca; }
+    .status.running { background: #eff6ff; color: var(--accent); border: 1px solid #bfdbfe; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+    .links { display: flex; justify-content: space-between; }
+    .links a { font-size: 12px; color: var(--accent); }
+    .save-hint { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">FinAgent</div>
+  <div class="subtitle">Trigger a report update on demand</div>
+
+  <label for="pat">GitHub Personal Access Token</label>
+  <input type="password" id="pat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+  <div class="hint">
+    Needs <code>workflow</code> scope.
+    <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent+Trigger" target="_blank" rel="noopener">
+      Create one here ↗
+    </a>
+  </div>
+  <label style="display:flex;align-items:center;gap:6px;margin-bottom:16px;cursor:pointer;">
+    <input type="checkbox" id="remember" style="width:auto;margin:0;padding:0;" />
+    <span style="font-size:12px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">
+      Remember in this browser (localStorage)
+    </span>
+  </label>
+
+  <button class="btn" id="triggerBtn" onclick="triggerWorkflow()">
+    &#x21bb;&ensp;Update Report Now
+  </button>
+
+  <div class="status" id="status"></div>
+
+  <hr class="divider" />
+  <div class="links">
+    <a href="index.html">← View latest report</a>
+    <a href="https://github.com/{{ github_repo }}/actions" target="_blank" rel="noopener">Actions log ↗</a>
+  </div>
+  <div class="save-hint">The report updates in ~2 min. Refresh index.html after.</div>
+</div>
+
+<script>
+  const REPO = "{{ github_repo }}";
+  const WORKFLOW = "generate_report.yml";
+  const LS_KEY = "finagent_pat";
+
+  // Restore saved PAT
+  const saved = localStorage.getItem(LS_KEY);
+  if (saved) {
+    document.getElementById("pat").value = saved;
+    document.getElementById("remember").checked = true;
+  }
+
+  async function triggerWorkflow() {
+    const pat = document.getElementById("pat").value.trim();
+    const remember = document.getElementById("remember").checked;
+    const btn = document.getElementById("triggerBtn");
+    const statusEl = document.getElementById("status");
+
+    if (!pat) {
+      showStatus("error", "Please enter your GitHub Personal Access Token.");
+      return;
+    }
+
+    if (remember) {
+      localStorage.setItem(LS_KEY, pat);
+    } else {
+      localStorage.removeItem(LS_KEY);
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Triggering…";
+    showStatus("running", "Sending request to GitHub Actions…");
+
+    try {
+      const resp = await fetch(
+        `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${pat}`,
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ref: "main" }),
+        }
+      );
+
+      if (resp.status === 204) {
+        showStatus("success", "✓ Workflow triggered! Report will update in ~2 minutes. Refresh this page then click \"View latest report\".");
+        btn.textContent = "Triggered ✓";
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = "↻  Update Report Now";
+        }, 30000);
+      } else if (resp.status === 401) {
+        showStatus("error", "Invalid token or missing 'workflow' scope. Check your PAT.");
+        btn.disabled = false;
+        btn.textContent = "↻  Update Report Now";
+      } else if (resp.status === 404) {
+        showStatus("error", `Repo not found: ${REPO}. Check GITHUB_REPO in your .env.`);
+        btn.disabled = false;
+        btn.textContent = "↻  Update Report Now";
+      } else {
+        const body = await resp.text();
+        showStatus("error", `GitHub returned ${resp.status}: ${body.slice(0, 120)}`);
+        btn.disabled = false;
+        btn.textContent = "↻  Update Report Now";
+      }
+    } catch (err) {
+      showStatus("error", `Network error: ${err.message}`);
+      btn.disabled = false;
+      btn.textContent = "↻  Update Report Now";
+    }
+  }
+
+  function showStatus(type, msg) {
+    const el = document.getElementById("status");
+    el.className = `status ${type}`;
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+
+  // Allow Enter key to trigger
+  document.getElementById("pat").addEventListener("keydown", e => {
+    if (e.key === "Enter") triggerWorkflow();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+name: Refresh Supply Chain
+
+on:
+  # Every Sunday at 01:00 UTC
+  schedule:
+    - cron: "0 1 * * 0"
+
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Refresh supply chain relationships
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python main.py --refresh-supply-chain
+
+      - name: Commit updated config
+        run: |
+          git config user.name  "FinAgent Bot"
+          git config user.email "finagent-bot@users.noreply.github.com"
+          git add config/stocks.json
+          if git diff --cached --quiet; then
+            echo "No supply chain changes detected."
+          else
+            git commit -m "chore: refresh supply chain relationships $(date -u +'%Y-%m-%d') [skip ci]"
+            git push
+          fi

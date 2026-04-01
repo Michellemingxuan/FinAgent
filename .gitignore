@@ -1,0 +1,21 @@
+# Credentials — never commit
+.env
+
+# Cached report context (contains live market data, not for version control)
+output/.last_context.pkl
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
