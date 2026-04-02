@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinAgent — 2026-04-02 08:22 UTC</title>
+  <title>FinAgent — 2026-04-02 08:33 UTC</title>
   <style>
     :root {
       --bg: #f8f9fb;
@@ -65,6 +65,10 @@
     [data-theme="dark"] .kpi-grid { background: var(--border); }
     [data-theme="dark"] .source-wsj { background: #422006; color: #fbbf24; }
     [data-theme="dark"] .source-yahoofinance { background: #2e1065; color: #c4b5fd; }
+    [data-theme="dark"] .source-googlenews { background: #0c4a6e; color: #7dd3fc; }
+    [data-theme="dark"] .source-cnbc { background: #422006; color: #fde68a; }
+    [data-theme="dark"] .source-marketwatch { background: #052e16; color: #86efac; }
+    [data-theme="dark"] .source-reuters { background: #4c0519; color: #fda4af; }
     [data-theme="dark"] canvas.sparkline { filter: brightness(1.2); }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -84,9 +88,16 @@
 
     /* ── Tab bar ── */
     .tab-bar { display: flex; gap: 0; overflow-x: auto; padding-bottom: 0; }
-    .tab { padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; user-select: none; }
-    .tab:hover { color: var(--text); }
+    .tab { display: flex; align-items: center; gap: 5px; padding: 10px 14px 10px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: grab; white-space: nowrap; transition: color 0.15s, border-color 0.15s, background 0.15s; user-select: none; position: relative; }
+    .tab:hover { color: var(--text); background: var(--bg); }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab.dragging { opacity: 0.4; cursor: grabbing; }
+    .tab.drag-over { border-left: 2px solid var(--accent); background: var(--accent-light); }
+    .tab-close { display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 11px; line-height: 1; color: var(--text-muted); transition: background 0.1s, color 0.1s; flex-shrink: 0; }
+    .tab-close:hover { background: var(--red-bg); color: var(--red); }
+    .tab-restore { padding: 6px 10px; font-size: 11px; color: var(--text-muted); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; display: none; align-items: center; gap: 3px; }
+    .tab-restore.has-hidden { display: flex; }
+    .tab-restore:hover { color: var(--accent); }
 
     /* ── Page layout ── */
     .page { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
@@ -145,6 +156,10 @@
     .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; }
     .source-wsj { background: #fef3c7; color: #92400e; }
     .source-yahoofinance { background: #ede9fe; color: #5b21b6; }
+    .source-googlenews { background: #e0f2fe; color: #075985; }
+    .source-cnbc { background: #fef9c3; color: #713f12; }
+    .source-marketwatch { background: #f0fdf4; color: #166534; }
+    .source-reuters { background: #fff1f2; color: #9f1239; }
     .news-date { font-size: 11px; color: var(--text-muted); }
     .news-summary { font-size: 12px; color: var(--text-secondary); margin-top: 5px; line-height: 1.5; }
     .ticker-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
@@ -255,11 +270,11 @@
     /* ── Add-stock modal ── */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
     .modal-overlay.visible { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 400px; width: 90%; box-shadow: 0 8px 32px rgb(0 0 0 / 0.2); }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 420px; width: 90%; box-shadow: 0 8px 32px rgb(0 0 0 / 0.2); }
     .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
     .modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
-    .modal input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); margin-bottom: 12px; outline: none; font-family: inherit; }
-    .modal input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15); }
+    .modal input[type="text"], .modal input[type="password"] { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); margin-bottom: 12px; outline: none; font-family: inherit; }
+    .modal input[type="text"]:focus, .modal input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15); }
     .modal label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
     .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
     .modal-actions .btn { flex: 1; justify-content: center; }
@@ -267,10 +282,38 @@
     .modal-status.success { display: block; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
     .modal-status.error { display: block; background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
     .modal-status.running { display: block; background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); }
+    /* Token saved row */
+    .token-saved-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 6px; margin-bottom: 12px; font-size: 12px; color: var(--green); }
+    .token-saved-row a { font-size: 11px; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+    /* Progress tracker */
+    .progress-track { margin-top: 14px; display: none; }
+    .progress-track.visible { display: block; }
+    .progress-steps { display: flex; flex-direction: column; gap: 6px; }
+    .progress-step { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .progress-step.done { color: var(--green); }
+    .progress-step.active { color: var(--accent); font-weight: 600; }
+    .progress-step.failed { color: var(--red); }
+    .step-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; background: var(--border); color: var(--text-muted); }
+    .progress-step.done .step-dot { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .progress-step.active .step-dot { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); animation: pulse-dot 1.2s ease-in-out infinite; }
+    .progress-step.failed .step-dot { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     [data-theme="dark"] .theme-chip { background: #1e3a5f; color: #93c5fd; border-color: #2563eb; }
     .header, .card { transition: background 0.3s, border-color 0.3s; }
+
+    /* ── Markdown within AI blocks ── */
+    .ai-text p { margin: 0 0 6px; }
+    .ai-text p:last-child { margin-bottom: 0; }
+    .ai-text ul, .ai-text ol { margin: 4px 0 6px 18px; padding: 0; }
+    .ai-text li { margin-bottom: 3px; }
+    .ai-text strong { font-weight: 700; color: var(--text); }
+    .ai-text em { font-style: italic; }
+    .ai-text code { background: var(--border-light); border-radius: 3px; padding: 1px 4px; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .ai-text h1, .ai-text h2, .ai-text h3 { font-size: 13px; font-weight: 700; margin: 8px 0 4px; color: var(--text); }
+    .ai-text blockquote { border-left: 3px solid var(--accent-border); margin: 6px 0; padding: 2px 10px; color: var(--text-secondary); }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -279,7 +322,7 @@
   <div class="header-top">
     <div>
       <div class="header-title">FinAgent</div>
-      <div class="header-meta" data-i18n="updated">Updated 2026-04-02 08:22 UTC</div>
+      <div class="header-meta" data-i18n="updated">Updated 2026-04-02 08:33 UTC</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
       <button class="toggle-btn" id="langToggle" onclick="toggleLang()" title="Switch language">EN</button>
@@ -310,49 +353,71 @@
   <!-- Tab bar -->
   <div class="tab-bar" id="tabBar">
     
-    <div class="tab active" data-tab="stock-NVDA">
-      NVDA
+    <div class="tab active" data-tab="stock-NVDA" data-symbol="NVDA" draggable="true">
+      <span>NVDA</span>
+      <span class="tab-close" title="Remove from view" onclick="closeTab(event, 'NVDA')">&#x2715;</span>
     </div>
     
-    <div class="tab " data-tab="stock-AAPL">
-      AAPL
+    <div class="tab " data-tab="stock-AAPL" data-symbol="AAPL" draggable="true">
+      <span>AAPL</span>
+      <span class="tab-close" title="Remove from view" onclick="closeTab(event, 'AAPL')">&#x2715;</span>
     </div>
     
-    <div class="tab " data-tab="stock-TSM">
-      TSM
+    <div class="tab " data-tab="stock-TSM" data-symbol="TSM" draggable="true">
+      <span>TSM</span>
+      <span class="tab-close" title="Remove from view" onclick="closeTab(event, 'TSM')">&#x2715;</span>
     </div>
     
-    <div class="tab " data-tab="stock-MU">
-      MU
+    <div class="tab " data-tab="stock-MU" data-symbol="MU" draggable="true">
+      <span>MU</span>
+      <span class="tab-close" title="Remove from view" onclick="closeTab(event, 'MU')">&#x2715;</span>
     </div>
     
     <div class="tab" data-tab="macro" data-i18n="macro_geo">Macro &amp; Geo</div>
+    <div class="tab-restore" id="tabRestore" onclick="restoreAllTabs()" title="Show hidden tabs">&#x21ba; <span id="tabRestoreLabel">Restore</span></div>
   </div>
 </div>
 
 <!-- ═══ ADD STOCK MODAL ═══ -->
 
-<div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)this.classList.remove('visible')">
+<div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)closeAddStockModal()">
   <div class="modal">
     <h3 data-i18n="add_stock_title">Add a Stock</h3>
-    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report including this stock will be generated immediately.</p>
+    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report will be generated automatically.</p>
+
     <label for="newTicker" data-i18n="ticker_label">Ticker Symbol</label>
-    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;" />
-    <label for="addStockPat" data-i18n="pat_label">GitHub Personal Access Token</label>
-    <input type="password" id="addStockPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
-    <div style="font-size:11px;color:var(--text-muted);margin-top:-8px;margin-bottom:12px;">
-      <span data-i18n="pat_hint">Needs <code>workflow</code> scope.</span>
-      <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent+AddStock" target="_blank" rel="noopener" data-i18n="pat_create">Create one here ↗</a>
+    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;"
+           onkeydown="if(event.key==='Enter')submitAddStock()" />
+
+    <!-- Token section: shows saved-token badge OR input -->
+    <div id="tokenSavedRow" class="token-saved-row" style="display:none;">
+      <span>🔑 GitHub token saved</span>
+      <a onclick="showPatInput()">Change</a>
     </div>
-    <label style="display:flex;align-items:center;gap:6px;margin-bottom:14px;cursor:pointer;">
-      <input type="checkbox" id="addStockRemember" style="width:auto;margin:0;padding:0;" />
-      <span style="font-size:12px;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;" data-i18n="remember">Remember in this browser</span>
-    </label>
-    <div class="modal-actions">
-      <button class="btn" onclick="document.getElementById('addStockModal').classList.remove('visible')" data-i18n="cancel">Cancel</button>
-      <button class="btn btn-primary" id="addStockSubmit" onclick="submitAddStock()" data-i18n="add_generate">Add &amp; Generate</button>
+    <div id="tokenInputSection">
+      <label for="addStockPat" data-i18n="pat_label">GitHub Personal Access Token</label>
+      <input type="password" id="addStockPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+      <div style="font-size:11px;color:var(--text-muted);margin-top:-8px;margin-bottom:12px;">
+        Needs <code>workflow</code> scope. &nbsp;
+        <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent" target="_blank" rel="noopener">Create one ↗</a>
+      </div>
+    </div>
+
+    <div class="modal-actions" id="addStockActions">
+      <button class="btn" onclick="closeAddStockModal()" data-i18n="cancel">Cancel</button>
+      <button class="btn btn-primary" id="addStockSubmit" onclick="submitAddStock()">Add &amp; Generate</button>
     </div>
     <div class="modal-status" id="addStockStatus"></div>
+
+    <!-- Live progress tracker -->
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-steps">
+        <div class="progress-step" id="pstep-trigger"><span class="step-dot">1</span><span>Triggering workflow</span></div>
+        <div class="progress-step" id="pstep-queue"><span class="step-dot">2</span><span>Queued on GitHub Actions</span></div>
+        <div class="progress-step" id="pstep-run"><span class="step-dot">3</span><span id="pstep-run-label">Running report generation…</span></div>
+        <div class="progress-step" id="pstep-done"><span class="step-dot">4</span><span id="pstep-done-label">Complete — reloading page</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -610,17 +675,17 @@
         
         <div class="ai-block">
           <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## NVIDIA (NVDA) – Analyst Sentiment Summary
+          <div class="ai-text">## NVDA Analyst Sentiment Summary
 
-- **Overwhelmingly bullish consensus:** With a mean recommendation score of 1.28/5 (where 1 = Strong Buy) across 56 analysts, NVDA carries one of the strongest institutional conviction profiles in the market; recent actions from Rosenblatt, Raymond James, Truist Securities, and Cantor Fitzgerald reflect zero deterioration in that stance, with all firms maintaining or reiterating positive ratings.
+- **Overwhelmingly bullish consensus:** With a mean recommendation score of 1.28/5 (where 1 = Strong Buy) across 56 analysts, NVDA carries one of the strongest consensus ratings in large-cap tech, reflecting broad institutional conviction in the company&#39;s AI-driven growth trajectory.
 
-- **Significant implied upside from current levels:** The consensus mean price target of $268.22 implies ~53% upside from the current price of $175.75, suggesting analysts broadly view the stock&#39;s recent pullback as a buying opportunity rather than a fundamental re-rating event.
+- **Substantial implied upside from current levels:** The consensus mean price target of **$268.22 implies ~53% upside** from the current price of $175.75, with the high target of $380 suggesting nearly 116% upside for the most bullish case; the lone bear case low of $140 implies modest downside of ~20%, indicating a skewed risk/reward profile to the upside.
 
-- **Wide target dispersion signals meaningful uncertainty:** The $140 low vs. $380 high target range — a spread of $240 — reflects sharply divergent views on AI infrastructure spending durability, competitive dynamics (AMD, custom ASICs), and valuation tolerance, even if the *directional* bull camp dominates.
+- **Recent rating actions show zero deterioration:** All five most recent analyst actions (Rosenblatt ×2, Cantor Fitzgerald, Raymond James, Truist Securities) represent **maintains or reiterates at Buy/Strong Buy** — no downgrades, no target cuts, and no new cautious initiations are evident in the recent action window, signaling sustained conviction.
 
-- **No recent downgrades or target cuts visible:** All five most recent analyst actions are affirmations of existing positive ratings with no noted price target reductions, suggesting near-term catalysts (e.g., Blackwell ramp, data center demand) have not materially disappointed institutional expectations.
+- **Bull case rests on AI infrastructure demand:** The clustering of Strong Buy reaffirmations from multiple firms in a short window (March 18–23) suggests analysts are comfortable with near-term execution and demand visibility, likely tied to data center GPU demand and the Blackwell product cycle.
 
-- **Bear case embedded in the data:** The $140 floor target implies ~20% downside from current prices, likely reflecting risks around export restrictions, customer capex moderation, or margin compression — a minority but non-trivial tail risk worth monitoring.</div>
+- **Bear risk reflected in wide target dispersion:** The $240 spread between the high ($380) and low ($140) targets signals **meaningful uncertainty around valuation and execution**, with potential downside risks including export restrictions, customer concentration, and margin sustainability at elevated multiples.</div>
         </div>
       </div>
     </div>
@@ -665,25 +730,7 @@
         
 
         
-          
-          <div class="subsec-title">Direct Coverage</div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/nvidia-discount-tech-valuations-look-003132274.html?.tsrc=rss" target="_blank" rel="noopener">Nvidia At A Discount? Tech Valuations Look Attractive And Mark Gibbens Says It&#39;s &#39;A Great Time to Get In&#39; On PLTR, NVDA And GOOGL</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-02 00:31 UTC</span>
-            </div>
-            <div class="news-summary">Following a five-week market selloff that pushed major averages into correction territory, Gibbens Capital Management CIO Mark Gibbens says the pullback has created a prime buying opportunity for long-term investors eyeing the tech sector. …</div>
-          </div>
-          
-          
-
-          
-
+          <div class="empty-state">No recent news found for NVDA</div>
         
       </div>
     </div>
@@ -760,15 +807,15 @@
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">## NVIDIA Corporation (NVDA) — Financial Analysis
 
-- **Explosive Revenue Growth:** Revenue has compounded at a remarkable pace — from **$60.92B (FY2024)** to **$130.50B (FY2025)** to **$215.94B (FY2026)** — representing a **~254% cumulative increase over two years**, driven overwhelmingly by surging demand for AI/data center compute (Hopper and Blackwell GPU architectures).
+- **Explosive Revenue Growth &amp; Scale:** Revenue nearly tripled over three years, surging from **$60.92B (FY2024)** to **$130.50B (FY2025)** and **$215.94B (FY2026)** — a **254% cumulative increase** — driven overwhelmingly by accelerating data center / AI accelerator demand, demonstrating rare hyper-growth at mega-cap scale.
 
-- **Best-in-Class Margins, Though Slightly Compressing:** Gross margins remain exceptional, peaking at **75.0% in FY2025** before dipping to **71.1% in FY2026**, likely reflecting higher Blackwell ramp costs and supply chain investments. Net margins have nonetheless expanded from **48.8% → 55.8% → 55.6%**, meaning NVIDIA converts over **$0.55 of every revenue dollar into net income** — a rare feat at this revenue scale.
+- **Exceptional and Stable Margin Profile:** Gross margins held in the **71–75% range** across all three years, while operating margins expanded materially from **54.1% → 62.4% → 60.4%**, and net margins consistently exceeded **48%**, peaking near **55.8%** in FY2025 — a profitability profile more typical of pure software businesses than semiconductor manufacturers.
 
-- **Free Cash Flow Generation is Exceptional:** FCF has nearly tripled in two years — from **$27.02B (FY2024)** to **$60.85B (FY2025)** to **$96.68B (FY2026)** — with an FCF margin approaching **~45%** in FY2026. This level of cash generation is extraordinary for a hardware/semiconductor business and funds aggressive shareholder returns and R&amp;D reinvestment.
+- **Free Cash Flow Compounding at Scale:** FCF more than tripled from **$27.02B (FY2024)** to **$60.85B (FY2025)** and **$96.68B (FY2026)**, with FCF conversion remaining extremely high relative to net income, indicating high earnings quality with minimal distortion from non-cash accounting items or heavy working capital consumption.
 
-- **Balance Sheet Carries a Notable Debt/Equity Anomaly:** Total debt has remained relatively flat (~**$9.98B–$11.06B**), which is modest in absolute terms. However, the **debt-to-equity ratio of 7.25x** appears elevated, likely a function of aggressive share buybacks dramatically reducing book equity rather than excessive leverage — cash on hand ($10.61B) roughly covers total debt, suggesting manageable net debt.
+- **Balance Sheet — Leverage Warrants Monitoring:** Total debt has remained relatively flat (~**$9.98B–$11.06B**), but cash on hand (**$10.61B** in FY2026) roughly matches debt, suggesting a near-net-cash position on a gross basis. However, a reported **debt-to-equity ratio of 7.26x** signals significant accumulated shareholder equity dilution or buyback-driven equity reduction, which should be monitored in the context of capital return programs.
 
-- **Valuation Reflects High Expectations but Forward Multiple Has Compressed Sharply:** At a **$4,271.60B market cap**, the trailing P/E of **35.9x** and EV/EBITDA of **31.7</div>
+- **Valuation Compression Signal:** The wide gap between trailing P/E (**35.9x**) and forward P/E (**15.8x**) implies the market is pricing in continued dramatic earnings growth; the **EV/EBITDA of 31.7x** remains elevated in absolute terms but has compressed substantially relative to prior years as earnings have scaled into</div>
         </div>
       </div>
     </div>
@@ -889,35 +936,34 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">Taiwan Strait Geopolitical Risk &amp; TSM Concentration</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
+            <span class="geo-name">TSMC Capacity Crunch Forcing Client Diversification Away from Taiwan — Mar/Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-03-31</span>
+              
+              <span class="pill risk-pill risk-medium-high">
+                Medium-High
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             
-            <span class="ticker-tag">TSM</span>
-            
             <span class="ticker-tag">NVDA</span>
             
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">MU</span>
+            <span class="ticker-tag">TSM</span>
             
           </div>
-          <div class="geo-analysis">• Taiwan remains the world&#39;s dominant advanced semiconductor manufacturing hub, and any escalation in cross-strait tensions would severely disrupt global chip supply chains, directly impacting TSM as the primary foundry for NVDA and AAPL chips.
-• The Nomura Taiwan fund headline explicitly flags &#39;geopolitical concerns&#39; as a source of recent volatility, signaling that institutional investors are actively pricing in Taiwan risk; TSM&#39;s recent -3.13% single-session drop may partly reflect such sentiment.
-• While TSMC is actively diversifying with fabs in Japan (3nm planned for 2028) and a $65B campus in Phoenix, AZ, the majority of cutting-edge production remains in Taiwan, leaving the portfolio highly exposed to any military or political destabilization scenario.</div>
+          <div class="geo-analysis ai-text">• 2026-03-31 — A severe capacity crunch at TSMC is forcing major clients including Nvidia and Tesla to seek alternatives at Samsung, signaling supply chain vulnerability tied to concentration of advanced node production in Taiwan.
+• 2026-03-31 — The capacity constraint underscores ongoing geopolitical concerns around Taiwan&#39;s AI supply chain, as noted by Nomura&#39;s Taiwan High Tech Fund commentary on &#39;recent volatility and geopolitical concerns&#39; (2026-04-01).
+• 2026-04-01 — TSMC&#39;s planned 3nm production launch in Japan in 2028 reflects a strategic push to geographically diversify manufacturing, but near-term supply risk for NVDA and other clients remains elevated.</div>
           
           <div class="geo-headlines">
             
-            <div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div>
+            <div class="geo-headline">Why Nvidia And Tesla Are Suddenly Knocking On Samsung&#39;s Door</div>
             
             <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
             
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC (TSM) Falls More Steeply Than Broader Market: What Investors Need to Know</div>
+            <div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div>
             
           </div>
           
@@ -925,44 +971,15 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade Policy &amp; Semiconductor Export Controls</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">NVDA</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-          </div>
-          <div class="geo-analysis">• NVDA and MU face ongoing and potentially escalating US export control restrictions targeting advanced AI chips and memory products destined for China, which represents a meaningful revenue segment for both companies; any tightening of BIS rules or new Entity List additions would directly compress their addressable markets.
-• MU has previously been targeted by Chinese regulatory retaliation (e.g., the 2023 CCCF ban on critical infrastructure purchases), and the current environment of elevated US-China tech rivalry increases the probability of renewed retaliatory measures against US memory and semiconductor firms.
-• AAPL&#39;s deep manufacturing and sales dependency on China — even as it expands its US Manufacturing Program with partners like Bosch — means that any deterioration in US-China trade relations (tariffs, sanctions, or counter-sanctions) poses significant margin and supply chain risk.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Analysts Bullish on Micron Technology (MU) Amid Robust AI Demand</div>
-            
-            <div class="geo-headline">DRAM prices surged 90-95%, memory suppliers booked two years out</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Middle East Conflict &amp; Oil Price Volatility (Iran War Ceasefire)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
+            <span class="geo-name">Iran War De-Escalation Sentiment Shift — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             
@@ -975,15 +992,12 @@
             <span class="ticker-tag">MU</span>
             
           </div>
-          <div class="geo-analysis">• Headlines indicate an active Iran conflict with hopes of a ceasefire, which has been driving oil price declines and market rallies; a re-escalation or breakdown in ceasefire talks could spike energy costs, raising input costs for energy-intensive semiconductor fabs operated by TSM and MU.
-• Prolonged Middle East instability risks disrupting global shipping lanes (e.g., Strait of Hormuz), which could affect the logistics of hardware components and finished goods for AAPL and chip equipment for TSM.
-• The current ceasefire optimism is providing a macro tailwind for tech equities broadly, but this is fragile — any reversal could trigger a risk-off move that disproportionately impacts high-valuation semiconductor names like NVDA.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Equity futures and ETFs gained pre-market as &#39;Iran war de-escalation hopes drive sentiment,&#39; indicating an active military/geopolitical conflict involving Iran that has been weighing on broader risk assets including tech.
+• 2026-04-01 — While de-escalation hopes are currently positive for tech sentiment, the underlying Iran conflict remains an active geopolitical risk; any re-escalation could disrupt global risk appetite and supply chains, particularly affecting semiconductor names reliant on stable shipping and energy costs.</div>
           
           <div class="geo-headlines">
             
-            <div class="geo-headline">Stock Market Today, April 1: Markets Rally and Oil Prices Fall for Second Day Running</div>
-            
-            <div class="geo-headline">Stock Market Today: Nasdaq Leads Charge After Trump&#39;s War Comments; Amazon, Tesla Rise (Live Coverage)</div>
+            <div class="geo-headline">Exchange-Traded Funds, Equity Futures Gain Pre-Bell Wednesday as Iran War De-Escalation Hopes Drive Sentiment</div>
             
           </div>
           
@@ -1029,6 +1043,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Microsoft Corporation", "relationship": "Major hyperscaler customer purchasing H100/H200 GPU clusters for Azure AI cloud infrastructure and OpenAI partnership", "ticker": "MSFT"}, {"criticality": "high", "name": "Meta Platforms Inc.", "relationship": "Large-scale buyer of H100 GPU clusters for AI model training (LLaMA) and metaverse/recommendation systems", "ticker": "META"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Significant purchaser of NVIDIA data center GPUs for Google Cloud AI services and internal AI research/training", "ticker": "GOOGL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Major customer deploying NVIDIA GPUs across AWS cloud instances (p4, p5 series) for AI/ML workloads", "ticker": "AMZN"}, {"criticality": "medium", "name": "Tesla Inc.", "relationship": "Customer for NVIDIA DRIVE automotive platforms and historically a large GPU buyer for Dojo/AI training infrastructure", "ticker": "TSLA"}, {"criticality": "medium", "name": "Hewlett Packard Enterprise", "relationship": "OEM partner integrating NVIDIA GPUs into enterprise AI servers and HPC systems sold to end customers", "ticker": "HPE"}], "supply_chain_summary": "NVIDIA sits at the critical nexus of the AI infrastructure supply chain, designing cutting-edge GPU accelerators that are entirely dependent on TSMC\u0027s leading-edge foundry capacity and HBM memory from a concentrated set of suppliers (Samsung, SK Hynix, Micron). On the demand side, NVIDIA is the dominant AI compute supplier to the world\u0027s largest hyperscalers and cloud providers, making its revenue highly concentrated among a small number of mega-cap technology companies aggressively investing in AI infrastructure.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary fab partner manufacturing all advanced NVIDIA GPUs (H100, A100, RTX series) on leading-edge nodes (4nm/5nm)", "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "Sole supplier of EUV lithography equipment to TSMC and Samsung, indirectly critical to NVIDIA\u0027s advanced chip production", "ticker": "ASML"}, {"criticality": "high", "name": "Micron Technology", "relationship": "Supplier of GDDR6/GDDR6X memory for GeForce and professional GPU products, and HBM3e for AI accelerators", "ticker": "MU"}, {"criticality": "medium", "name": "Broadcom Inc.", "relationship": "Supplier of high-speed networking ASICs and PCIe switch silicon used in NVIDIA\u0027s NVLink and data center interconnect solutions", "ticker": "AVGO"}, {"criticality": "medium", "name": "Applied Materials", "relationship": "Supplier of wafer fabrication and deposition equipment used across NVIDIA\u0027s foundry partners in chip manufacturing", "ticker": "AMAT"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -1085,19 +1100,31 @@
             nodes.forEach(function(node, i) {
               var ny = startY + i * (NODE_H + ROW_GAP);
               var nc = colorMap[node.criticality] || colorMap['low'];
-              var g = svgEl_('g', {});
+              var isWatched = watchlist.indexOf(node.ticker) !== -1;
+              var g = svgEl_('g', isWatched ? {style: 'cursor:pointer;'} : {});
+              if (isWatched) {
+                g.addEventListener('click', function() { switchToTab('stock-' + node.ticker); });
+              }
               g.appendChild(svgEl_('rect', {
                 x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
-                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+                fill: isWatched ? '#eff6ff' : nc.fill,
+                stroke: isWatched ? '#2563eb' : nc.stroke,
+                'stroke-width': isWatched ? 2 : 1.5,
+                'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
               addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
-                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+                'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
               var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
-              var relText = (node.relationship || '').substring(0, 26);
-              addText(g, colX + NODE_W/2, ny + 44, relText,
-                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              if (isWatched) {
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
+                  'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
+              } else {
+                var relText = (node.relationship || '').substring(0, 26);
+                addText(g, colX + NODE_W/2, ny + 44, relText,
+                  'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              }
               svgEl.appendChild(g);
 
               // Arrow
@@ -1386,17 +1413,17 @@
         
         <div class="ai-block">
           <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## AAPL – Analyst Rating Synthesis
+          <div class="ai-text">## AAPL Analyst Sentiment Summary
 
-- **Consensus is constructively bullish**: With a mean recommendation score of ~1.90/5.0 (where 1=Strong Buy), the 40-analyst consensus skews firmly toward Buy, and recent actions from high-profile firms — Wedbush (3 reiterations), Morgan Stanley, and B of A Securities — reinforce conviction with no downgrades or negative rating changes visible in the recent action log.
+• **Consensus remains constructively bullish**, with a mean recommendation score of 1.90/5.0 (where 1=Strong Buy) across 40 analysts, reflecting a broad Buy-leaning skew; recent actions from Wedbush (multiple reiterations), Morgan Stanley, and B of A Securities (Strong Buy) show no cracks in conviction among major institutional voices.
 
-- **Meaningful upside implied by consensus price target**: The mean price target of ~$295 implies **~15% upside** from the current price of $255.63, suggesting the street views the stock as moderately undervalued at current levels; the bull case target of $350 represents ~37% upside, while the bear case floor of $205 implies ~20% downside risk.
+• **No rating downgrades or upgrades appear in recent actions** — all five most recent analyst moves are reiterations or maintains of existing Buy/Strong Buy ratings, suggesting a stable and unshaken bull thesis despite any near-term macro or product-cycle noise.
 
-- **Broad PT dispersion signals divided views on magnitude, not direction**: The $145 spread between the high ($350) and low ($205) target reflects differing views on the pace of AI monetization, services growth, and hardware upgrade cycles — though the directional bias remains positive across the majority of the coverage universe.
+• **The mean price target of ~$295 implies ~15.4% upside** from the current price of $255.63, a moderate but meaningful premium; the bull case high target of $350 represents ~37% upside, while the bear case floor of $205 implies ~20% downside, indicating the debate range remains wide.
 
-- **Repetitive reiterations from Wedbush may signal a catalyst-watch posture**: Three reiterations in under a month from Wedbush, alongside concurrent confirmations from Morgan Stanley and B of A, suggests analysts are actively defending their thesis — possibly in response to macro or tariff-related headwinds pressuring the share price — rather than initiating fresh optimism.
+• **The frequency of Wedbush reiterations** (three times in roughly one month) stands out as notably active advocacy, likely reflecting ongoing confidence in Apple&#39;s AI integration roadmap (Apple Intelligence) or Services segment growth trajectory.
 
-- **No recent upgrades or downgrades limits near-term sentiment catalyst**: The absence of any rating *changes* in recent actions means there is no fresh upgarde momentum to act as a near-term price catalyst; a meaningful re-rating event (</div>
+• **Key risk to the consensus** is the relatively wide target range ($145 spread), signaling meaningful disagreement on valuation; at ~$255, AAPL trades closer to the midpoint between the mean target and downside floor, suggesting the market is already pricing in some skepticism around near-term catalysts.</div>
         </div>
       </div>
     </div>
@@ -1454,18 +1481,6 @@
               <span class="news-date">2026-04-01 19:41 UTC</span>
             </div>
             <div class="news-summary">Apple Inc. (NASDAQ:AAPL) is one of Motley Fool’s high-growth stock picks. On March 26, Apple Inc. (NASDAQ:AAPL) expanded its American Manufacturing Program by adding new partners including Bosch, Cirrus Logic, TDK, and Qnity Electronics. Th…</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/apple-inc-aapl-d-e-190154865.html?.tsrc=rss" target="_blank" rel="noopener">Apple Inc. (AAPL): D. E. Shaw Trims Holding</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-01 19:01 UTC</span>
-            </div>
-            <div class="news-summary">Apple Inc. (NASDAQ:AAPL) features on the D. E. Shaw Stock Portfolio: Top 10 Stocks to Buy. Apple Inc. (NASDAQ:AAPL) has featured in the 13F portfolio of D. E. Shaw consistently since the fourth quarter of 2010, with two notable exceptions i…</div>
           </div>
           
           
@@ -1546,19 +1561,17 @@
 
         <div class="ai-block">
           <div class="ai-label">AI Analysis</div>
-          <div class="ai-text"># Apple Inc. (AAPL) — Financial Analysis
+          <div class="ai-text">## Apple Inc. (AAPL) — Financial Analysis
 
----
+- **Revenue &amp; Margin Expansion:** Revenue grew steadily from $383.3B (2023) → $391.0B (2024) → $416.2B (2025), a cumulative ~8.6% gain over two years. More notably, gross margin expanded meaningfully from 44.1% → 46.2% → **46.9%**, and operating margin climbed from 29.8% → 31.5% → **32.0%**, reflecting disciplined cost management and a continued mix-shift toward higher-margin Services revenue. Net margin reached **26.9%** in 2025, recovering above the 2023 level after a dip in 2024.
 
-- **Revenue &amp; Margin Expansion:** Revenue has grown steadily from **$383.3B (2023) → $391.0B (2024) → $416.2B (2025)**, representing cumulative growth of ~8.6% over three years. More notably, gross margin has expanded meaningfully from **44.1% → 46.2% → 46.9%**, and operating margin from **29.8% → 31.5% → 32.0%**, reflecting disciplined cost management and a continued mix-shift toward higher-margin Services revenue.
+- **Exceptional Cash Generation:** Free cash flow has been consistently massive — $99.6B (2023), $108.8B (2024), and $98.8B (2025) — averaging roughly **$102B annually**. The slight 2025 dip from 2024&#39;s peak is worth monitoring but remains near historic highs, underscoring the durability of Apple&#39;s earnings quality and capital-light business model.
 
-- **Net Margin Variability:** Net margin dipped to **24.0% in 2024** (from 25.3% in 2023) before recovering to a three-year high of **26.9% in 2025**, suggesting the 2024 dip was transitory — likely driven by tax or non-operating items — rather than structural deterioration in earnings quality.
+- **Leverage &amp; Debt Reduction in Progress:** Total debt has declined from $111.1B (2023) → $106.6B (2024) → **$98.7B (2025)**, demonstrating active deleveraging. However, with a **debt-to-equity ratio of 102.6x**, Apple carries technically negative book equity — a product of aggressive share buybacks rather than financial distress, but a metric that requires context when read in isolation.
 
-- **Robust but Fluctuating Free Cash Flow:** FCF has remained exceptionally strong across all three years: **$99.6B (2023) → $108.8B (2024) → $98.8B (2025)**. The slight 2025 decline from the 2024 peak is modest and FCF consistently converts at roughly **89–95% of net income**, underscoring high earnings quality and low capital intensity relative to cash generation.
+- **Cash Position Remains Lean Relative to Debt:** On-hand cash grew modestly from ~$29.9B (2023-24) to **$35.9B (2025)**, but net debt remains elevated at roughly **$62.8B**. Apple&#39;s ability to service and retire this debt is unambiguous given its FCF generation (~2.5x annual net debt coverage), but the balance sheet is not &#34;fortress&#34; status in traditional terms.
 
-- **Leverage &amp; Balance Sheet Structure:** Total debt has been actively reduced from **$111.1B (2023) → $106.6B (2024) → $98.7B (2025)** — a ~$12.4B reduction — signaling deliberate deleveraging. However, cash on hand remains relatively lean at **$35.9B (2025)** versus $29.9B in prior years, and the **debt-to-equity ratio of 102.6x** reflects Apple&#39;s intentional negative-equity capital structure driven by aggressive share buybacks, not financial distress.
-
-- **Capital Return vs. Cash Retention:** The combination of ~$99B in annual FCF against only ~$35.9B in</div>
+- **Valuation Premium Reflects Brand &amp; Ecosystem Moat:** At a trailing P/E of **</div>
         </div>
       </div>
     </div>
@@ -1679,35 +1692,33 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">Taiwan Strait Geopolitical Risk &amp; TSM Concentration</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
+            <span class="geo-name">Iran War De-Escalation Sentiment Shift — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
-            
-            <span class="ticker-tag">TSM</span>
             
             <span class="ticker-tag">NVDA</span>
             
             <span class="ticker-tag">AAPL</span>
             
+            <span class="ticker-tag">TSM</span>
+            
             <span class="ticker-tag">MU</span>
             
           </div>
-          <div class="geo-analysis">• Taiwan remains the world&#39;s dominant advanced semiconductor manufacturing hub, and any escalation in cross-strait tensions would severely disrupt global chip supply chains, directly impacting TSM as the primary foundry for NVDA and AAPL chips.
-• The Nomura Taiwan fund headline explicitly flags &#39;geopolitical concerns&#39; as a source of recent volatility, signaling that institutional investors are actively pricing in Taiwan risk; TSM&#39;s recent -3.13% single-session drop may partly reflect such sentiment.
-• While TSMC is actively diversifying with fabs in Japan (3nm planned for 2028) and a $65B campus in Phoenix, AZ, the majority of cutting-edge production remains in Taiwan, leaving the portfolio highly exposed to any military or political destabilization scenario.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Equity futures and ETFs gained pre-market as &#39;Iran war de-escalation hopes drive sentiment,&#39; indicating an active military/geopolitical conflict involving Iran that has been weighing on broader risk assets including tech.
+• 2026-04-01 — While de-escalation hopes are currently positive for tech sentiment, the underlying Iran conflict remains an active geopolitical risk; any re-escalation could disrupt global risk appetite and supply chains, particularly affecting semiconductor names reliant on stable shipping and energy costs.</div>
           
           <div class="geo-headlines">
             
-            <div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div>
-            
-            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
-            
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC (TSM) Falls More Steeply Than Broader Market: What Investors Need to Know</div>
+            <div class="geo-headline">Exchange-Traded Funds, Equity Futures Gain Pre-Bell Wednesday as Iran War De-Escalation Hopes Drive Sentiment</div>
             
           </div>
           
@@ -1715,97 +1726,27 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade Policy &amp; Semiconductor Export Controls</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
+            <span class="geo-name">Apple U.S. Manufacturing Expansion amid Trade/Tariff Pressure — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
-            
-            <span class="ticker-tag">NVDA</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-            <span class="ticker-tag">TSM</span>
             
             <span class="ticker-tag">AAPL</span>
             
           </div>
-          <div class="geo-analysis">• NVDA and MU face ongoing and potentially escalating US export control restrictions targeting advanced AI chips and memory products destined for China, which represents a meaningful revenue segment for both companies; any tightening of BIS rules or new Entity List additions would directly compress their addressable markets.
-• MU has previously been targeted by Chinese regulatory retaliation (e.g., the 2023 CCCF ban on critical infrastructure purchases), and the current environment of elevated US-China tech rivalry increases the probability of renewed retaliatory measures against US memory and semiconductor firms.
-• AAPL&#39;s deep manufacturing and sales dependency on China — even as it expands its US Manufacturing Program with partners like Bosch — means that any deterioration in US-China trade relations (tariffs, sanctions, or counter-sanctions) poses significant margin and supply chain risk.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Apple expanded its American Manufacturing Program with a $400M investment adding partners including Bosch and Cirrus Logic, a move consistent with ongoing pressure to onshore supply chains amid U.S.-China trade tensions.
+• 2026-04-01 — This expansion signals that AAPL is actively repositioning its supplier base in response to geopolitical and trade policy risks, which may involve near-term cost headwinds but reduces longer-term tariff and sanctions exposure.</div>
           
           <div class="geo-headlines">
             
             <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Analysts Bullish on Micron Technology (MU) Amid Robust AI Demand</div>
-            
-            <div class="geo-headline">DRAM prices surged 90-95%, memory suppliers booked two years out</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Middle East Conflict &amp; Oil Price Volatility (Iran War Ceasefire)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">NVDA</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-          </div>
-          <div class="geo-analysis">• Headlines indicate an active Iran conflict with hopes of a ceasefire, which has been driving oil price declines and market rallies; a re-escalation or breakdown in ceasefire talks could spike energy costs, raising input costs for energy-intensive semiconductor fabs operated by TSM and MU.
-• Prolonged Middle East instability risks disrupting global shipping lanes (e.g., Strait of Hormuz), which could affect the logistics of hardware components and finished goods for AAPL and chip equipment for TSM.
-• The current ceasefire optimism is providing a macro tailwind for tech equities broadly, but this is fragile — any reversal could trigger a risk-off move that disproportionately impacts high-valuation semiconductor names like NVDA.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Stock Market Today, April 1: Markets Rally and Oil Prices Fall for Second Day Running</div>
-            
-            <div class="geo-headline">Stock Market Today: Nasdaq Leads Charge After Trump&#39;s War Comments; Amazon, Tesla Rise (Live Coverage)</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">US Onshoring &amp; Industrial Policy (CHIPS Act Execution Risk)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-          </div>
-          <div class="geo-analysis">• TSMC&#39;s $65B Arizona campus and planned advanced packaging expansions represent significant capital commitments contingent on continued US government support (CHIPS Act subsidies, permitting); any policy reversal, budget cuts, or political friction under the current administration could slow execution timelines and inflate costs.
-• AAPL&#39;s $400M US Manufacturing Program expansion signals proactive compliance with domestic content and reshoring pressures, but also reflects vulnerability to political mandates that could force costly supply chain restructuring if geopolitical conditions worsen.
-• MU&#39;s domestic DRAM fab investments (Idaho, New York) are similarly tied to federal incentives; execution delays or funding uncertainty could create competitive disadvantages versus Korean and Chinese rivals who benefit from their own state subsidies.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
             
           </div>
           
@@ -1851,6 +1792,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Verizon Communications", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans", "ticker": "VZ"}, {"criticality": "high", "name": "AT\u0026T Inc.", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales and service plans", "ticker": "T"}, {"criticality": "high", "name": "T-Mobile US", "relationship": "Major U.S. carrier distributor and retail channel for iPhone sales; largest iPhone carrier partner", "ticker": "TMUS"}, {"criticality": "medium", "name": "Amazon.com Inc.", "relationship": "Significant third-party online retailer and distribution channel for Apple hardware and accessories", "ticker": "AMZN"}, {"criticality": "medium", "name": "Walmart Inc.", "relationship": "Large brick-and-mortar retail distribution channel for Apple devices and accessories", "ticker": "WMT"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Pays Apple an estimated $15-20B annually as default search engine on Safari/iOS, a major services revenue source", "ticker": "GOOGL"}], "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a powerful demand-side orchestrator that designs its own silicon and outsources manufacturing to a concentrated set of critical partners \u2014 most notably TSMC for chips and Samsung for displays and memory. On the downstream side, Apple distributes its products through major telecom carriers and retailers while generating substantial high-margin services revenue from platform participants like Google, making it both a hardware seller and a platform gatekeeper.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary fabricator of Apple Silicon (A-series, M-series chips) on leading-edge nodes", "ticker": "TSM"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Supplier of 5G modem chipsets used in iPhone lineup", "ticker": "QCOM"}, {"criticality": "medium", "name": "Broadcom Inc.", "relationship": "Supplier of Wi-Fi, Bluetooth, and RF semiconductor components across Apple product lines", "ticker": "AVGO"}, {"criticality": "medium", "name": "Cirrus Logic Inc.", "relationship": "Sole-source supplier of audio chips and haptic controllers for iPhone and iPad", "ticker": "CRUS"}, {"criticality": "low", "name": "Honeywell International", "relationship": "Supplier of specialty materials and sensor components used in device manufacturing", "ticker": "HON"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -1907,19 +1849,31 @@
             nodes.forEach(function(node, i) {
               var ny = startY + i * (NODE_H + ROW_GAP);
               var nc = colorMap[node.criticality] || colorMap['low'];
-              var g = svgEl_('g', {});
+              var isWatched = watchlist.indexOf(node.ticker) !== -1;
+              var g = svgEl_('g', isWatched ? {style: 'cursor:pointer;'} : {});
+              if (isWatched) {
+                g.addEventListener('click', function() { switchToTab('stock-' + node.ticker); });
+              }
               g.appendChild(svgEl_('rect', {
                 x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
-                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+                fill: isWatched ? '#eff6ff' : nc.fill,
+                stroke: isWatched ? '#2563eb' : nc.stroke,
+                'stroke-width': isWatched ? 2 : 1.5,
+                'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
               addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
-                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+                'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
               var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
-              var relText = (node.relationship || '').substring(0, 26);
-              addText(g, colX + NODE_W/2, ny + 44, relText,
-                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              if (isWatched) {
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
+                  'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
+              } else {
+                var relText = (node.relationship || '').substring(0, 26);
+                addText(g, colX + NODE_W/2, ny + 44, relText,
+                  'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              }
               svgEl.appendChild(g);
 
               // Arrow
@@ -2214,17 +2168,17 @@
         
         <div class="ai-block">
           <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## TSM Analyst Sentiment Summary
+          <div class="ai-text">## TSM Analyst Consensus Summary
 
-- **Predominantly bullish consensus:** Of the 5 most recent analyst actions, 4 carry strong positive ratings (2 Strong Buy, 2 Buy) with only 1 Hold (TD Cowen), reflecting broad conviction in TSM&#39;s leadership in advanced semiconductor manufacturing and AI-driven demand tailwinds.
+- **Strongly bullish consensus with meaningful upside implied:** The mean price target of **$430.65** across 18 analysts represents **~26% upside** from the current price of $341.49, with the high target of $520 implying **~52% upside** and even the most conservative target of $351 sitting just ~3% above current levels — suggesting limited downside risk in the analyst community.
 
-- **Meaningful upside implied by consensus targets:** The mean price target of **$430.65** represents approximately **26% upside** from the current price of $341.49, with the high target of $520 implying as much as **52% upside**; even the low target of $351 suggests limited near-term downside (~3%), indicating the Street sees an asymmetric risk/reward profile.
+- **Recent rating actions skew decisively positive:** Of the five most recent analyst actions, **four carry Buy or Strong Buy ratings** (DA Davidson, Barclays, Needham, Bernstein), with only TD Cowen maintaining a Hold — indicating broad conviction in TSM&#39;s near-to-medium-term outlook with minimal bearish representation.
 
-- **DA Davidson&#39;s fresh initiation at Strong Buy** is a notable incremental positive signal, suggesting new institutional coverage is entering with high conviction rather than a cautious starter rating — typically a bullish indicator of fundamental confidence.
+- **DA Davidson&#39;s fresh initiation at Strong Buy** is a notable signal, as new coverage initiations at the highest conviction tier often reflect a deliberate, well-researched entry point and may indicate growing institutional interest in the name at current levels.
 
-- **Barclays and Needham maintaining Buy/Strong Buy** following TSMC&#39;s January earnings cycle suggests results and forward guidance were sufficient to sustain — rather than pressure — price targets, reinforcing stability in the bull case around continued AI chip demand and pricing power.
+- **No rating downgrades are present** in the recent action set, and the &#34;Maintains&#34; actions from multiple firms following TSMC&#39;s January 2026 earnings cycle suggest analysts are **reaffirming confidence** in the company&#39;s execution, consistent with TSMC&#39;s dominant positioning in advanced node manufacturing (3nm, 2nm) and AI-driven demand tailwinds.
 
-- **Key bear consideration is limited but present:** TD Cowen&#39;s Hold stance likely reflects valuation discipline and/or geopolitical risk concerns (Taiwan Strait exposure, U.S.-China tech restrictions), which remain the primary overhangs that prevent universal bullishness despite strong fundamentals.</div>
+- **Key bear risk implied by the data** is narrow but present: TD Cowen&#39;s Hold and the low target of $351 suggest some analysts see **limited near-term catalysts** or potential macro/geopolitical overhangs (e.g., U.S.-China tensions, export controls) that could cap upside in the short term.</div>
         </div>
       </div>
     </div>
@@ -2344,6 +2298,102 @@
             <div class="news-summary">In the most recent trading session, TSMC (TSM) closed at $316.5, indicating a -3.13% shift from the previous trading day.</div>
           </div>
           
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMixAFBVV95cUxNVkFTdDBQcjdUTmZkWEtRd0NSNU9NWUgxU2lqYnQxTVhpY1RjbTQxUFNtQWNHdXEzT21fMnVWb2IxVThsamxYTXZjTGk2dFBJamVobC14a0p6TTZkaVg3SWo2bGd0VW9RWlJpcTdCS0lMa2hENVRPRlc4WUxqNW10M3ByamZ5ZkJrenhQVzBGNmZRc1hyTC04Slc4MWlidDVIX3NlY3Z6Z1c4aVd3MEMwQjNqcnFrZ21PYmJBdzJZbVhSNC1U?oc=5" target="_blank" rel="noopener">Taiwan Semiconductor Manufacturing (NYSE:TSM) Stock Price Up 1.2% - Still a Buy? - MarketBeat</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-01 21:49 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMixAFBVV95cUxNVkFTdDBQcjdUTmZkWEtRd0NSNU9NWUgxU2lqYnQxTVhpY1RjbTQxUFNtQWNHdXEzT21fMnVWb2IxVThsamxYTXZjTGk2dFBJamVobC14a0p6TTZkaVg3SWo2bGd0VW9RWlJpcTdCS0lMa2hENVRPRlc4WUxqNW10M3ByamZ5ZkJrenhQVz…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxOLVhnbFpxM1E0U1hfME5uSjRQWDhvVUdBbERjTzEzMEI1bEUyRVFLY05oVzJVR3M1cm9adEN1MVVOQWNIcWd6MHRuZ0U2V3VFSmR2eFE3Z0h6emdYdkJfc0xGOXFrMi1mc1BQc3lmcHNwRGJwZFRZbkgxd1IxSXN4VzFzOFJ6dVRlVEpiSHp1a1hBNUdfMnc?oc=5" target="_blank" rel="noopener">Insider Purchase: Director at $TSM Buys 1,000 Shares - Quiver Quantitative</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-01 11:01 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMilgFBVV95cUxOLVhnbFpxM1E0U1hfME5uSjRQWDhvVUdBbERjTzEzMEI1bEUyRVFLY05oVzJVR3M1cm9adEN1MVVOQWNIcWd6MHRuZ0U2V3VFSmR2eFE3Z0h6emdYdkJfc0xGOXFrMi1mc1BQc3lmcHNwRGJwZFRZbkgxd1IxSXN4VzFzOFJ6dVRlVEpiSH…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMivgFBVV95cUxPVkFabFhLcU4ta1dvTml3M0NmdVM3dVBtaDE1N3pMZzlwdUQ4bk1OODNTSGJmZkFlcTcyRWxCN19CVnFPSnY0am8wbUJSNHo5alY2bFRnODZGMHFVUW92WXlwLUlzaTVGbXE5ZFBaVThta283T1NBaHU1emJSRnh1dnBid1FHR2FFNWtWZ20yLUZ5UGJuZ01tT0RoRnc3c3Q5SGsxejJUNDVNR0lkTHNWaGpqREM4WmMyZlp4aXNR?oc=5" target="_blank" rel="noopener">(TSM) Volatility Zones as Tactical Triggers - Stock Traders Daily</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-02 00:04 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMivgFBVV95cUxPVkFabFhLcU4ta1dvTml3M0NmdVM3dVBtaDE1N3pMZzlwdUQ4bk1OODNTSGJmZkFlcTcyRWxCN19CVnFPSnY0am8wbUJSNHo5alY2bFRnODZGMHFVUW92WXlwLUlzaTVGbXE5ZFBaVThta283T1NBaHU1emJSRnh1dnBid1FHR2FFNWtWZ2…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiTkFVX3lxTE1jVjFXLWwzS2J2SnV0MkpIOUpSSENsYlJuRHMtSEV4Y0N3dDlpZmpXbWZuYTllaGpFV2tlek8xVnJ6VG9hdzNQNTkyS3lFdw?oc=5" target="_blank" rel="noopener">TSMC (TSM) Stock; Climbs 6% on Japan 3nm expansion and AI chip demand - MEXC Exchange</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-01 11:56 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiTkFVX3lxTE1jVjFXLWwzS2J2SnV0MkpIOUpSSENsYlJuRHMtSEV4Y0N3dDlpZmpXbWZuYTllaGpFV2tlek8xVnJ6VG9hdzNQNTkyS3lFdw?oc=5&#34; target=&#34;_blank&#34;&gt;TSMC (TSM) Stock; Climbs 6% on Japan 3nm expansion and AI chi…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxQakJacTV3LUNLdC16S0YxejU5Qi1yOThzV1ZETE1wOXpEcGR5a2VkamtoT0VEc2Q5eTRzNmNBSnloQnlJNFVGbXl6MWlIMkxMOVRGZVAwZ3B2UDlCWk1xMTF5RVFQVERIZHBkQzZoMmwzR3g2MExrYmlNWGxxNHhHeWRySF9WVHIyVkxBWnNPS21iWDQ1QVE?oc=5" target="_blank" rel="noopener">TSMC Stock (TSM) Extends Gains on AI Chip Japan Expansion Plans - TipRanks</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-01 09:14 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMilgFBVV95cUxQakJacTV3LUNLdC16S0YxejU5Qi1yOThzV1ZETE1wOXpEcGR5a2VkamtoT0VEc2Q5eTRzNmNBSnloQnlJNFVGbXl6MWlIMkxMOVRGZVAwZ3B2UDlCWk1xMTF5RVFQVERIZHBkQzZoMmwzR3g2MExrYmlNWGxxNHhHeWRySF9WVHIyVkxBWn…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxQUUZkWml6WlhkaXgzQ3BuSzQyamkzOEVCZFhRelh1TjRGdWJERENOSGNJVWNOQkZ1WFpLcXltc1E0dW1LUUMzSzJSMG9mZlRyNXFLazc2S0I0R1FGMkYzai1tN0F4VW4tU2xSQmtYNjNsNzBteVlfSzNvbk5qV1BMZDBrc0RucDhrMEE?oc=5" target="_blank" rel="noopener">Taiwan Semiconductor Manufacturing Co Ltd Stock (TSM) Moved Down by 3.42% on Mar 30: A Full Analysis - TradingKey</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-03-30 18:15 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiigFBVV95cUxQUUZkWml6WlhkaXgzQ3BuSzQyamkzOEVCZFhRelh1TjRGdWJERENOSGNJVWNOQkZ1WFpLcXltc1E0dW1LUUMzSzJSMG9mZlRyNXFLazc2S0I0R1FGMkYzai1tN0F4VW4tU2xSQmtYNjNsNzBteVlfSzNvbk5qV1BMZDBrc0RucDhrMEE?oc…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxOSHBCM1FpSDZDZTNVSWJTRHVVVFZjV09TMUJmeGc0Y3p3V2ZOX044b0R2VDhpbUVNXy1HaG5qTmE3ZWloSTcxTGVleHJoVEhPMHNLZVJYWXNvQnBReko1RHo5RWRlMEtGeTVDak5ubHN0T29RZk9iN3k3VWxVWGFVc1Faalc0ZmJq?oc=5" target="_blank" rel="noopener">TSM Options Trade Yields Significant Gains - GuruFocus</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-01 13:42 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiiAFBVV95cUxOSHBCM1FpSDZDZTNVSWJTRHVVVFZjV09TMUJmeGc0Y3p3V2ZOX044b0R2VDhpbUVNXy1HaG5qTmE3ZWloSTcxTGVleHJoVEhPMHNLZVJYWXNvQnBReko1RHo5RWRlMEtGeTVDak5ubHN0T29RZk9iN3k3VWxVWGFVc1Faalc0ZmJq?oc=5&#34;…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxNTEhLUFZUUDJaS0p5SXZhNWFQME4zUTdnZkdDcUx0VUhtNVlSd1VYejZMOVZLMmVobnVtajZCZktVWVp5N2FvN25XbjQ4VXdVVnhjUGYyZXJKQmQ1cEZzcFM3OXI2aTFNanBkbHZaREVDVS1KeDI3aEw2X00xd2w2cEZhNTRja1pvUDVGcXVVQi1FQlZHU0d1b0lxc2Z4T0ZvUnlqeUd6M1RLa3VaYjV2QjFRMXhubnVKNUhNNEg3V3c?oc=5" target="_blank" rel="noopener">What&#39;s Going On With Taiwan Semiconductor Stock Wednesday? - Taiwan Semiconductor (NYSE:TSM) - Benzinga</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-01 09:23 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiwAFBVV95cUxNTEhLUFZUUDJaS0p5SXZhNWFQME4zUTdnZkdDcUx0VUhtNVlSd1VYejZMOVZLMmVobnVtajZCZktVWVp5N2FvN25XbjQ4VXdVVnhjUGYyZXJKQmQ1cEZzcFM3OXI2aTFNanBkbHZaREVDVS1KeDI3aEw2X00xd2w2cEZhNTRja1pvUDVGcX…</div>
+          </div>
+          
           
 
           
@@ -2423,19 +2473,20 @@
         <div class="ai-block">
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text"># Taiwan Semiconductor Manufacturing (TSM) — Financial Analysis
-*(All figures in TWD billions unless noted)*
+
+*(All figures in New Taiwan Dollar billions unless otherwise noted)*
 
 ---
 
-- **Strong revenue acceleration with expanding margins:** Revenue grew 33.9% YoY to TWD 3,809B in 2025 (from TWD 2,162B in 2023, a ~76% cumulative gain), driven by surging AI/advanced node demand. Gross margin expanded meaningfully from 54.4% → 56.1% → **59.9%**, while operating margin reached **50.8%** in 2025 — a rare level of operating leverage for a capital-intensive semiconductor manufacturer, reflecting pricing power and favorable product mix in leading-edge nodes (3nm/2nm).
+- **Strong revenue acceleration and expanding margins:** Revenue grew 33.9% YoY in 2024 (NT$2,161.74B → NT$2,894.31B) and a further 31.6% in 2025 (→ NT$3,809.05B), a two-year cumulative gain of ~76%. Gross margin expanded meaningfully from 54.4% (2023) to 59.9% (2025), while operating margin climbed from 42.6% to 50.8% — reflecting strong pricing power and operational leverage on leading-edge nodes (N3, N5).
 
-- **Exceptional net profitability:** Net margin improved from 39.4% (2023) to **45.1%** (2025), implying net income of approximately TWD 1,717B in 2025. The consistent 5–6 ppt annual margin expansion across all three tiers signals disciplined cost control alongside revenue scaling.
+- **Net profitability at elite levels:** Net margin improved from 39.4% (2023) to 45.1% (2025), meaning nearly half of every dollar of revenue flows to the bottom line — exceptional for a capital-intensive semiconductor manufacturer and indicative of TSMC&#39;s near-monopoly positioning in advanced process nodes.
 
-- **Significant free cash flow recovery and growth:** FCF surged from a modest TWD 286.57B in 2023 to TWD 861.20B (2024) and **TWD 992.38B** (2025) — a ~3.5x improvement in two years. The 2023 trough was attributable to peak capital expenditure cycles; the subsequent FCF recovery confirms capex is now being absorbed effectively by revenue growth.
+- **Balance sheet is net-cash positive and strengthening:** Cash holdings surged from NT$1,465.43B (2023) to NT$2,767.86B (2025), while total debt rose modestly from NT$956.26B to NT$1,064.58B over the same period. Net cash position stands at approximately NT$1,703.28B in 2025, providing substantial financial flexibility despite the elevated debt-to-equity ratio of 19.6x (likely reflecting TWD accounting conventions and equity base construction).
 
-- **Robust net cash position:** Cash holdings grew from TWD 1,465B → TWD 2,128B → **TWD 2,768B**, while total debt rose only modestly from TWD 956B to TWD **1,065B** over the same period. This yields a **net cash position of approximately TWD 1,703B** in 2025, providing substantial buffer for ongoing global fab expansion (Arizona, Japan, Germany).
+- **Free cash flow inflection is a standout highlight:** FCF surged from NT$286.57B (2023) to NT$861.20B (2024) and NT$992.38B (2025) — a ~3.5x increase in two years. The 2023 trough likely reflected peak capex intensity for N3 ramp; the subsequent recovery confirms improving capital efficiency as advanced nodes mature and yields improve.
 
-- **Debt-to-equity ratio warrants context:** The reported D/E of **19.57x** appears elevated at face value but reflects TWD accounting conventions and TSMC&#39;s massive retained earnings base denominated in equity book value terms</div>
+- **Valuation signals a growth re-rating underway:** The trailing P/E of 33.0x versus a forward P/E of 19.0</div>
         </div>
       </div>
     </div>
@@ -2455,80 +2506,50 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">Taiwan Strait Geopolitical Risk &amp; TSM Concentration</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
+            <span class="geo-name">TSMC Capacity Crunch Forcing Client Diversification Away from Taiwan — Mar/Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-03-31</span>
+              
+              <span class="pill risk-pill risk-medium-high">
+                Medium-High
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             
-            <span class="ticker-tag">TSM</span>
-            
             <span class="ticker-tag">NVDA</span>
             
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">MU</span>
+            <span class="ticker-tag">TSM</span>
             
           </div>
-          <div class="geo-analysis">• Taiwan remains the world&#39;s dominant advanced semiconductor manufacturing hub, and any escalation in cross-strait tensions would severely disrupt global chip supply chains, directly impacting TSM as the primary foundry for NVDA and AAPL chips.
-• The Nomura Taiwan fund headline explicitly flags &#39;geopolitical concerns&#39; as a source of recent volatility, signaling that institutional investors are actively pricing in Taiwan risk; TSM&#39;s recent -3.13% single-session drop may partly reflect such sentiment.
-• While TSMC is actively diversifying with fabs in Japan (3nm planned for 2028) and a $65B campus in Phoenix, AZ, the majority of cutting-edge production remains in Taiwan, leaving the portfolio highly exposed to any military or political destabilization scenario.</div>
+          <div class="geo-analysis ai-text">• 2026-03-31 — A severe capacity crunch at TSMC is forcing major clients including Nvidia and Tesla to seek alternatives at Samsung, signaling supply chain vulnerability tied to concentration of advanced node production in Taiwan.
+• 2026-03-31 — The capacity constraint underscores ongoing geopolitical concerns around Taiwan&#39;s AI supply chain, as noted by Nomura&#39;s Taiwan High Tech Fund commentary on &#39;recent volatility and geopolitical concerns&#39; (2026-04-01).
+• 2026-04-01 — TSMC&#39;s planned 3nm production launch in Japan in 2028 reflects a strategic push to geographically diversify manufacturing, but near-term supply risk for NVDA and other clients remains elevated.</div>
           
           <div class="geo-headlines">
+            
+            <div class="geo-headline">Why Nvidia And Tesla Are Suddenly Knocking On Samsung&#39;s Door</div>
+            
+            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
             
             <div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div>
             
-            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
-            
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC (TSM) Falls More Steeply Than Broader Market: What Investors Need to Know</div>
-            
           </div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade Policy &amp; Semiconductor Export Controls</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">NVDA</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-          </div>
-          <div class="geo-analysis">• NVDA and MU face ongoing and potentially escalating US export control restrictions targeting advanced AI chips and memory products destined for China, which represents a meaningful revenue segment for both companies; any tightening of BIS rules or new Entity List additions would directly compress their addressable markets.
-• MU has previously been targeted by Chinese regulatory retaliation (e.g., the 2023 CCCF ban on critical infrastructure purchases), and the current environment of elevated US-China tech rivalry increases the probability of renewed retaliatory measures against US memory and semiconductor firms.
-• AAPL&#39;s deep manufacturing and sales dependency on China — even as it expands its US Manufacturing Program with partners like Bosch — means that any deterioration in US-China trade relations (tariffs, sanctions, or counter-sanctions) poses significant margin and supply chain risk.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Analysts Bullish on Micron Technology (MU) Amid Robust AI Demand</div>
-            
-            <div class="geo-headline">DRAM prices surged 90-95%, memory suppliers booked two years out</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Middle East Conflict &amp; Oil Price Volatility (Iran War Ceasefire)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
+            <span class="geo-name">Iran War De-Escalation Sentiment Shift — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             
@@ -2541,47 +2562,12 @@
             <span class="ticker-tag">MU</span>
             
           </div>
-          <div class="geo-analysis">• Headlines indicate an active Iran conflict with hopes of a ceasefire, which has been driving oil price declines and market rallies; a re-escalation or breakdown in ceasefire talks could spike energy costs, raising input costs for energy-intensive semiconductor fabs operated by TSM and MU.
-• Prolonged Middle East instability risks disrupting global shipping lanes (e.g., Strait of Hormuz), which could affect the logistics of hardware components and finished goods for AAPL and chip equipment for TSM.
-• The current ceasefire optimism is providing a macro tailwind for tech equities broadly, but this is fragile — any reversal could trigger a risk-off move that disproportionately impacts high-valuation semiconductor names like NVDA.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Equity futures and ETFs gained pre-market as &#39;Iran war de-escalation hopes drive sentiment,&#39; indicating an active military/geopolitical conflict involving Iran that has been weighing on broader risk assets including tech.
+• 2026-04-01 — While de-escalation hopes are currently positive for tech sentiment, the underlying Iran conflict remains an active geopolitical risk; any re-escalation could disrupt global risk appetite and supply chains, particularly affecting semiconductor names reliant on stable shipping and energy costs.</div>
           
           <div class="geo-headlines">
             
-            <div class="geo-headline">Stock Market Today, April 1: Markets Rally and Oil Prices Fall for Second Day Running</div>
-            
-            <div class="geo-headline">Stock Market Today: Nasdaq Leads Charge After Trump&#39;s War Comments; Amazon, Tesla Rise (Live Coverage)</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">US Onshoring &amp; Industrial Policy (CHIPS Act Execution Risk)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-          </div>
-          <div class="geo-analysis">• TSMC&#39;s $65B Arizona campus and planned advanced packaging expansions represent significant capital commitments contingent on continued US government support (CHIPS Act subsidies, permitting); any policy reversal, budget cuts, or political friction under the current administration could slow execution timelines and inflate costs.
-• AAPL&#39;s $400M US Manufacturing Program expansion signals proactive compliance with domestic content and reshoring pressures, but also reflects vulnerability to political mandates that could force costly supply chain restructuring if geopolitical conditions worsen.
-• MU&#39;s domestic DRAM fab investments (Idaho, New York) are similarly tied to federal incentives; execution delays or funding uncertainty could create competitive disadvantages versus Korean and Chinese rivals who benefit from their own state subsidies.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
+            <div class="geo-headline">Exchange-Traded Funds, Equity Futures Gain Pre-Bell Wednesday as Iran War De-Escalation Hopes Drive Sentiment</div>
             
           </div>
           
@@ -2629,6 +2615,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest single customer, sole manufacturer of A-series and M-series chips for iPhone, iPad, and Mac; estimated ~25% of TSMC revenue", "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Major fabless customer for GPU and AI accelerator chips (H100, B100) on leading-edge nodes; rapidly growing revenue share", "ticker": "NVDA"}, {"criticality": "high", "name": "Advanced Micro Devices Inc.", "relationship": "Key fabless customer for Ryzen/EPYC CPUs and Radeon GPUs manufactured exclusively at TSMC on 5nm/4nm nodes", "ticker": "AMD"}, {"criticality": "high", "name": "Qualcomm Incorporated", "relationship": "Major customer for Snapdragon mobile SoCs and RF semiconductor products on advanced nodes", "ticker": "QCOM"}, {"criticality": "medium", "name": "Intel Corporation", "relationship": "Growing customer outsourcing select products including Meteor Lake tiles and future foundry orders to TSMC", "ticker": "INTC"}, {"criticality": "medium", "name": "Marvell Technology Inc.", "relationship": "Customer for custom AI/cloud silicon and networking chips manufactured at TSMC advanced nodes", "ticker": "MRVL"}], "supply_chain_summary": "TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world\u0027s dominant pure-play foundry, manufacturing chips designed by fabless companies on leading-edge nodes that no other foundry can replicate at scale. Its upstream dependency on a small set of highly specialized equipment makers (particularly ASML for EUV) and its downstream concentration among a few hyperscale and fabless giants make it both extraordinarily powerful and geopolitically sensitive.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Sole supplier of EUV lithography equipment, critical for leading-edge 5nm/3nm/2nm node manufacturing", "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Leading supplier of wafer fabrication equipment including CVD, PVD, and etch systems", "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Key supplier of etch and deposition equipment essential for advanced node wafer processing", "ticker": "LRCX"}, {"criticality": "medium", "name": "KLA Corporation", "relationship": "Primary supplier of process control, wafer inspection, and metrology equipment", "ticker": "KLAC"}, {"criticality": "low", "name": "Emerson Electric Co.", "relationship": "Supplier of specialty industrial gases and chemical delivery systems used in fab operations", "ticker": "EMR"}, {"criticality": "medium", "name": "Ferrotec Holdings (via chemical suppliers)", "relationship": "Supplier of ultra-pure chemicals and silicon wafer materials for wafer fabrication", "ticker": "FSI"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -2685,19 +2672,31 @@
             nodes.forEach(function(node, i) {
               var ny = startY + i * (NODE_H + ROW_GAP);
               var nc = colorMap[node.criticality] || colorMap['low'];
-              var g = svgEl_('g', {});
+              var isWatched = watchlist.indexOf(node.ticker) !== -1;
+              var g = svgEl_('g', isWatched ? {style: 'cursor:pointer;'} : {});
+              if (isWatched) {
+                g.addEventListener('click', function() { switchToTab('stock-' + node.ticker); });
+              }
               g.appendChild(svgEl_('rect', {
                 x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
-                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+                fill: isWatched ? '#eff6ff' : nc.fill,
+                stroke: isWatched ? '#2563eb' : nc.stroke,
+                'stroke-width': isWatched ? 2 : 1.5,
+                'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
               addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
-                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+                'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
               var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
-              var relText = (node.relationship || '').substring(0, 26);
-              addText(g, colX + NODE_W/2, ny + 44, relText,
-                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              if (isWatched) {
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
+                  'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
+              } else {
+                var relText = (node.relationship || '').substring(0, 26);
+                addText(g, colX + NODE_W/2, ny + 44, relText,
+                  'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              }
               svgEl.appendChild(g);
 
               // Arrow
@@ -2996,15 +2995,19 @@
           <div class="ai-label">AI Consensus Summary</div>
           <div class="ai-text">## MU (Micron Technology) – Analyst Sentiment Summary
 
-- **Overwhelmingly bullish consensus**: With a mean recommendation score of **1.47/5** (strong buy territory) across 40 analysts, MU carries one of the more constructive street-wide views in the semiconductor space; the majority of recent actions from major firms (Citigroup, JP Morgan, Mizuho, B of A Securities) reflect sustained Buy/Strong Buy conviction with no downgrades observed in the recent action set.
+**Current Price: $367.85 | Consensus PT: $525.48 | Rating: Strong Buy**
 
-- **Meaningful implied upside from consensus targets**: The mean price target of **$525.48** implies approximately **~43% upside** from the current price of $367.85, suggesting analysts broadly view the stock as materially undervalued at current levels; the high target of $750 implies over **100% upside**, though the low target of $249 signals some downside risk among the more cautious outliers.
+---
 
-- **Goldman Sachs remains the notable dissenter**: Its **Hold** rating stands out against an otherwise bullish peer group, likely reflecting concerns around near-term memory cycle visibility, pricing volatility, or valuation — though no explicit downgrade action was taken, its neutral stance warrants monitoring as a potential leading indicator of sentiment shifts.
+• **Overwhelmingly bullish consensus:** With a mean recommendation score of 1.47/5 (strong buy territory) across 40 analysts, the Street is broadly constructive on MU — recent actions from Citigroup (Strong Buy), JP Morgan (Buy), B of A Securities (Strong Buy), and Mizuho (Buy) all reflect sustained conviction with no rating deteriorations observed in the latest round.
 
-- **No rating upgrades or downgrades in recent actions**: All five recent analyst actions are **&#34;Maintains,&#34;** suggesting the street is in a consolidation phase — conviction in existing views is holding firm but no new catalysts have yet prompted incremental rating changes in either direction.
+• **Meaningful implied upside to consensus:** The mean price target of ~$525 represents approximately **+43% upside** from current levels, suggesting analysts view the stock as meaningfully undervalued at present prices, potentially reflecting a cyclical trough or near-term macro/sector headwinds being priced in.
 
-- **Wide price target dispersion ($249–$750) signals elevated uncertainty**: The ~$500 spread between low and high targets reflects genuine disagreement around the magnitude and durability of the AI-driven memory demand cycle, HBM ramp trajectory, and potential macro/inventory head</div>
+• **Wide target dispersion signals debate on magnitude, not direction:** The spread between the high target ($750, ~+104% upside) and low target ($249, ~-32% downside) is exceptionally wide, indicating broad disagreement on the scale of the memory cycle recovery rather than its existence — bulls see an AI/HBM-driven supercycle; bears flag oversupply risks.
+
+• **Goldman Sachs is the lone dissenter:** Goldman&#39;s Hold rating stands out as a contrarian data point among an otherwise bullish peer group, likely reflecting caution around near-term earnings visibility, DRAM/NAND pricing volatility, or geopolitical supply chain risks.
+
+• **No rating upgrades or downgrades in recent actions:** All five firms simply *maintained* existing ratings, suggesting the Street is in a **&#34;wait and see&#34; posture** — conviction levels are stable</div>
         </div>
       </div>
     </div>
@@ -3054,66 +3057,6 @@
           
           <div class="news-item">
             <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/look-micron-technology-mu-valuation-060948068.html?.tsrc=rss" target="_blank" rel="noopener">A Look At Micron Technology (MU) Valuation After TurboQuant Headline Volatility</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-02 06:09 UTC</span>
-            </div>
-            <div class="news-summary">Micron Technology (MU) stock has been on a roller coaster after Google’s TurboQuant memory compression announcement triggered a sharp sell-off, followed by a rebound as investors refocused on Micron’s AI driven fundamentals. See our latest …</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/micron-technology-mu-jumps-8-042935139.html?.tsrc=rss" target="_blank" rel="noopener">Micron Technology (MU) Jumps 8.9% on Tech Optimism</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-02 04:29 UTC</span>
-            </div>
-            <div class="news-summary">Micron Technology Inc. (NASDAQ:MU) is one of the 10 Stocks Outperforming Wall Street with Outsized Gains. Micron Technology jumped by 8.94 percent on Wednesday to finish at $367.85 apiece, mirroring the broader market optimism and the surge…</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/micron-technology-mu-billionaire-ray-185932447.html?.tsrc=rss" target="_blank" rel="noopener">Micron Technology (MU): Billionaire Ray Dalio Is Loading Up on This Chip Stock</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-01 18:59 UTC</span>
-            </div>
-            <div class="news-summary">Micron Technology, Inc. (NASDAQ:MU) is one of the 15 Best Stocks to Buy According to Billionaire Ray Dalio. Micron Technology, Inc. (NASDAQ:MU) is one of the favorite chip stocks of Ray Dalio. It has featured in the 13F portfolio of Bridgew…</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/analysts-bullish-micron-technology-mu-164441350.html?.tsrc=rss" target="_blank" rel="noopener">Analysts Bullish on Micron Technology (MU) Amid Robust AI Demand</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-01 16:44 UTC</span>
-            </div>
-            <div class="news-summary">Micron Technology, Inc. (NASDAQ:MU) earns a spot on our list of 8 Best AI Infrastructure Stocks to Invest in. As of March 30, 2026, 94% of the covering analysts maintain bullish ratings on Micron Technology, Inc. (NASDAQ:MU), indicating tha…</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/strong-analyst-sentiment-micron-technology-164422530.html?.tsrc=rss" target="_blank" rel="noopener">Strong Analyst Sentiment on Micron Technology (MU) Following Better-Than-Expected Fiscal Q2 2026 Results</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-01 16:44 UTC</span>
-            </div>
-            <div class="news-summary">Micron Technology, Inc. (NASDAQ:MU) is among our picks on the list titled billionaire portfolio: 7 cheap stocks top billionaires are accumulating. Micron Technology, Inc. (NASDAQ:MU) is receiving strong confidence from Wall Street as of Mar…</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
               <a href="https://finance.yahoo.com/sectors/technology/articles/nomura-taiwan-high-tech-fund-213856241.html?.tsrc=rss" target="_blank" rel="noopener">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</a>
               
             </div>
@@ -3122,18 +3065,6 @@
               <span class="news-date">2026-04-01 21:38 UTC</span>
             </div>
             <div class="news-summary">Diversified bets across Taiwan&#39;s AI supply chain drive strong gains despite recent volatility and geopolitical concerns.</div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-title">
-              <a href="https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-googl-releases-lyria-190108821.html" target="_blank" rel="noopener">Alphabet Inc. (GOOGL) Releases Lyria 3 Pro for Generating Longer Music Tracks</a>
-              
-            </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-03-31 20:55 UTC</span>
-            </div>
-            
           </div>
           
           
@@ -3216,15 +3147,15 @@
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">## Micron Technology (MU) – Financial Analysis
 
-- **Explosive revenue recovery and margin inflection:** Revenue surged from a cyclical trough of $15.54B in 2023 to $25.11B in 2024 and $37.38B in 2025 (+141% over two years), driven by memory/NAND pricing recovery and AI-related HBM demand. Gross margin swung dramatically from **-9.1% → 22.4% → 39.8%**, and operating margin recovered from **-34.8% to +26.2%**, demonstrating the extreme operating leverage inherent in semiconductor memory cycles.
+- **Dramatic revenue and margin recovery:** Revenue nearly tripled from a cyclical trough of $15.54B in 2023 to $37.38B in 2025, with gross margin swinging from -9.1% to 39.8% over the same period — a textbook semiconductor upcycle recovery driven by DRAM/NAND pricing normalization and surging HBM/AI memory demand.
 
-- **Profitability restoration is substantial but still cycle-dependent:** Net margin reached **22.8% in 2025** ($8.52B net income implied), a stark reversal from the **-37.5% net loss** ($5.83B) in 2023. The speed and magnitude of this swing underscores MU&#39;s high fixed-cost structure — both a risk in downturns and a significant earnings amplifier in upcycles.
+- **Profitability inflection is sharp but recent:** Operating margin collapsed to -34.8% in 2023, recovered modestly to 5.2% in 2024, then surged to 26.2% in 2025. Net margin followed the same arc (-37.5% → 3.1% → 22.8%), underscoring how operationally leveraged Micron is to memory pricing — gains can reverse equally fast.
 
-- **Free cash flow recovery remains a work-in-progress despite profit surge:** FCF improved from **-$6.12B (2023) → $0.12B (2024) → $1.67B (2025)**, but the gap between net income (~$8.5B) and FCF ($1.67B) signals **heavy capital expenditure consumption** — consistent with MU&#39;s aggressive investment in HBM and leading-edge DRAM/NAND capacity. CapEx intensity is a structural feature, not a one-off.
+- **Free cash flow remains thin relative to earnings scale:** Despite $8.53B in net income implied at 2025 margins, FCF was only $1.67B in 2025 (vs. $0.12B in 2024 and -$6.12B in 2023), indicating **massive capital expenditure consumption** — consistent with Micron&#39;s multi-billion-dollar fab buildout (CHIPS Act projects). Investors should monitor capex normalization closely.
 
-- **Balance sheet carries meaningful but manageable leverage:** Total debt has grown modestly from $13.93B (2023) to $15.28B (2025), while cash improved to **$9.64B**, yielding net debt of approximately **$5.64B**. The reported **debt-to-equity of ~14.9x** appears elevated but likely reflects accounting equity distortions from prior-year losses; with restored profitability, coverage metrics are improving materially.
+- **Balance sheet is manageable but leveraged:** Total debt has crept up from $13.93B (2023) to $15.28B (2025), while net debt stands at approximately **$5.64B** ($15.28B debt minus $9.64B cash). The debt-to-equity ratio of **14.9x** appears elevated and warrants scrutiny, likely reflecting the capital-intensive expansion phase.
 
-- **Valuation signals strong near-term earnings expectations:** The **forward P/E</div>
+- **Valuation disconnect signals strong forward earnings expectations:** The trailing P/E of 17.4x versus a **forward P/E of just 3.7x** implies the market is pricing in a substantial step-up in earnings — but also flags meaningful execution and cycle risk if memory pricing softens before new capacity is fully monetized. EV/EBITDA of 11.2x</div>
         </div>
       </div>
     </div>
@@ -3345,80 +3276,15 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">Taiwan Strait Geopolitical Risk &amp; TSM Concentration</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">NVDA</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-          </div>
-          <div class="geo-analysis">• Taiwan remains the world&#39;s dominant advanced semiconductor manufacturing hub, and any escalation in cross-strait tensions would severely disrupt global chip supply chains, directly impacting TSM as the primary foundry for NVDA and AAPL chips.
-• The Nomura Taiwan fund headline explicitly flags &#39;geopolitical concerns&#39; as a source of recent volatility, signaling that institutional investors are actively pricing in Taiwan risk; TSM&#39;s recent -3.13% single-session drop may partly reflect such sentiment.
-• While TSMC is actively diversifying with fabs in Japan (3nm planned for 2028) and a $65B campus in Phoenix, AZ, the majority of cutting-edge production remains in Taiwan, leaving the portfolio highly exposed to any military or political destabilization scenario.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div>
-            
-            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
-            
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC (TSM) Falls More Steeply Than Broader Market: What Investors Need to Know</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">US-China Trade Policy &amp; Semiconductor Export Controls</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">NVDA</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-          </div>
-          <div class="geo-analysis">• NVDA and MU face ongoing and potentially escalating US export control restrictions targeting advanced AI chips and memory products destined for China, which represents a meaningful revenue segment for both companies; any tightening of BIS rules or new Entity List additions would directly compress their addressable markets.
-• MU has previously been targeted by Chinese regulatory retaliation (e.g., the 2023 CCCF ban on critical infrastructure purchases), and the current environment of elevated US-China tech rivalry increases the probability of renewed retaliatory measures against US memory and semiconductor firms.
-• AAPL&#39;s deep manufacturing and sales dependency on China — even as it expands its US Manufacturing Program with partners like Bosch — means that any deterioration in US-China trade relations (tariffs, sanctions, or counter-sanctions) poses significant margin and supply chain risk.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Analysts Bullish on Micron Technology (MU) Amid Robust AI Demand</div>
-            
-            <div class="geo-headline">DRAM prices surged 90-95%, memory suppliers booked two years out</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Middle East Conflict &amp; Oil Price Volatility (Iran War Ceasefire)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
+            <span class="geo-name">Iran War De-Escalation Sentiment Shift — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             
@@ -3431,47 +3297,12 @@
             <span class="ticker-tag">MU</span>
             
           </div>
-          <div class="geo-analysis">• Headlines indicate an active Iran conflict with hopes of a ceasefire, which has been driving oil price declines and market rallies; a re-escalation or breakdown in ceasefire talks could spike energy costs, raising input costs for energy-intensive semiconductor fabs operated by TSM and MU.
-• Prolonged Middle East instability risks disrupting global shipping lanes (e.g., Strait of Hormuz), which could affect the logistics of hardware components and finished goods for AAPL and chip equipment for TSM.
-• The current ceasefire optimism is providing a macro tailwind for tech equities broadly, but this is fragile — any reversal could trigger a risk-off move that disproportionately impacts high-valuation semiconductor names like NVDA.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Equity futures and ETFs gained pre-market as &#39;Iran war de-escalation hopes drive sentiment,&#39; indicating an active military/geopolitical conflict involving Iran that has been weighing on broader risk assets including tech.
+• 2026-04-01 — While de-escalation hopes are currently positive for tech sentiment, the underlying Iran conflict remains an active geopolitical risk; any re-escalation could disrupt global risk appetite and supply chains, particularly affecting semiconductor names reliant on stable shipping and energy costs.</div>
           
           <div class="geo-headlines">
             
-            <div class="geo-headline">Stock Market Today, April 1: Markets Rally and Oil Prices Fall for Second Day Running</div>
-            
-            <div class="geo-headline">Stock Market Today: Nasdaq Leads Charge After Trump&#39;s War Comments; Amazon, Tesla Rise (Live Coverage)</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">US Onshoring &amp; Industrial Policy (CHIPS Act Execution Risk)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">TSM</span>
-            
-            <span class="ticker-tag">AAPL</span>
-            
-            <span class="ticker-tag">MU</span>
-            
-          </div>
-          <div class="geo-analysis">• TSMC&#39;s $65B Arizona campus and planned advanced packaging expansions represent significant capital commitments contingent on continued US government support (CHIPS Act subsidies, permitting); any policy reversal, budget cuts, or political friction under the current administration could slow execution timelines and inflate costs.
-• AAPL&#39;s $400M US Manufacturing Program expansion signals proactive compliance with domestic content and reshoring pressures, but also reflects vulnerability to political mandates that could force costly supply chain restructuring if geopolitical conditions worsen.
-• MU&#39;s domestic DRAM fab investments (Idaho, New York) are similarly tied to federal incentives; execution delays or funding uncertainty could create competitive disadvantages versus Korean and Chinese rivals who benefit from their own state subsidies.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
-            
-            <div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div>
-            
-            <div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
+            <div class="geo-headline">Exchange-Traded Funds, Equity Futures Gain Pre-Bell Wednesday as Iran War De-Escalation Hopes Drive Sentiment</div>
             
           </div>
           
@@ -3504,6 +3335,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Major customer purchasing LPDDR and NAND flash memory for iPhones, iPads, and Mac products", "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Critical customer for High Bandwidth Memory (HBM3E) used in AI/data center GPUs such as H100 and B200", "ticker": "NVDA"}, {"criticality": "high", "name": "Amazon.com, Inc.", "relationship": "Large cloud customer purchasing data center DRAM modules and SSDs for AWS infrastructure", "ticker": "AMZN"}, {"criticality": "medium", "name": "Dell Technologies Inc.", "relationship": "Significant customer purchasing DRAM modules and enterprise SSDs for servers, PCs, and storage systems", "ticker": "DELL"}, {"criticality": "medium", "name": "Qualcomm Incorporated", "relationship": "Customer for LPDDR mobile DRAM integrated into Snapdragon mobile and automotive platforms", "ticker": "QCOM"}, {"criticality": "low", "name": "Tesla, Inc.", "relationship": "Customer for automotive-grade DRAM and NAND flash used in vehicle infotainment and ADAS systems", "ticker": "TSLA"}], "supply_chain_summary": "Micron Technology occupies a critical mid-tier position in the semiconductor supply chain as one of only three major global producers of DRAM and NAND flash memory, sitting downstream of specialized capital equipment makers and upstream of nearly every major computing, mobile, cloud, and automotive platform. Its highly capital-intensive, vertically integrated manufacturing model creates deep dependencies on a small number of equipment suppliers while serving a broad but concentrated customer base where AI-driven HBM demand from companies like NVIDIA is rapidly reshaping revenue mix.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Critical supplier of EUV and DUV lithography equipment essential for advanced DRAM and NAND manufacturing", "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials, Inc.", "relationship": "Key supplier of wafer fabrication equipment including CVD, PVD, and etch systems used in memory production", "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Supplier of etch and deposition equipment critical for NAND 3D stacking and DRAM cell fabrication", "ticker": "LRCX"}, {"criticality": "medium", "name": "Entegris, Inc.", "relationship": "Supplier of advanced materials, chemical mechanical planarization slurries, and filtration systems for memory fabs", "ticker": "ENTG"}, {"criticality": "medium", "name": "KLA Corporation", "relationship": "Supplier of process control and wafer inspection equipment used to maintain yield in memory manufacturing", "ticker": "KLAC"}, {"criticality": "medium", "name": "SUMCO Corporation", "relationship": "Key supplier of silicon wafers, a primary raw material for DRAM and NAND flash production", "ticker": "SUMCO"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -3560,19 +3392,31 @@
             nodes.forEach(function(node, i) {
               var ny = startY + i * (NODE_H + ROW_GAP);
               var nc = colorMap[node.criticality] || colorMap['low'];
-              var g = svgEl_('g', {});
+              var isWatched = watchlist.indexOf(node.ticker) !== -1;
+              var g = svgEl_('g', isWatched ? {style: 'cursor:pointer;'} : {});
+              if (isWatched) {
+                g.addEventListener('click', function() { switchToTab('stock-' + node.ticker); });
+              }
               g.appendChild(svgEl_('rect', {
                 x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
-                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+                fill: isWatched ? '#eff6ff' : nc.fill,
+                stroke: isWatched ? '#2563eb' : nc.stroke,
+                'stroke-width': isWatched ? 2 : 1.5,
+                'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
               addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
-                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+                'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
               var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
-              var relText = (node.relationship || '').substring(0, 26);
-              addText(g, colX + NODE_W/2, ny + 44, relText,
-                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              if (isWatched) {
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
+                  'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
+              } else {
+                var relText = (node.relationship || '').substring(0, 26);
+                addText(g, colX + NODE_W/2, ny + 44, relText,
+                  'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              }
               svgEl.appendChild(g);
 
               // Arrow
@@ -3770,61 +3614,61 @@
         
         <div class="news-item">
           <div class="news-title">
-            <a href="https://247wallst.com/investing/2026/04/01/dram-prices-surged-90-95-memory-suppliers-booked-two-years-out/?.tsrc=rss" target="_blank" rel="noopener">DRAM prices surged 90-95%, memory suppliers booked two years out</a>
+            <a href="https://finance.yahoo.com/sectors/technology/articles/sector-tech-stocks-gain-afternoon-194904011.html?.tsrc=rss" target="_blank" rel="noopener">Sector Update: Tech Stocks Gain Late Afternoon</a>
           </div>
           <div class="news-meta-row">
             <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-            <span class="news-date">2026-04-02 00:39 UTC</span>
+            <span class="news-date">2026-04-01 19:49 UTC</span>
           </div>
-          <div class="news-summary">I’ve been watching the memory semiconductor cycle for years now, and I can’t stop thinking about a comment from a market analyst this week. On a recent TV segment, the analyst argued the selloff in memory and semiconductor names has been co…</div>
+          <div class="news-summary">Tech stocks were higher late Wednesday afternoon, with the State Street Technology Select Sector SPD…</div>
           
         </div>
         
         <div class="news-item">
           <div class="news-title">
-            <a href="https://www.fool.com/investing/2026/04/01/why-micron-stock-skyrocketed-today/?.tsrc=rss" target="_blank" rel="noopener">Why Micron Stock Skyrocketed Today</a>
+            <a href="https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130639197.html?.tsrc=rss" target="_blank" rel="noopener">Exchange-Traded Funds, Equity Futures Gain Pre-Bell Wednesday as Iran War De-Escalation Hopes Drive Sentiment</a>
           </div>
           <div class="news-meta-row">
             <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-            <span class="news-date">2026-04-01 22:00 UTC</span>
+            <span class="news-date">2026-04-01 13:06 UTC</span>
           </div>
-          <div class="news-summary">After facing some bearish pressures, Micron stock just had a huge bullish day on the market.…</div>
+          <div class="news-summary">The broad market exchange-traded fund SPDR S&amp;amp;P 500 ETF Trust (SPY) was up 0.8%, and the actively tra…</div>
           
         </div>
         
         <div class="news-item">
           <div class="news-title">
-            <a href="https://www.fool.com/coverage/stock-market-today/2026/04/01/stock-market-today-april-1-markets-rally-and-oil-prices-fall-for-second-day-running/?.tsrc=rss" target="_blank" rel="noopener">Stock Market Today, April 1: Markets Rally and Oil Prices Fall for Second Day Running</a>
+            <a href="https://finance.yahoo.com/markets/stocks/articles/why-nvidia-tesla-suddenly-knocking-183102795.html?.tsrc=rss" target="_blank" rel="noopener">Why Nvidia And Tesla Are Suddenly Knocking On Samsung&#39;s Door</a>
           </div>
           <div class="news-meta-row">
             <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-            <span class="news-date">2026-04-01 21:41 UTC</span>
+            <span class="news-date">2026-03-31 18:31 UTC</span>
           </div>
-          <div class="news-summary">Today, April 1, 2026, hopes that the Iran war may soon end drove markets upwards as tumbling oil prices reshaped the day’s winners.…</div>
+          <div class="news-summary">A severe capacity crunch at Taiwan Semiconductor Manufacturing Company Ltd. is forcing major clients, including Nvidia Corp. and Tesla Inc., to seek alternatives, positioning Samsung Electronics Co. Ltd. as a rare second source for cutting-…</div>
           
         </div>
         
         <div class="news-item">
           <div class="news-title">
-            <a href="https://finance.yahoo.com/m/eb516596-2ac5-34e8-a0f8-5dea7c12004f/stock-market-today%3A-nasdaq.html?.tsrc=rss" target="_blank" rel="noopener">Stock Market Today: Nasdaq Leads Charge After Trump&#39;s War Comments; Amazon, Tesla Rise (Live Coverage)</a>
+            <a href="https://finance.yahoo.com/sectors/technology/articles/global-photonics-packaging-market-2026-150100555.html?.tsrc=rss" target="_blank" rel="noopener">The Global Photonics Packaging Market 2026-2036 | AI Drives Radical Transformation in Photonics Packaging: Co-Packaged Optics Lead the Way</a>
           </div>
           <div class="news-meta-row">
             <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-            <span class="news-date">2026-04-01 20:44 UTC</span>
+            <span class="news-date">2026-03-31 15:01 UTC</span>
           </div>
-          <div class="news-summary">Stock Market Today: The Dow Jones index rose Wednesday after Trump said Iran&#39;s new president is asking for a ceasefire.…</div>
+          <div class="news-summary">Dublin, March 31, 2026 (GLOBE NEWSWIRE) -- The &#34;The Global Photonics Packaging Market 2026-2036&#34; has been added to ResearchAndMarkets.com&#39;s offering. Photonics packaging is undergoing a significant transformation, reshaping its role in the …</div>
           
         </div>
         
         <div class="news-item">
           <div class="news-title">
-            <a href="https://finance.yahoo.com/m/4f69a248-ddea-36d5-91ab-39877bcb480d/these-stocks-are-today%E2%80%99s.html?.tsrc=rss" target="_blank" rel="noopener">These Stocks Are Today’s Movers: Intel, Western Digital, Eli Lilly, Nike, RH, Exxon Mobil, and More</a>
+            <a href="https://247wallst.com/investing/2026/03/31/fidelity-disruptive-technology-etf-is-down-12-in-2026-and-this-catalyst-could-decide-what-comes-next/?.tsrc=rss" target="_blank" rel="noopener">Fidelity Disruptive Technology ETF Is Down 12% in 2026 and This Catalyst Could Decide What Comes Next</a>
           </div>
           <div class="news-meta-row">
             <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-            <span class="news-date">2026-04-01 20:21 UTC</span>
+            <span class="news-date">2026-03-31 13:45 UTC</span>
           </div>
-          <div class="news-summary">Intel stock jumps after the company agrees to repurchase Apollo Global Management’s 49% stake in a joint venture related to its Ireland chip factory.…</div>
+          <div class="news-summary">If you searched for a biotech or health sciences ETF and landed on Fidelity Disruptive Technology ETF (NYSEARCA:FDTX), there is something important to clarify upfront: this fund carries zero healthcare sector exposure. Its name references d…</div>
           
         </div>
         
@@ -3943,13 +3787,16 @@
           centerNodes.forEach(function(sym, i) {
             var cy = centerStartY + i * (CENTER_H + ROW_GAP);
             centerMids[sym] = cy + CENTER_H / 2;
-            var g = svgEl_('g', {});
+            var g = svgEl_('g', {style: 'cursor:pointer;'});
+            g.addEventListener('click', (function(s){ return function(){ switchToTab('stock-' + s); }; })(sym));
             g.appendChild(svgEl_('rect', {
               x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
               fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
             }));
-            addText(g, cx + CENTER_W/2, cy + 24, sym,
+            addText(g, cx + CENTER_W/2, cy + 20, sym,
               'font-size:12px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+            addText(g, cx + CENTER_W/2, cy + 36, '↗ view report',
+              'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
             svgEl.appendChild(g);
           });
 
@@ -4028,10 +3875,11 @@
       <div class="card" style="margin-bottom:12px;">
         <div class="ai-block" style="border-top:none;">
           <div class="ai-label">Portfolio-Level Summary</div>
-          <div class="ai-text">• The portfolio carries elevated geopolitical concentration risk, with TSM, NVDA, AAPL, and MU all deeply exposed to US-China technology decoupling and Taiwan Strait stability — the two most consequential and interconnected macro risks in the current environment.
-• A partial mitigation is underway via geographic diversification of manufacturing (TSMC Japan/Arizona, AAPL US suppliers, MU domestic fabs), but these efforts are multi-year in nature and do not reduce near-term vulnerability.
-• The Iran ceasefire narrative provides a short-term positive macro backdrop for the portfolio, but its fragility means energy cost and shipping disruption risks remain latent and should be monitored closely.
-• Memory market tightness (DRAM prices +90-95%, suppliers booked two years out) amplifies the potential impact of any export control or sanctions action targeting MU, as supply shocks could trigger immediate and severe geopolitical responses from trading partners.</div>
+          <div class="ai-text">• NVDA faces a near-term supply chain risk as TSMC&#39;s capacity crunch forces it to negotiate with Samsung as an alternative foundry, potentially disrupting production timelines for AI chips.
+• TSM is actively diversifying geographically (Japan 3nm by 2028, Arizona campus expansion), but remains the focal point of Taiwan geopolitical risk concerns flagged by fund managers this week.
+• AAPL is proactively expanding U.S. manufacturing partnerships ($400M program), reflecting ongoing trade policy pressure and reducing but not eliminating geopolitical supply chain exposure.
+• MU has no direct headline triggers this period but remains indirectly exposed to the Iran conflict risk and Taiwan geopolitical overhang given its reliance on the broader Asian semiconductor supply chain.
+• An active Iran-related military conflict is currently influencing broad market sentiment; de-escalation hopes are providing a short-term tailwind, but re-escalation remains a tail risk for all portfolio names.</div>
         </div>
       </div>
       
@@ -4039,80 +3887,73 @@
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">Taiwan Strait Geopolitical Risk &amp; TSM Concentration</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
+            <span class="geo-name">TSMC Capacity Crunch Forcing Client Diversification Away from Taiwan — Mar/Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-03-31</span>
+              
+              <span class="pill risk-pill risk-medium-high">
+                Medium-High
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
-            <span class="ticker-tag">TSM</span><span class="ticker-tag">NVDA</span><span class="ticker-tag">AAPL</span><span class="ticker-tag">MU</span>
+            <span class="ticker-tag">NVDA</span><span class="ticker-tag">TSM</span>
           </div>
-          <div class="geo-analysis">• Taiwan remains the world&#39;s dominant advanced semiconductor manufacturing hub, and any escalation in cross-strait tensions would severely disrupt global chip supply chains, directly impacting TSM as the primary foundry for NVDA and AAPL chips.
-• The Nomura Taiwan fund headline explicitly flags &#39;geopolitical concerns&#39; as a source of recent volatility, signaling that institutional investors are actively pricing in Taiwan risk; TSM&#39;s recent -3.13% single-session drop may partly reflect such sentiment.
-• While TSMC is actively diversifying with fabs in Japan (3nm planned for 2028) and a $65B campus in Phoenix, AZ, the majority of cutting-edge production remains in Taiwan, leaving the portfolio highly exposed to any military or political destabilization scenario.</div>
+          <div class="geo-analysis ai-text">• 2026-03-31 — A severe capacity crunch at TSMC is forcing major clients including Nvidia and Tesla to seek alternatives at Samsung, signaling supply chain vulnerability tied to concentration of advanced node production in Taiwan.
+• 2026-03-31 — The capacity constraint underscores ongoing geopolitical concerns around Taiwan&#39;s AI supply chain, as noted by Nomura&#39;s Taiwan High Tech Fund commentary on &#39;recent volatility and geopolitical concerns&#39; (2026-04-01).
+• 2026-04-01 — TSMC&#39;s planned 3nm production launch in Japan in 2028 reflects a strategic push to geographically diversify manufacturing, but near-term supply risk for NVDA and other clients remains elevated.</div>
           
           <div class="geo-headlines">
-            <div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div><div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div><div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div><div class="geo-headline">TSMC (TSM) Falls More Steeply Than Broader Market: What Investors Need to Know</div>
+            <div class="geo-headline">Why Nvidia And Tesla Are Suddenly Knocking On Samsung&#39;s Door</div><div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div><div class="geo-headline">Nomura Taiwan High Tech Fund Returns 164%, Outperforms 99% of Peers</div>
           </div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US-China Trade Policy &amp; Semiconductor Export Controls</span>
-            <span class="pill risk-pill risk-high">
-              High
-            </span>
-          </div>
-          <div class="geo-tickers">
-            <span class="ticker-tag">NVDA</span><span class="ticker-tag">MU</span><span class="ticker-tag">TSM</span><span class="ticker-tag">AAPL</span>
-          </div>
-          <div class="geo-analysis">• NVDA and MU face ongoing and potentially escalating US export control restrictions targeting advanced AI chips and memory products destined for China, which represents a meaningful revenue segment for both companies; any tightening of BIS rules or new Entity List additions would directly compress their addressable markets.
-• MU has previously been targeted by Chinese regulatory retaliation (e.g., the 2023 CCCF ban on critical infrastructure purchases), and the current environment of elevated US-China tech rivalry increases the probability of renewed retaliatory measures against US memory and semiconductor firms.
-• AAPL&#39;s deep manufacturing and sales dependency on China — even as it expands its US Manufacturing Program with partners like Bosch — means that any deterioration in US-China trade relations (tariffs, sanctions, or counter-sanctions) poses significant margin and supply chain risk.</div>
-          
-          <div class="geo-headlines">
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div><div class="geo-headline">Analysts Bullish on Micron Technology (MU) Amid Robust AI Demand</div><div class="geo-headline">DRAM prices surged 90-95%, memory suppliers booked two years out</div>
-          </div>
-          
-        </div>
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">Middle East Conflict &amp; Oil Price Volatility (Iran War Ceasefire)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
+            <span class="geo-name">Iran War De-Escalation Sentiment Shift — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             <span class="ticker-tag">NVDA</span><span class="ticker-tag">AAPL</span><span class="ticker-tag">TSM</span><span class="ticker-tag">MU</span>
           </div>
-          <div class="geo-analysis">• Headlines indicate an active Iran conflict with hopes of a ceasefire, which has been driving oil price declines and market rallies; a re-escalation or breakdown in ceasefire talks could spike energy costs, raising input costs for energy-intensive semiconductor fabs operated by TSM and MU.
-• Prolonged Middle East instability risks disrupting global shipping lanes (e.g., Strait of Hormuz), which could affect the logistics of hardware components and finished goods for AAPL and chip equipment for TSM.
-• The current ceasefire optimism is providing a macro tailwind for tech equities broadly, but this is fragile — any reversal could trigger a risk-off move that disproportionately impacts high-valuation semiconductor names like NVDA.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Equity futures and ETFs gained pre-market as &#39;Iran war de-escalation hopes drive sentiment,&#39; indicating an active military/geopolitical conflict involving Iran that has been weighing on broader risk assets including tech.
+• 2026-04-01 — While de-escalation hopes are currently positive for tech sentiment, the underlying Iran conflict remains an active geopolitical risk; any re-escalation could disrupt global risk appetite and supply chains, particularly affecting semiconductor names reliant on stable shipping and energy costs.</div>
           
           <div class="geo-headlines">
-            <div class="geo-headline">Stock Market Today, April 1: Markets Rally and Oil Prices Fall for Second Day Running</div><div class="geo-headline">Stock Market Today: Nasdaq Leads Charge After Trump&#39;s War Comments; Amazon, Tesla Rise (Live Coverage)</div>
+            <div class="geo-headline">Exchange-Traded Funds, Equity Futures Gain Pre-Bell Wednesday as Iran War De-Escalation Hopes Drive Sentiment</div>
           </div>
           
         </div>
         
         <div class="geo-theme">
           <div class="geo-header">
-            <span class="geo-name">US Onshoring &amp; Industrial Policy (CHIPS Act Execution Risk)</span>
-            <span class="pill risk-pill risk-medium">
-              Medium
-            </span>
+            <span class="geo-name">Apple U.S. Manufacturing Expansion amid Trade/Tariff Pressure — Apr 2026</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-04-01</span>
+              
+              <span class="pill risk-pill risk-medium">
+                Medium
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
-            <span class="ticker-tag">TSM</span><span class="ticker-tag">AAPL</span><span class="ticker-tag">MU</span>
+            <span class="ticker-tag">AAPL</span>
           </div>
-          <div class="geo-analysis">• TSMC&#39;s $65B Arizona campus and planned advanced packaging expansions represent significant capital commitments contingent on continued US government support (CHIPS Act subsidies, permitting); any policy reversal, budget cuts, or political friction under the current administration could slow execution timelines and inflate costs.
-• AAPL&#39;s $400M US Manufacturing Program expansion signals proactive compliance with domestic content and reshoring pressures, but also reflects vulnerability to political mandates that could force costly supply chain restructuring if geopolitical conditions worsen.
-• MU&#39;s domestic DRAM fab investments (Idaho, New York) are similarly tied to federal incentives; execution delays or funding uncertainty could create competitive disadvantages versus Korean and Chinese rivals who benefit from their own state subsidies.</div>
+          <div class="geo-analysis ai-text">• 2026-04-01 — Apple expanded its American Manufacturing Program with a $400M investment adding partners including Bosch and Cirrus Logic, a move consistent with ongoing pressure to onshore supply chains amid U.S.-China trade tensions.
+• 2026-04-01 — This expansion signals that AAPL is actively repositioning its supplier base in response to geopolitical and trade policy risks, which may involve near-term cost headwinds but reduces longer-term tariff and sanctions exposure.</div>
           
           <div class="geo-headlines">
-            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div><div class="geo-headline">Willmeng starts $7B Phoenix mixed-use project, companion to TSMC site</div><div class="geo-headline">TSMC plans 3-nanometre chip production launch in Japan in 2028</div>
+            <div class="geo-headline">Apple Inc. (AAPL) Expands U.S. Manufacturing Program with $400M Investment</div>
           </div>
           
         </div>
@@ -4125,26 +3966,35 @@
 
   <!-- Footer -->
   <div style="margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-    <span>Data: Financial Modeling Prep &bull; Yahoo Finance &bull; Wall Street Journal &bull; yfinance</span>
+    <span>Data: Yahoo Finance &bull; Google News &bull; CNBC &bull; MarketWatch &bull; Reuters &bull; Wall Street Journal &bull; StockAnalysis.com</span>
     <span>For informational purposes only. Not investment advice.</span>
   </div>
 
 </div><!-- end .page -->
 
 <script>
-  // Tab switching
-  const tabs = document.querySelectorAll('.tab');
-  const contents = document.querySelectorAll('.tab-content');
+  // Global helper — must be defined before any inline SVG script uses it
+  function switchToTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const targetTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+    if (targetTab) {
+      targetTab.classList.add('active');
+      targetTab.style.display = ''; // restore if hidden
+    }
+    const targetContent = document.getElementById('tab-' + tabId);
+    if (targetContent) {
+      targetContent.classList.add('active');
+      targetContent.style.display = ''; // restore if hidden
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      tabs.forEach(t => t.classList.remove('active'));
-      contents.forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      const el = document.getElementById('tab-' + target);
-      if (el) el.classList.add('active');
-    });
+  // Tab bar click handlers (delegated so it works for dynamically revealed tabs too)
+  document.getElementById('tabBar').addEventListener('click', e => {
+    const tab = e.target.closest('.tab[data-tab]');
+    if (!tab || e.target.closest('.tab-close')) return;
+    switchToTab(tab.dataset.tab);
   });
 </script>
 
@@ -4213,6 +4063,9 @@ document.addEventListener('DOMContentLoaded', () => {
     drawSparkline('spark-MU', pts, color);
   }
   
+
+  initTabs();
+  initAddStock();
 });
 </script>
 
@@ -4240,7 +4093,7 @@ function toggleTheme() {
 // ── i18n ───────────────────────────────────────────────────────────
 const I18N = {
   zh: {
-    updated: '更新于 2026-04-02 08:22 UTC',
+    updated: '更新于 2026-04-02 08:33 UTC',
     history: '历史记录',
     add_stock: '添加股票',
     refresh_report: '刷新报告',
@@ -4271,7 +4124,7 @@ const I18N = {
     add_generate: '添加并生成',
   },
   en: {
-    updated: 'Updated 2026-04-02 08:22 UTC',
+    updated: 'Updated 2026-04-02 08:33 UTC',
     history: 'History',
     add_stock: 'Add Stock',
     refresh_report: 'Refresh Report',
@@ -4326,37 +4179,202 @@ function toggleLang() {
   if (currentLang !== 'en') applyLang(currentLang);
 })();
 
+// ── Tab drag-to-reorder ───────────────────────────────────────────
+const TAB_ORDER_KEY = 'finagent_tab_order';
+const TAB_HIDDEN_KEY = 'finagent_tab_hidden';
+let dragSrcTab = null;
+
+function initTabs() {
+  restoreTabState();
+  const tabBar = document.getElementById('tabBar');
+  tabBar.addEventListener('dragstart', e => {
+    const tab = e.target.closest('.tab[data-symbol]');
+    if (!tab) return;
+    dragSrcTab = tab;
+    tab.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  tabBar.addEventListener('dragend', e => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('dragging', 'drag-over'));
+    dragSrcTab = null;
+    saveTabOrder();
+  });
+  tabBar.addEventListener('dragover', e => {
+    e.preventDefault();
+    const target = e.target.closest('.tab[data-symbol]');
+    if (!target || target === dragSrcTab) return;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+    target.classList.add('drag-over');
+    e.dataTransfer.dropEffect = 'move';
+  });
+  tabBar.addEventListener('dragleave', e => {
+    const target = e.target.closest('.tab[data-symbol]');
+    if (target) target.classList.remove('drag-over');
+  });
+  tabBar.addEventListener('drop', e => {
+    e.preventDefault();
+    const target = e.target.closest('.tab[data-symbol]');
+    if (!target || !dragSrcTab || target === dragSrcTab) return;
+    // Insert before or after depending on mouse position
+    const rect = target.getBoundingClientRect();
+    const insertBefore = e.clientX < rect.left + rect.width / 2;
+    target.classList.remove('drag-over');
+    if (insertBefore) tabBar.insertBefore(dragSrcTab, target);
+    else tabBar.insertBefore(dragSrcTab, target.nextSibling);
+    saveTabOrder();
+  });
+}
+
+function saveTabOrder() {
+  const order = Array.from(document.querySelectorAll('#tabBar .tab[data-symbol]'))
+    .map(t => t.dataset.symbol);
+  localStorage.setItem(TAB_ORDER_KEY, JSON.stringify(order));
+}
+
+function restoreTabState() {
+  const tabBar = document.getElementById('tabBar');
+  const macroTab = tabBar.querySelector('[data-tab="macro"]');
+  const restoreBtn = document.getElementById('tabRestore');
+
+  // Restore order
+  try {
+    const order = JSON.parse(localStorage.getItem(TAB_ORDER_KEY) || '[]');
+    if (order.length) {
+      order.forEach(sym => {
+        const t = tabBar.querySelector(`.tab[data-symbol="${sym}"]`);
+        if (t) tabBar.insertBefore(t, macroTab);
+      });
+    }
+  } catch (_) {}
+
+  // Restore hidden
+  try {
+    const hidden = JSON.parse(localStorage.getItem(TAB_HIDDEN_KEY) || '[]');
+    hidden.forEach(sym => hideTabSilent(sym));
+    updateRestoreButton();
+  } catch (_) {}
+}
+
+function hideTabSilent(sym) {
+  const tab = document.querySelector(`#tabBar .tab[data-symbol="${sym}"]`);
+  const content = document.getElementById('tab-stock-' + sym);
+  if (tab) tab.style.display = 'none';
+  if (content) content.style.display = 'none';
+}
+
+function closeTab(e, sym) {
+  e.stopPropagation();
+  const tab = document.querySelector(`#tabBar .tab[data-symbol="${sym}"]`);
+  const content = document.getElementById('tab-stock-' + sym);
+  if (tab) {
+    // If this tab is active, activate the next visible tab
+    if (tab.classList.contains('active')) {
+      const allTabs = Array.from(document.querySelectorAll('#tabBar .tab'));
+      const visible = allTabs.filter(t => t.style.display !== 'none' && t !== tab);
+      if (visible.length) switchToTab(visible[0].dataset.tab);
+    }
+    tab.style.display = 'none';
+  }
+  if (content) { content.classList.remove('active'); content.style.display = 'none'; }
+  // Save hidden list
+  const hidden = JSON.parse(localStorage.getItem(TAB_HIDDEN_KEY) || '[]');
+  if (!hidden.includes(sym)) hidden.push(sym);
+  localStorage.setItem(TAB_HIDDEN_KEY, JSON.stringify(hidden));
+  updateRestoreButton();
+}
+
+function restoreAllTabs() {
+  localStorage.removeItem(TAB_HIDDEN_KEY);
+  document.querySelectorAll('#tabBar .tab[data-symbol]').forEach(t => t.style.display = '');
+  document.querySelectorAll('.tab-content[id^="tab-stock-"]').forEach(c => c.style.display = '');
+  updateRestoreButton();
+}
+
+function updateRestoreButton() {
+  const hidden = JSON.parse(localStorage.getItem(TAB_HIDDEN_KEY) || '[]');
+  const btn = document.getElementById('tabRestore');
+  const lbl = document.getElementById('tabRestoreLabel');
+  if (!btn) return;
+  if (hidden.length) {
+    btn.classList.add('has-hidden');
+    if (lbl) lbl.textContent = `+${hidden.length} hidden`;
+  } else {
+    btn.classList.remove('has-hidden');
+  }
+}
+
 // ── Add Stock ─────────────────────────────────────────────────────
 const ADD_STOCK_PAT_KEY = 'finagent_add_stock_pat';
-(function initAddStock() {
+let _pollTimer = null;
+
+function initAddStock() {
   const saved = localStorage.getItem(ADD_STOCK_PAT_KEY);
   if (saved) {
-    const el = document.getElementById('addStockPat');
-    if (el) el.value = saved;
-    const cb = document.getElementById('addStockRemember');
-    if (cb) cb.checked = true;
+    const savedRow = document.getElementById('tokenSavedRow');
+    const inputSec = document.getElementById('tokenInputSection');
+    if (savedRow) savedRow.style.display = 'flex';
+    if (inputSec) inputSec.style.display = 'none';
   }
-})();
+}
+
+function showPatInput() {
+  document.getElementById('tokenSavedRow').style.display = 'none';
+  document.getElementById('tokenInputSection').style.display = 'block';
+  document.getElementById('addStockPat').focus();
+}
+
+function closeAddStockModal() {
+  document.getElementById('addStockModal').classList.remove('visible');
+  // Reset to initial state
+  const btn = document.getElementById('addStockSubmit');
+  if (btn) { btn.disabled = false; btn.textContent = 'Add & Generate'; }
+  document.getElementById('addStockActions').style.display = 'flex';
+  document.getElementById('progressTrack').classList.remove('visible');
+  showAddStatus('', '');
+  if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
+}
+
+function setProgressStep(step, state) {
+  // state: 'active' | 'done' | 'failed' | ''
+  const el = document.getElementById('pstep-' + step);
+  if (!el) return;
+  el.className = 'progress-step' + (state ? ' ' + state : '');
+  const dot = el.querySelector('.step-dot');
+  if (dot) dot.textContent = state === 'done' ? '✓' : state === 'failed' ? '✕' : ({ trigger:'1', queue:'2', run:'3', done:'4' }[step] || '?');
+}
 
 
 async function submitAddStock() {
   const REPO = "Michellemingxuan/FinAgent";
   const WORKFLOW = "generate_report.yml";
   const ticker = (document.getElementById('newTicker').value || '').trim().toUpperCase();
-  const pat = (document.getElementById('addStockPat').value || '').trim();
-  const remember = document.getElementById('addStockRemember').checked;
-  const statusEl = document.getElementById('addStockStatus');
+  const savedPat = localStorage.getItem(ADD_STOCK_PAT_KEY) || '';
+  const inputEl = document.getElementById('addStockPat');
+  const pat = (inputEl && inputEl.offsetParent !== null ? inputEl.value.trim() : '') || savedPat;
   const btn = document.getElementById('addStockSubmit');
 
-  if (!ticker) { showAddStatus('error', currentLang === 'zh' ? '请输入股票代码。' : 'Please enter a ticker symbol.'); return; }
-  if (!pat) { showAddStatus('error', currentLang === 'zh' ? '请输入 GitHub PAT。' : 'Please enter your GitHub PAT.'); return; }
+  if (!ticker) { showAddStatus('error', 'Please enter a ticker symbol.'); return; }
+  if (!pat) {
+    showPatInput();
+    showAddStatus('error', 'Please enter your GitHub Personal Access Token.');
+    return;
+  }
 
-  if (remember) localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
-  else localStorage.removeItem(ADD_STOCK_PAT_KEY);
+  // Save token
+  localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
+  initAddStock();
 
+  // Switch to progress UI
   btn.disabled = true;
-  btn.textContent = currentLang === 'zh' ? '触发中…' : 'Triggering…';
-  showAddStatus('running', currentLang === 'zh' ? '正在发送请求到 GitHub Actions…' : 'Sending request to GitHub Actions…');
+  btn.textContent = 'Working…';
+  document.getElementById('progressTrack').classList.add('visible');
+  showAddStatus('', '');
+  setProgressStep('trigger', 'active');
+  setProgressStep('queue', '');
+  setProgressStep('run', '');
+  setProgressStep('done', '');
+
+  const triggerTime = Date.now();
 
   try {
     const resp = await fetch(
@@ -4373,33 +4391,120 @@ async function submitAddStock() {
       }
     );
 
-    if (resp.status === 204) {
-      showAddStatus('success', currentLang === 'zh'
-        ? `✓ 已触发! ${ticker} 的报告将在约 3 分钟后生成。届时请刷新页面。`
-        : `✓ Triggered! Report for ${ticker} will be ready in ~3 minutes. Refresh the page afterwards.`);
-      btn.textContent = '✓';
-      setTimeout(() => { btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate'; }, 30000);
-    } else if (resp.status === 401) {
-      showAddStatus('error', currentLang === 'zh' ? 'Token 无效或缺少 workflow 权限。' : 'Invalid token or missing workflow scope.');
-      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
-    } else {
-      const body = await resp.text();
-      showAddStatus('error', `GitHub ${resp.status}: ${body.slice(0, 120)}`);
-      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    if (resp.status === 401) {
+      setProgressStep('trigger', 'failed');
+      showAddStatus('error', 'Invalid token or missing workflow scope.');
+      btn.disabled = false; btn.textContent = 'Add & Generate';
+      return;
     }
+    if (resp.status !== 204) {
+      const body = await resp.text();
+      setProgressStep('trigger', 'failed');
+      showAddStatus('error', `GitHub error ${resp.status}: ${body.slice(0, 100)}`);
+      btn.disabled = false; btn.textContent = 'Add & Generate';
+      return;
+    }
+
+    setProgressStep('trigger', 'done');
+    setProgressStep('queue', 'active');
+
+    // Poll for the run status
+    await new Promise(r => setTimeout(r, 4000)); // wait 4s for run to appear
+    _pollForRun(REPO, pat, ticker, triggerTime);
+
   } catch (err) {
+    setProgressStep('trigger', 'failed');
     showAddStatus('error', `Network error: ${err.message}`);
-    btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    btn.disabled = false; btn.textContent = 'Add & Generate';
   }
+}
+
+async function _pollForRun(repo, pat, ticker, triggerTime) {
+  const headers = {
+    'Authorization': `Bearer ${pat}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  let runId = null;
+  let pollCount = 0;
+  const MAX_POLLS = 60; // 10 min max
+
+  _pollTimer = setInterval(async () => {
+    pollCount++;
+    if (pollCount > MAX_POLLS) {
+      clearInterval(_pollTimer);
+      setProgressStep('run', 'failed');
+      showAddStatus('error', 'Timed out waiting for workflow. Check GitHub Actions.');
+      return;
+    }
+
+    try {
+      if (!runId) {
+        // Find the run triggered after triggerTime
+        const r = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/generate_report.yml/runs?per_page=5&event=workflow_dispatch`, { headers });
+        if (!r.ok) return;
+        const data = await r.json();
+        const run = (data.workflow_runs || []).find(run => {
+          return new Date(run.created_at).getTime() >= triggerTime - 10000;
+        });
+        if (run) {
+          runId = run.id;
+          setProgressStep('queue', 'done');
+          setProgressStep('run', 'active');
+          const elapsed = document.getElementById('pstep-run-label');
+          if (elapsed) elapsed.textContent = `Running: ${ticker} report generation…`;
+        }
+        return;
+      }
+
+      // Poll the specific run
+      const r = await fetch(`https://api.github.com/repos/${repo}/actions/runs/${runId}`, { headers });
+      if (!r.ok) return;
+      const run = await r.json();
+
+      // Update elapsed time label
+      const elapsed = Math.round((Date.now() - triggerTime) / 1000);
+      const runLabel = document.getElementById('pstep-run-label');
+      if (runLabel) runLabel.textContent = `Running: ${ticker} report generation… (${elapsed}s)`;
+
+      if (run.status === 'completed') {
+        clearInterval(_pollTimer);
+        if (run.conclusion === 'success') {
+          setProgressStep('run', 'done');
+          setProgressStep('done', 'active');
+          const doneLabel = document.getElementById('pstep-done-label');
+          if (doneLabel) doneLabel.textContent = `✓ Done! Reloading in 3 seconds…`;
+          setTimeout(() => window.location.reload(), 3000);
+        } else {
+          setProgressStep('run', 'failed');
+          showAddStatus('error', `Workflow finished with status: ${run.conclusion}. Check GitHub Actions for details.`);
+          const btn = document.getElementById('addStockSubmit');
+          if (btn) { btn.disabled = false; btn.textContent = 'Add & Generate'; }
+        }
+      }
+    } catch (_) {}
+  }, 10000);
 }
 
 
 function showAddStatus(type, msg) {
   const el = document.getElementById('addStockStatus');
   if (!el) return;
-  el.className = `modal-status ${type}`;
+  el.className = type ? `modal-status ${type}` : 'modal-status';
   el.textContent = msg;
 }
+
+// ── Render markdown in AI text blocks ──────────────────────────────────────
+(function renderAIMarkdown() {
+  if (typeof marked === 'undefined') return;
+  marked.setOptions({ breaks: true, gfm: true });
+  document.querySelectorAll('.ai-text').forEach(el => {
+    const raw = el.textContent || '';
+    if (raw.trim()) {
+      el.innerHTML = marked.parse(raw);
+    }
+  });
+})();
 </script>
 
 </body>
