@@ -85,6 +85,7 @@ class GeopoliticalTheme:
     risk_level: str  # "Low", "Medium", "Medium-High", "High"
     ai_analysis: str  # Claude-generated paragraph
     source_headlines: list[str]
+    latest_date: str = ""  # Most recent triggering headline date (YYYY-MM-DD)
 
 
 @dataclass

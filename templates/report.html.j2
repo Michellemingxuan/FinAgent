@@ -65,6 +65,10 @@
     [data-theme="dark"] .kpi-grid { background: var(--border); }
     [data-theme="dark"] .source-wsj { background: #422006; color: #fbbf24; }
     [data-theme="dark"] .source-yahoofinance { background: #2e1065; color: #c4b5fd; }
+    [data-theme="dark"] .source-googlenews { background: #0c4a6e; color: #7dd3fc; }
+    [data-theme="dark"] .source-cnbc { background: #422006; color: #fde68a; }
+    [data-theme="dark"] .source-marketwatch { background: #052e16; color: #86efac; }
+    [data-theme="dark"] .source-reuters { background: #4c0519; color: #fda4af; }
     [data-theme="dark"] canvas.sparkline { filter: brightness(1.2); }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -84,9 +88,16 @@
 
     /* ── Tab bar ── */
     .tab-bar { display: flex; gap: 0; overflow-x: auto; padding-bottom: 0; }
-    .tab { padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; user-select: none; }
-    .tab:hover { color: var(--text); }
+    .tab { display: flex; align-items: center; gap: 5px; padding: 10px 14px 10px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: grab; white-space: nowrap; transition: color 0.15s, border-color 0.15s, background 0.15s; user-select: none; position: relative; }
+    .tab:hover { color: var(--text); background: var(--bg); }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab.dragging { opacity: 0.4; cursor: grabbing; }
+    .tab.drag-over { border-left: 2px solid var(--accent); background: var(--accent-light); }
+    .tab-close { display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 11px; line-height: 1; color: var(--text-muted); transition: background 0.1s, color 0.1s; flex-shrink: 0; }
+    .tab-close:hover { background: var(--red-bg); color: var(--red); }
+    .tab-restore { padding: 6px 10px; font-size: 11px; color: var(--text-muted); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; display: none; align-items: center; gap: 3px; }
+    .tab-restore.has-hidden { display: flex; }
+    .tab-restore:hover { color: var(--accent); }
 
     /* ── Page layout ── */
     .page { max-width: 1100px; margin: 0 auto; padding: 24px 32px; }
@@ -145,6 +156,10 @@
     .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; }
     .source-wsj { background: #fef3c7; color: #92400e; }
     .source-yahoofinance { background: #ede9fe; color: #5b21b6; }
+    .source-googlenews { background: #e0f2fe; color: #075985; }
+    .source-cnbc { background: #fef9c3; color: #713f12; }
+    .source-marketwatch { background: #f0fdf4; color: #166534; }
+    .source-reuters { background: #fff1f2; color: #9f1239; }
     .news-date { font-size: 11px; color: var(--text-muted); }
     .news-summary { font-size: 12px; color: var(--text-secondary); margin-top: 5px; line-height: 1.5; }
     .ticker-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
@@ -255,11 +270,11 @@
     /* ── Add-stock modal ── */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
     .modal-overlay.visible { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 400px; width: 90%; box-shadow: 0 8px 32px rgb(0 0 0 / 0.2); }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; max-width: 420px; width: 90%; box-shadow: 0 8px 32px rgb(0 0 0 / 0.2); }
     .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
     .modal p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
-    .modal input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); margin-bottom: 12px; outline: none; font-family: inherit; }
-    .modal input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15); }
+    .modal input[type="text"], .modal input[type="password"] { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--bg); margin-bottom: 12px; outline: none; font-family: inherit; }
+    .modal input[type="text"]:focus, .modal input[type="password"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15); }
     .modal label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
     .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
     .modal-actions .btn { flex: 1; justify-content: center; }
@@ -267,10 +282,38 @@
     .modal-status.success { display: block; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
     .modal-status.error { display: block; background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
     .modal-status.running { display: block; background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); }
+    /* Token saved row */
+    .token-saved-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 6px; margin-bottom: 12px; font-size: 12px; color: var(--green); }
+    .token-saved-row a { font-size: 11px; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+    /* Progress tracker */
+    .progress-track { margin-top: 14px; display: none; }
+    .progress-track.visible { display: block; }
+    .progress-steps { display: flex; flex-direction: column; gap: 6px; }
+    .progress-step { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .progress-step.done { color: var(--green); }
+    .progress-step.active { color: var(--accent); font-weight: 600; }
+    .progress-step.failed { color: var(--red); }
+    .step-dot { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; background: var(--border); color: var(--text-muted); }
+    .progress-step.done .step-dot { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .progress-step.active .step-dot { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); animation: pulse-dot 1.2s ease-in-out infinite; }
+    .progress-step.failed .step-dot { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     [data-theme="dark"] .theme-chip { background: #1e3a5f; color: #93c5fd; border-color: #2563eb; }
     .header, .card { transition: background 0.3s, border-color 0.3s; }
+
+    /* ── Markdown within AI blocks ── */
+    .ai-text p { margin: 0 0 6px; }
+    .ai-text p:last-child { margin-bottom: 0; }
+    .ai-text ul, .ai-text ol { margin: 4px 0 6px 18px; padding: 0; }
+    .ai-text li { margin-bottom: 3px; }
+    .ai-text strong { font-weight: 700; color: var(--text); }
+    .ai-text em { font-style: italic; }
+    .ai-text code { background: var(--border-light); border-radius: 3px; padding: 1px 4px; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .ai-text h1, .ai-text h2, .ai-text h3 { font-size: 13px; font-weight: 700; margin: 8px 0 4px; color: var(--text); }
+    .ai-text blockquote { border-left: 3px solid var(--accent-border); margin: 6px 0; padding: 2px 10px; color: var(--text-secondary); }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -308,37 +351,56 @@
   <!-- Tab bar -->
   <div class="tab-bar" id="tabBar">
     {% for tr in ctx.ratings %}
-    <div class="tab {% if loop.first %}active{% endif %}" data-tab="stock-{{ tr.symbol }}">
-      {{ tr.symbol }}
+    <div class="tab {% if loop.first %}active{% endif %}" data-tab="stock-{{ tr.symbol }}" data-symbol="{{ tr.symbol }}" draggable="true">
+      <span>{{ tr.symbol }}</span>
+      <span class="tab-close" title="Remove from view" onclick="closeTab(event, '{{ tr.symbol }}')">&#x2715;</span>
     </div>
     {% endfor %}
     <div class="tab" data-tab="macro" data-i18n="macro_geo">Macro &amp; Geo</div>
+    <div class="tab-restore" id="tabRestore" onclick="restoreAllTabs()" title="Show hidden tabs">&#x21ba; <span id="tabRestoreLabel">Restore</span></div>
   </div>
 </div>
 
 <!-- ═══ ADD STOCK MODAL ═══ -->
 {% if github_repo %}
-<div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)this.classList.remove('visible')">
+<div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)closeAddStockModal()">
   <div class="modal">
     <h3 data-i18n="add_stock_title">Add a Stock</h3>
-    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report including this stock will be generated immediately.</p>
+    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report will be generated automatically.</p>
+
     <label for="newTicker" data-i18n="ticker_label">Ticker Symbol</label>
-    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;" />
-    <label for="addStockPat" data-i18n="pat_label">GitHub Personal Access Token</label>
-    <input type="password" id="addStockPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
-    <div style="font-size:11px;color:var(--text-muted);margin-top:-8px;margin-bottom:12px;">
-      <span data-i18n="pat_hint">Needs <code>workflow</code> scope.</span>
-      <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent+AddStock" target="_blank" rel="noopener" data-i18n="pat_create">Create one here ↗</a>
+    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;"
+           onkeydown="if(event.key==='Enter')submitAddStock()" />
+
+    <!-- Token section: shows saved-token badge OR input -->
+    <div id="tokenSavedRow" class="token-saved-row" style="display:none;">
+      <span>🔑 GitHub token saved</span>
+      <a onclick="showPatInput()">Change</a>
     </div>
-    <label style="display:flex;align-items:center;gap:6px;margin-bottom:14px;cursor:pointer;">
-      <input type="checkbox" id="addStockRemember" style="width:auto;margin:0;padding:0;" />
-      <span style="font-size:12px;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;" data-i18n="remember">Remember in this browser</span>
-    </label>
-    <div class="modal-actions">
-      <button class="btn" onclick="document.getElementById('addStockModal').classList.remove('visible')" data-i18n="cancel">Cancel</button>
-      <button class="btn btn-primary" id="addStockSubmit" onclick="submitAddStock()" data-i18n="add_generate">Add &amp; Generate</button>
+    <div id="tokenInputSection">
+      <label for="addStockPat" data-i18n="pat_label">GitHub Personal Access Token</label>
+      <input type="password" id="addStockPat" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+      <div style="font-size:11px;color:var(--text-muted);margin-top:-8px;margin-bottom:12px;">
+        Needs <code>workflow</code> scope. &nbsp;
+        <a href="https://github.com/settings/tokens/new?scopes=workflow&description=FinAgent" target="_blank" rel="noopener">Create one ↗</a>
+      </div>
+    </div>
+
+    <div class="modal-actions" id="addStockActions">
+      <button class="btn" onclick="closeAddStockModal()" data-i18n="cancel">Cancel</button>
+      <button class="btn btn-primary" id="addStockSubmit" onclick="submitAddStock()">Add &amp; Generate</button>
     </div>
     <div class="modal-status" id="addStockStatus"></div>
+
+    <!-- Live progress tracker -->
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-steps">
+        <div class="progress-step" id="pstep-trigger"><span class="step-dot">1</span><span>Triggering workflow</span></div>
+        <div class="progress-step" id="pstep-queue"><span class="step-dot">2</span><span>Queued on GitHub Actions</span></div>
+        <div class="progress-step" id="pstep-run"><span class="step-dot">3</span><span id="pstep-run-label">Running report generation…</span></div>
+        <div class="progress-step" id="pstep-done"><span class="step-dot">4</span><span id="pstep-done-label">Complete — reloading page</span></div>
+      </div>
+    </div>
   </div>
 </div>
 {% endif %}
@@ -695,20 +757,25 @@
         <div class="geo-theme">
           <div class="geo-header">
             <span class="geo-name">{{ theme.theme }}</span>
-            <span class="pill risk-pill
-              {%- if theme.risk_level == 'High' %} risk-high
-              {%- elif theme.risk_level == 'Medium-High' %} risk-medium-high
-              {%- elif theme.risk_level == 'Medium' %} risk-medium
-              {%- else %} risk-low{%- endif %}">
-              {{ theme.risk_level }}
-            </span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              {% if theme.latest_date %}
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">{{ theme.latest_date }}</span>
+              {% endif %}
+              <span class="pill risk-pill
+                {%- if theme.risk_level == 'High' %} risk-high
+                {%- elif theme.risk_level == 'Medium-High' %} risk-medium-high
+                {%- elif theme.risk_level == 'Medium' %} risk-medium
+                {%- else %} risk-low{%- endif %}">
+                {{ theme.risk_level }}
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             {% for sym in theme.affected_tickers %}
             <span class="ticker-tag">{{ sym }}</span>
             {% endfor %}
           </div>
-          <div class="geo-analysis">{{ theme.ai_analysis }}</div>
+          <div class="geo-analysis ai-text">{{ theme.ai_analysis }}</div>
           {% if theme.source_headlines %}
           <div class="geo-headlines">
             {% for hl in theme.source_headlines %}
@@ -758,6 +825,7 @@
           var sc = {{ sc | tojson }};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
+          var watchlist = {{ ctx.watchlist_symbols | tojson }};
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -814,19 +882,31 @@
             nodes.forEach(function(node, i) {
               var ny = startY + i * (NODE_H + ROW_GAP);
               var nc = colorMap[node.criticality] || colorMap['low'];
-              var g = svgEl_('g', {});
+              var isWatched = watchlist.indexOf(node.ticker) !== -1;
+              var g = svgEl_('g', isWatched ? {style: 'cursor:pointer;'} : {});
+              if (isWatched) {
+                g.addEventListener('click', function() { switchToTab('stock-' + node.ticker); });
+              }
               g.appendChild(svgEl_('rect', {
                 x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
-                fill: nc.fill, stroke: nc.stroke, 'stroke-width': 1.5
+                fill: isWatched ? '#eff6ff' : nc.fill,
+                stroke: isWatched ? '#2563eb' : nc.stroke,
+                'stroke-width': isWatched ? 2 : 1.5,
+                'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
               addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
-                'font-size:11px;font-weight:700;fill:#111827;text-anchor:middle;');
+                'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
               var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
-              var relText = (node.relationship || '').substring(0, 26);
-              addText(g, colX + NODE_W/2, ny + 44, relText,
-                'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              if (isWatched) {
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
+                  'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
+              } else {
+                var relText = (node.relationship || '').substring(0, 26);
+                addText(g, colX + NODE_W/2, ny + 44, relText,
+                  'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+              }
               svgEl.appendChild(g);
 
               // Arrow
@@ -1083,13 +1163,16 @@
           centerNodes.forEach(function(sym, i) {
             var cy = centerStartY + i * (CENTER_H + ROW_GAP);
             centerMids[sym] = cy + CENTER_H / 2;
-            var g = svgEl_('g', {});
+            var g = svgEl_('g', {style: 'cursor:pointer;'});
+            g.addEventListener('click', (function(s){ return function(){ switchToTab('stock-' + s); }; })(sym));
             g.appendChild(svgEl_('rect', {
               x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
               fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
             }));
-            addText(g, cx + CENTER_W/2, cy + 24, sym,
+            addText(g, cx + CENTER_W/2, cy + 20, sym,
               'font-size:12px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
+            addText(g, cx + CENTER_W/2, cy + 36, '↗ view report',
+              'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
             svgEl.appendChild(g);
           });
 
@@ -1177,18 +1260,23 @@
         <div class="geo-theme">
           <div class="geo-header">
             <span class="geo-name">{{ theme.theme }}</span>
-            <span class="pill risk-pill
-              {%- if theme.risk_level == 'High' %} risk-high
-              {%- elif theme.risk_level == 'Medium-High' %} risk-medium-high
-              {%- elif theme.risk_level == 'Medium' %} risk-medium
-              {%- else %} risk-low{%- endif %}">
-              {{ theme.risk_level }}
-            </span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              {% if theme.latest_date %}
+              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">{{ theme.latest_date }}</span>
+              {% endif %}
+              <span class="pill risk-pill
+                {%- if theme.risk_level == 'High' %} risk-high
+                {%- elif theme.risk_level == 'Medium-High' %} risk-medium-high
+                {%- elif theme.risk_level == 'Medium' %} risk-medium
+                {%- else %} risk-low{%- endif %}">
+                {{ theme.risk_level }}
+              </span>
+            </div>
           </div>
           <div class="geo-tickers">
             {% for sym in theme.affected_tickers %}<span class="ticker-tag">{{ sym }}</span>{% endfor %}
           </div>
-          <div class="geo-analysis">{{ theme.ai_analysis }}</div>
+          <div class="geo-analysis ai-text">{{ theme.ai_analysis }}</div>
           {% if theme.source_headlines %}
           <div class="geo-headlines">
             {% for hl in theme.source_headlines %}<div class="geo-headline">{{ hl }}</div>{% endfor %}
@@ -1204,26 +1292,35 @@
 
   <!-- Footer -->
   <div style="margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-    <span>Data: Financial Modeling Prep &bull; Yahoo Finance &bull; Wall Street Journal &bull; yfinance</span>
+    <span>Data: Yahoo Finance &bull; Google News &bull; CNBC &bull; MarketWatch &bull; Reuters &bull; Wall Street Journal &bull; StockAnalysis.com</span>
     <span>For informational purposes only. Not investment advice.</span>
   </div>
 
 </div><!-- end .page -->
 
 <script>
-  // Tab switching
-  const tabs = document.querySelectorAll('.tab');
-  const contents = document.querySelectorAll('.tab-content');
+  // Global helper — must be defined before any inline SVG script uses it
+  function switchToTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const targetTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+    if (targetTab) {
+      targetTab.classList.add('active');
+      targetTab.style.display = ''; // restore if hidden
+    }
+    const targetContent = document.getElementById('tab-' + tabId);
+    if (targetContent) {
+      targetContent.classList.add('active');
+      targetContent.style.display = ''; // restore if hidden
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      tabs.forEach(t => t.classList.remove('active'));
-      contents.forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      const el = document.getElementById('tab-' + target);
-      if (el) el.classList.add('active');
-    });
+  // Tab bar click handlers (delegated so it works for dynamically revealed tabs too)
+  document.getElementById('tabBar').addEventListener('click', e => {
+    const tab = e.target.closest('.tab[data-tab]');
+    if (!tab || e.target.closest('.tab-close')) return;
+    switchToTab(tab.dataset.tab);
   });
 </script>
 
@@ -1265,6 +1362,9 @@ document.addEventListener('DOMContentLoaded', () => {
     drawSparkline('spark-{{ sym }}', pts, color);
   }
   {% endfor %}
+
+  initTabs();
+  initAddStock();
 });
 </script>
 
@@ -1378,37 +1478,202 @@ function toggleLang() {
   if (currentLang !== 'en') applyLang(currentLang);
 })();
 
+// ── Tab drag-to-reorder ───────────────────────────────────────────
+const TAB_ORDER_KEY = 'finagent_tab_order';
+const TAB_HIDDEN_KEY = 'finagent_tab_hidden';
+let dragSrcTab = null;
+
+function initTabs() {
+  restoreTabState();
+  const tabBar = document.getElementById('tabBar');
+  tabBar.addEventListener('dragstart', e => {
+    const tab = e.target.closest('.tab[data-symbol]');
+    if (!tab) return;
+    dragSrcTab = tab;
+    tab.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  tabBar.addEventListener('dragend', e => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('dragging', 'drag-over'));
+    dragSrcTab = null;
+    saveTabOrder();
+  });
+  tabBar.addEventListener('dragover', e => {
+    e.preventDefault();
+    const target = e.target.closest('.tab[data-symbol]');
+    if (!target || target === dragSrcTab) return;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+    target.classList.add('drag-over');
+    e.dataTransfer.dropEffect = 'move';
+  });
+  tabBar.addEventListener('dragleave', e => {
+    const target = e.target.closest('.tab[data-symbol]');
+    if (target) target.classList.remove('drag-over');
+  });
+  tabBar.addEventListener('drop', e => {
+    e.preventDefault();
+    const target = e.target.closest('.tab[data-symbol]');
+    if (!target || !dragSrcTab || target === dragSrcTab) return;
+    // Insert before or after depending on mouse position
+    const rect = target.getBoundingClientRect();
+    const insertBefore = e.clientX < rect.left + rect.width / 2;
+    target.classList.remove('drag-over');
+    if (insertBefore) tabBar.insertBefore(dragSrcTab, target);
+    else tabBar.insertBefore(dragSrcTab, target.nextSibling);
+    saveTabOrder();
+  });
+}
+
+function saveTabOrder() {
+  const order = Array.from(document.querySelectorAll('#tabBar .tab[data-symbol]'))
+    .map(t => t.dataset.symbol);
+  localStorage.setItem(TAB_ORDER_KEY, JSON.stringify(order));
+}
+
+function restoreTabState() {
+  const tabBar = document.getElementById('tabBar');
+  const macroTab = tabBar.querySelector('[data-tab="macro"]');
+  const restoreBtn = document.getElementById('tabRestore');
+
+  // Restore order
+  try {
+    const order = JSON.parse(localStorage.getItem(TAB_ORDER_KEY) || '[]');
+    if (order.length) {
+      order.forEach(sym => {
+        const t = tabBar.querySelector(`.tab[data-symbol="${sym}"]`);
+        if (t) tabBar.insertBefore(t, macroTab);
+      });
+    }
+  } catch (_) {}
+
+  // Restore hidden
+  try {
+    const hidden = JSON.parse(localStorage.getItem(TAB_HIDDEN_KEY) || '[]');
+    hidden.forEach(sym => hideTabSilent(sym));
+    updateRestoreButton();
+  } catch (_) {}
+}
+
+function hideTabSilent(sym) {
+  const tab = document.querySelector(`#tabBar .tab[data-symbol="${sym}"]`);
+  const content = document.getElementById('tab-stock-' + sym);
+  if (tab) tab.style.display = 'none';
+  if (content) content.style.display = 'none';
+}
+
+function closeTab(e, sym) {
+  e.stopPropagation();
+  const tab = document.querySelector(`#tabBar .tab[data-symbol="${sym}"]`);
+  const content = document.getElementById('tab-stock-' + sym);
+  if (tab) {
+    // If this tab is active, activate the next visible tab
+    if (tab.classList.contains('active')) {
+      const allTabs = Array.from(document.querySelectorAll('#tabBar .tab'));
+      const visible = allTabs.filter(t => t.style.display !== 'none' && t !== tab);
+      if (visible.length) switchToTab(visible[0].dataset.tab);
+    }
+    tab.style.display = 'none';
+  }
+  if (content) { content.classList.remove('active'); content.style.display = 'none'; }
+  // Save hidden list
+  const hidden = JSON.parse(localStorage.getItem(TAB_HIDDEN_KEY) || '[]');
+  if (!hidden.includes(sym)) hidden.push(sym);
+  localStorage.setItem(TAB_HIDDEN_KEY, JSON.stringify(hidden));
+  updateRestoreButton();
+}
+
+function restoreAllTabs() {
+  localStorage.removeItem(TAB_HIDDEN_KEY);
+  document.querySelectorAll('#tabBar .tab[data-symbol]').forEach(t => t.style.display = '');
+  document.querySelectorAll('.tab-content[id^="tab-stock-"]').forEach(c => c.style.display = '');
+  updateRestoreButton();
+}
+
+function updateRestoreButton() {
+  const hidden = JSON.parse(localStorage.getItem(TAB_HIDDEN_KEY) || '[]');
+  const btn = document.getElementById('tabRestore');
+  const lbl = document.getElementById('tabRestoreLabel');
+  if (!btn) return;
+  if (hidden.length) {
+    btn.classList.add('has-hidden');
+    if (lbl) lbl.textContent = `+${hidden.length} hidden`;
+  } else {
+    btn.classList.remove('has-hidden');
+  }
+}
+
 // ── Add Stock ─────────────────────────────────────────────────────
 const ADD_STOCK_PAT_KEY = 'finagent_add_stock_pat';
-(function initAddStock() {
+let _pollTimer = null;
+
+function initAddStock() {
   const saved = localStorage.getItem(ADD_STOCK_PAT_KEY);
   if (saved) {
-    const el = document.getElementById('addStockPat');
-    if (el) el.value = saved;
-    const cb = document.getElementById('addStockRemember');
-    if (cb) cb.checked = true;
+    const savedRow = document.getElementById('tokenSavedRow');
+    const inputSec = document.getElementById('tokenInputSection');
+    if (savedRow) savedRow.style.display = 'flex';
+    if (inputSec) inputSec.style.display = 'none';
   }
-})();
+}
+
+function showPatInput() {
+  document.getElementById('tokenSavedRow').style.display = 'none';
+  document.getElementById('tokenInputSection').style.display = 'block';
+  document.getElementById('addStockPat').focus();
+}
+
+function closeAddStockModal() {
+  document.getElementById('addStockModal').classList.remove('visible');
+  // Reset to initial state
+  const btn = document.getElementById('addStockSubmit');
+  if (btn) { btn.disabled = false; btn.textContent = 'Add & Generate'; }
+  document.getElementById('addStockActions').style.display = 'flex';
+  document.getElementById('progressTrack').classList.remove('visible');
+  showAddStatus('', '');
+  if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
+}
+
+function setProgressStep(step, state) {
+  // state: 'active' | 'done' | 'failed' | ''
+  const el = document.getElementById('pstep-' + step);
+  if (!el) return;
+  el.className = 'progress-step' + (state ? ' ' + state : '');
+  const dot = el.querySelector('.step-dot');
+  if (dot) dot.textContent = state === 'done' ? '✓' : state === 'failed' ? '✕' : ({ trigger:'1', queue:'2', run:'3', done:'4' }[step] || '?');
+}
 
 {% if github_repo %}
 async function submitAddStock() {
   const REPO = "{{ github_repo }}";
   const WORKFLOW = "generate_report.yml";
   const ticker = (document.getElementById('newTicker').value || '').trim().toUpperCase();
-  const pat = (document.getElementById('addStockPat').value || '').trim();
-  const remember = document.getElementById('addStockRemember').checked;
-  const statusEl = document.getElementById('addStockStatus');
+  const savedPat = localStorage.getItem(ADD_STOCK_PAT_KEY) || '';
+  const inputEl = document.getElementById('addStockPat');
+  const pat = (inputEl && inputEl.offsetParent !== null ? inputEl.value.trim() : '') || savedPat;
   const btn = document.getElementById('addStockSubmit');
 
-  if (!ticker) { showAddStatus('error', currentLang === 'zh' ? '请输入股票代码。' : 'Please enter a ticker symbol.'); return; }
-  if (!pat) { showAddStatus('error', currentLang === 'zh' ? '请输入 GitHub PAT。' : 'Please enter your GitHub PAT.'); return; }
+  if (!ticker) { showAddStatus('error', 'Please enter a ticker symbol.'); return; }
+  if (!pat) {
+    showPatInput();
+    showAddStatus('error', 'Please enter your GitHub Personal Access Token.');
+    return;
+  }
 
-  if (remember) localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
-  else localStorage.removeItem(ADD_STOCK_PAT_KEY);
+  // Save token
+  localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
+  initAddStock();
 
+  // Switch to progress UI
   btn.disabled = true;
-  btn.textContent = currentLang === 'zh' ? '触发中…' : 'Triggering…';
-  showAddStatus('running', currentLang === 'zh' ? '正在发送请求到 GitHub Actions…' : 'Sending request to GitHub Actions…');
+  btn.textContent = 'Working…';
+  document.getElementById('progressTrack').classList.add('visible');
+  showAddStatus('', '');
+  setProgressStep('trigger', 'active');
+  setProgressStep('queue', '');
+  setProgressStep('run', '');
+  setProgressStep('done', '');
+
+  const triggerTime = Date.now();
 
   try {
     const resp = await fetch(
@@ -1425,33 +1690,120 @@ async function submitAddStock() {
       }
     );
 
-    if (resp.status === 204) {
-      showAddStatus('success', currentLang === 'zh'
-        ? `✓ 已触发! ${ticker} 的报告将在约 3 分钟后生成。届时请刷新页面。`
-        : `✓ Triggered! Report for ${ticker} will be ready in ~3 minutes. Refresh the page afterwards.`);
-      btn.textContent = '✓';
-      setTimeout(() => { btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate'; }, 30000);
-    } else if (resp.status === 401) {
-      showAddStatus('error', currentLang === 'zh' ? 'Token 无效或缺少 workflow 权限。' : 'Invalid token or missing workflow scope.');
-      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
-    } else {
-      const body = await resp.text();
-      showAddStatus('error', `GitHub ${resp.status}: ${body.slice(0, 120)}`);
-      btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    if (resp.status === 401) {
+      setProgressStep('trigger', 'failed');
+      showAddStatus('error', 'Invalid token or missing workflow scope.');
+      btn.disabled = false; btn.textContent = 'Add & Generate';
+      return;
     }
+    if (resp.status !== 204) {
+      const body = await resp.text();
+      setProgressStep('trigger', 'failed');
+      showAddStatus('error', `GitHub error ${resp.status}: ${body.slice(0, 100)}`);
+      btn.disabled = false; btn.textContent = 'Add & Generate';
+      return;
+    }
+
+    setProgressStep('trigger', 'done');
+    setProgressStep('queue', 'active');
+
+    // Poll for the run status
+    await new Promise(r => setTimeout(r, 4000)); // wait 4s for run to appear
+    _pollForRun(REPO, pat, ticker, triggerTime);
+
   } catch (err) {
+    setProgressStep('trigger', 'failed');
     showAddStatus('error', `Network error: ${err.message}`);
-    btn.disabled = false; btn.textContent = currentLang === 'zh' ? '添加并生成' : 'Add & Generate';
+    btn.disabled = false; btn.textContent = 'Add & Generate';
   }
+}
+
+async function _pollForRun(repo, pat, ticker, triggerTime) {
+  const headers = {
+    'Authorization': `Bearer ${pat}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+  let runId = null;
+  let pollCount = 0;
+  const MAX_POLLS = 60; // 10 min max
+
+  _pollTimer = setInterval(async () => {
+    pollCount++;
+    if (pollCount > MAX_POLLS) {
+      clearInterval(_pollTimer);
+      setProgressStep('run', 'failed');
+      showAddStatus('error', 'Timed out waiting for workflow. Check GitHub Actions.');
+      return;
+    }
+
+    try {
+      if (!runId) {
+        // Find the run triggered after triggerTime
+        const r = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/generate_report.yml/runs?per_page=5&event=workflow_dispatch`, { headers });
+        if (!r.ok) return;
+        const data = await r.json();
+        const run = (data.workflow_runs || []).find(run => {
+          return new Date(run.created_at).getTime() >= triggerTime - 10000;
+        });
+        if (run) {
+          runId = run.id;
+          setProgressStep('queue', 'done');
+          setProgressStep('run', 'active');
+          const elapsed = document.getElementById('pstep-run-label');
+          if (elapsed) elapsed.textContent = `Running: ${ticker} report generation…`;
+        }
+        return;
+      }
+
+      // Poll the specific run
+      const r = await fetch(`https://api.github.com/repos/${repo}/actions/runs/${runId}`, { headers });
+      if (!r.ok) return;
+      const run = await r.json();
+
+      // Update elapsed time label
+      const elapsed = Math.round((Date.now() - triggerTime) / 1000);
+      const runLabel = document.getElementById('pstep-run-label');
+      if (runLabel) runLabel.textContent = `Running: ${ticker} report generation… (${elapsed}s)`;
+
+      if (run.status === 'completed') {
+        clearInterval(_pollTimer);
+        if (run.conclusion === 'success') {
+          setProgressStep('run', 'done');
+          setProgressStep('done', 'active');
+          const doneLabel = document.getElementById('pstep-done-label');
+          if (doneLabel) doneLabel.textContent = `✓ Done! Reloading in 3 seconds…`;
+          setTimeout(() => window.location.reload(), 3000);
+        } else {
+          setProgressStep('run', 'failed');
+          showAddStatus('error', `Workflow finished with status: ${run.conclusion}. Check GitHub Actions for details.`);
+          const btn = document.getElementById('addStockSubmit');
+          if (btn) { btn.disabled = false; btn.textContent = 'Add & Generate'; }
+        }
+      }
+    } catch (_) {}
+  }, 10000);
 }
 {% endif %}
 
 function showAddStatus(type, msg) {
   const el = document.getElementById('addStockStatus');
   if (!el) return;
-  el.className = `modal-status ${type}`;
+  el.className = type ? `modal-status ${type}` : 'modal-status';
   el.textContent = msg;
 }
+
+// ── Render markdown in AI text blocks ──────────────────────────────────────
+(function renderAIMarkdown() {
+  if (typeof marked === 'undefined') return;
+  marked.setOptions({ breaks: true, gfm: true });
+  document.querySelectorAll('.ai-text').forEach(el => {
+    const raw = el.textContent || '';
+    if (raw.trim()) {
+      el.innerHTML = marked.parse(raw);
+    }
+  });
+})();
 </script>
 
 </body>

@@ -7,14 +7,24 @@ from models.report import GeopoliticalTheme, NewsSection
 logger = logging.getLogger(__name__)
 
 SYSTEM = """You are a geopolitical risk analyst specializing in technology and financial markets.
-Given recent news headlines and a portfolio of stocks, identify distinct geopolitical themes
-that could materially affect the portfolio.
+Given a set of RECENT news headlines (each with a publication date), identify distinct geopolitical
+developments that are actively unfolding RIGHT NOW and could materially affect the portfolio.
+
+CRITICAL RULES:
+- Every theme you identify MUST be directly triggered by at least one headline from the provided list.
+- Do NOT invent or recall general background knowledge about long-standing risks (e.g. "China has
+  always threatened Taiwan"). Only surface a theme if a specific recent headline evidences it.
+- Include the triggering headline text verbatim in source_headlines.
+- Include the publication date of the most recent triggering headline in latest_date (YYYY-MM-DD).
+- Write the analysis bullets in present-tense, event-driven language:
+  e.g. "• [Date] — New rule restricts H20 chip exports; NVDA guides down ~$5.5B"
+  NOT "• The US has historically imposed export controls..."
 
 For each theme:
-- Name the theme concisely (e.g. "US-China Semiconductor Export Controls")
-- List which portfolio tickers (and any flagged tickers) are affected
+- Name it concisely after the specific current event (e.g. "BIS H20 Export Licensing Rule — Apr 2025")
+- List which portfolio tickers are affected
 - Assign risk level: Low / Medium / Medium-High / High
-- Write a short analysis of the risk using 2-3 bullet points
+- Write 2-3 bullet points, each starting with the event date and key fact
 
 Return a JSON object with this exact structure:
 {
@@ -23,16 +33,17 @@ Return a JSON object with this exact structure:
       "theme": "...",
       "affected_tickers": ["NVDA", "TSM"],
       "risk_level": "Medium-High",
-      "analysis": "...",
-      "source_headlines": ["headline 1", "headline 2"]
+      "latest_date": "2025-04-15",
+      "analysis": "• [date] — fact\n• [date] — fact",
+      "source_headlines": ["exact headline text from input"]
     }
-  ],
   ],
   "portfolio_summary": "• bullet 1\n• bullet 2"
 }
 
 Focus on: trade policy, sanctions, export controls, geopolitical conflicts, supply chain
-disruptions, regulatory actions by governments. Omit purely domestic business/earnings news."""
+disruptions, regulatory actions by governments. Omit purely domestic business/earnings news.
+If there are no geopolitical headlines at all, return {"themes": [], "portfolio_summary": "No geopolitical events in recent headlines."}"""
 
 
 class GeopoliticalAgent(BaseAgent):
@@ -54,7 +65,12 @@ class GeopoliticalAgent(BaseAgent):
         )
 
         headlines = [
-            {"title": item.title, "source": item.source, "summary": item.summary[:200]}
+            {
+                "title": item.title,
+                "source": item.source,
+                "published": item.published,
+                "summary": item.summary[:200],
+            }
             for item in all_news
         ]
 
@@ -85,6 +101,7 @@ class GeopoliticalAgent(BaseAgent):
                         risk_level=t.get("risk_level", "Medium"),
                         ai_analysis=t.get("analysis", ""),
                         source_headlines=t.get("source_headlines", []),
+                        latest_date=t.get("latest_date", ""),
                     )
                     for t in data.get("themes", [])
                 ]
