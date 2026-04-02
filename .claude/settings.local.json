@@ -11,7 +11,8 @@
       "Bash(curl -s \"https://api.nasdaq.com/api/analyst/NVDA/ratings?offset=0&limit=40&type=all&sortColumn=date&sortOrder=DESC\" -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36\" -H \"Accept: application/json, text/plain, */*\" -H \"Origin: https://www.nasdaq.com\" -H \"Referer: https://www.nasdaq.com/\")",
       "Bash(python3 main.py --preview-email)",
       "Bash(python3 main.py --refresh-supply-chain)",
-      "Bash(python3 -c \"import json; d=json.load\\(open\\(''config/stocks.json''\\)\\); sc=d[''supply_chain_detail'']; print\\(''NVDA upstream:'', [x[''ticker''] for x in sc.get\\(''NVDA'',{}\\).get\\(''upstream'',[]\\)]\\); print\\(''NVDA downstream:'', [x[''ticker''] for x in sc.get\\(''NVDA'',{}\\).get\\(''downstream'',[]\\)]\\); print\\(''Last updated:'', d[''supply_chain_last_updated'']\\); print\\(''NVDA summary:'', sc.get\\(''NVDA'',{}\\).get\\(''supply_chain_summary'',''''\\)[:100]\\)\")"
+      "Bash(python3 -c \"import json; d=json.load\\(open\\(''config/stocks.json''\\)\\); sc=d[''supply_chain_detail'']; print\\(''NVDA upstream:'', [x[''ticker''] for x in sc.get\\(''NVDA'',{}\\).get\\(''upstream'',[]\\)]\\); print\\(''NVDA downstream:'', [x[''ticker''] for x in sc.get\\(''NVDA'',{}\\).get\\(''downstream'',[]\\)]\\); print\\(''Last updated:'', d[''supply_chain_last_updated'']\\); print\\(''NVDA summary:'', sc.get\\(''NVDA'',{}\\).get\\(''supply_chain_summary'',''''\\)[:100]\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('tickers:', [t['symbol'] for t in d['tickers']]\\); print\\('subscribers keys:', list\\(d.get\\('subscribers',{}\\).keys\\(\\)\\)\\)\")"
     ]
   }
 }
