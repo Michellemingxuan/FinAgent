@@ -214,13 +214,20 @@ class YFinanceClient:
             df = t.earnings_history
             if df is None or df.empty:
                 return []
+            # yfinance index is 'quarter' (Timestamps), columns: epsActual, epsEstimate, surprisePercent
             df = df.sort_index(ascending=False).head(4).reset_index()
             results = []
             for _, row in df.iterrows():
-                period = str(row.get("period") or row.get("Quarter") or row.get("index", ""))[:7]
-                eps_est = _safe_float(row.get("epsestimate") or row.get("EPS Estimate"))
-                eps_act = _safe_float(row.get("epsactual") or row.get("EPS Actual"))
-                surprise_pct = _safe_float(row.get("epssurprisepct") or row.get("Surprise(%)"))
+                # Index column after reset_index is named 'quarter'
+                period_val = row.get("quarter") or row.get("Quarter") or row.get("index", "")
+                period = str(period_val)[:7]
+                # Columns are camelCase: epsActual, epsEstimate, surprisePercent
+                eps_est = _safe_float(row.get("epsEstimate") or row.get("epsestimate"))
+                eps_act = _safe_float(row.get("epsActual") or row.get("epsactual"))
+                surprise_pct = _safe_float(row.get("surprisePercent") or row.get("epssurprisepct"))
+                # surprisePercent is a ratio (0.08 = 8%), convert to percent
+                if surprise_pct is not None and abs(surprise_pct) < 5:
+                    surprise_pct = surprise_pct * 100
                 results.append({
                     "period": period,
                     "eps_estimate": eps_est,
@@ -231,6 +238,38 @@ class YFinanceClient:
         except Exception as exc:
             logger.warning("yfinance earnings history failed for %s: %s", symbol, exc)
             return []
+
+    def get_revenue_and_eps_estimates(self, symbol: str) -> dict:
+        """Returns forward revenue estimates and EPS revision counts."""
+        result: dict = {"revenue_estimates": [], "eps_revisions": {}}
+        try:
+            t = yf.Ticker(symbol)
+            rev_df = t.revenue_estimate
+            if rev_df is not None and not rev_df.empty:
+                rev_df = rev_df.reset_index()
+                for _, row in rev_df.iterrows():
+                    period = str(row.get("period", ""))
+                    result["revenue_estimates"].append({
+                        "period": period,
+                        "avg": _safe_float(row.get("avg")),
+                        "low": _safe_float(row.get("low")),
+                        "high": _safe_float(row.get("high")),
+                        "growth": _safe_float(row.get("growth")),
+                    })
+            rev_df2 = t.eps_revisions
+            if rev_df2 is not None and not rev_df2.empty:
+                rev_df2 = rev_df2.reset_index()
+                for _, row in rev_df2.iterrows():
+                    period = str(row.get("period", ""))
+                    result["eps_revisions"][period] = {
+                        "up_7d": int(row.get("upLast7days") or 0),
+                        "up_30d": int(row.get("upLast30days") or 0),
+                        "down_30d": int(row.get("downLast30days") or 0),
+                        "down_7d": int(row.get("downLast7Days") or 0),
+                    }
+        except Exception as exc:
+            logger.warning("yfinance revenue/eps estimates failed for %s: %s", symbol, exc)
+        return result
 
     def get_analyst_estimates(self, symbol: str) -> dict:
         """Returns forward EPS/revenue estimates and revision trend from ticker.info."""

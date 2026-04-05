@@ -275,6 +275,19 @@
     .product-metric-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
     .product-metric-value { font-size: 18px; font-weight: 700; color: var(--text); }
     .product-metric-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    /* Segment breakdown */
+    .seg-list { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border); }
+    .seg-row { display: flex; align-items: center; gap: 10px; }
+    .seg-name { font-size: 12px; font-weight: 600; color: var(--text); width: 140px; flex-shrink: 0; }
+    .seg-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .seg-bar-fill { height: 100%; border-radius: 4px; }
+    .seg-pct { font-size: 12px; font-weight: 700; color: var(--text); width: 36px; text-align: right; flex-shrink: 0; }
+    .seg-trend { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
+    .seg-trend-growing { background: var(--green-bg); color: var(--green); }
+    .seg-trend-stable { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    .seg-trend-declining { background: var(--red-bg); color: var(--red); }
+    .seg-desc { font-size: 11px; color: var(--text-secondary); margin-left: 150px; margin-top: -4px; }
+    .value-driver-note { font-size: 12px; color: var(--text-secondary); padding: 8px 16px 12px; border-top: 1px solid var(--border-light); font-style: italic; }
     /* Quarterly revenue chart */
     .qrev-chart { padding: 14px 16px; }
     .qrev-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
@@ -825,6 +838,37 @@
           </div>
         </div>
 
+        <!-- Segment / Product revenue breakdown -->
+        {% set seg_list = tp.segments[0] if tp.segments else [] %}
+        {% set value_driver = tp.segments[1] if tp.segments and tp.segments|length > 1 else "" %}
+        {% if seg_list %}
+        {% set seg_colors = ['#2563eb','#16a34a','#d97706','#7c3aed','#0891b2','#9ca3af'] %}
+        <div class="seg-list">
+          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Revenue Breakdown by Segment</div>
+          {% for seg in seg_list %}
+          {% set color = seg_colors[loop.index0 % seg_colors|length] %}
+          <div>
+            <div class="seg-row">
+              <div class="seg-name">{{ seg.name }}</div>
+              <div class="seg-bar-track">
+                <div class="seg-bar-fill" style="width:{{ seg.pct | default(0) }}%;background:{{ color }};opacity:0.8;"></div>
+              </div>
+              <div class="seg-pct">{{ seg.pct | default(0) }}%</div>
+              {% if seg.trend %}
+              <span class="seg-trend seg-trend-{{ seg.trend }}">{{ seg.trend }}</span>
+              {% endif %}
+            </div>
+            {% if seg.description %}
+            <div class="seg-desc">{{ seg.description }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% if value_driver %}
+        <div class="value-driver-note">⚡ <strong>Key value driver:</strong> {{ value_driver }}</div>
+        {% endif %}
+        {% endif %}
+
         <!-- Quarterly revenue bar chart -->
         {% if tp.quarterly_revenue %}
         <div class="qrev-chart" style="border-top:1px solid var(--border);">
@@ -1039,7 +1083,7 @@
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
-          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
+          var NODE_W = 148, NODE_H = 58, NODE_RX = 7;
           var COL_GAP = 80;
           var ROW_GAP = 14;
           var CENTER_W = 110, CENTER_H = 60;
@@ -1104,22 +1148,31 @@
                 'stroke-width': isWatched ? 2 : 1.5,
                 'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
-              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
+              var revPct = node.revenue_pct ? node.revenue_pct : 0;
+              var pctLabel = revPct > 0 ? revPct + '%' : '';
+              // Ticker + pct on same line
+              var tickerLabel = (node.ticker || '') + (pctLabel ? '  ' + pctLabel : '');
+              addText(g, colX + NODE_W/2, ny + 17, tickerLabel,
                 'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
-              var nameText = (node.name || '').substring(0, 20);
+              var nameText = (node.name || '').substring(0, 22);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
               if (isWatched) {
-                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
+                addText(g, colX + NODE_W/2, ny + 48, '↗ view report',
                   'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
               } else {
-                var relText = (node.relationship || '').substring(0, 26);
+                var relText = (node.relationship || '').substring(0, 28);
                 addText(g, colX + NODE_W/2, ny + 44, relText,
                   'font-size:8px;fill:#9ca3af;text-anchor:middle;');
+                if (pctLabel) {
+                  addText(g, colX + NODE_W/2, ny + 54, '~' + pctLabel + ' of rev/cost',
+                    'font-size:8px;fill:' + nc.stroke + ';text-anchor:middle;font-weight:600;');
+                }
               }
               svgEl.appendChild(g);
 
-              // Arrow
+              // Arrow — thickness scales with revenue_pct
+              var arrowW = revPct > 0 ? Math.max(1, Math.min(4, revPct / 8)) : 1.2;
               var nodeRightX = colX + NODE_W;
               var nodeMidY = ny + NODE_H / 2;
               var centerMidY = cy + CENTER_H / 2;
@@ -1135,7 +1188,7 @@
               cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
               var path = svgEl_('path', {
                 d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
-                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': arrowW,
                 'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
                 opacity: 0.6
               });
@@ -2004,11 +2057,15 @@ function showAddStatus(type, msg) {
 // ── Render markdown in AI text blocks ──────────────────────────────────────
 (function renderAIMarkdown() {
   if (typeof marked === 'undefined') return;
+  // Disable strikethrough (~~text~~) — Claude uses em-dashes which can trigger it
+  const renderer = new marked.Renderer();
   marked.setOptions({ breaks: true, gfm: true });
+  // Override del to render as plain text, not <del>
+  renderer.del = (token) => token.text;
   document.querySelectorAll('.ai-text').forEach(el => {
     const raw = el.textContent || '';
     if (raw.trim()) {
-      el.innerHTML = marked.parse(raw);
+      el.innerHTML = marked.parse(raw, { renderer });
     }
   });
 })();

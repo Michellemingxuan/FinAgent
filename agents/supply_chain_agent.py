@@ -20,11 +20,11 @@ and industrial sectors. Given a company's profile, identify its key supply chain
 Return a JSON object with exactly this structure:
 {
   "upstream": [
-    {"ticker": "ASML", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier", "criticality": "high"},
+    {"ticker": "ASML", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier", "criticality": "high", "revenue_pct": 15},
     ...
   ],
   "downstream": [
-    {"ticker": "AAPL", "name": "Apple Inc.", "relationship": "Major chip customer for mobile SoCs", "criticality": "high"},
+    {"ticker": "AAPL", "name": "Apple Inc.", "relationship": "Major chip customer for mobile SoCs", "criticality": "high", "revenue_pct": 20},
     ...
   ],
   "supply_chain_summary": "2 sentence description of this company's position in the supply chain"
@@ -35,8 +35,9 @@ Rules:
 - Only include publicly traded companies with real ticker symbols
 - Prioritize companies where the relationship is material (>5% revenue impact or critical dependency)
 - criticality: "high" (existential/major), "medium" (significant), "low" (minor)
-- If a company is both upstream and downstream (e.g. a competitor who also supplies), pick the primary direction
-- For companies with no clear supply chain (e.g. pure financial), return empty arrays with a summary note"""
+- revenue_pct: your best estimate of what % of the SUBJECT company's revenue or cost base this relationship represents (integer 1-100, or 0 if unknown). For downstream customers, it's % of subject's revenue. For upstream suppliers, it's % of subject's cost/capex. Use publicly known figures from filings when available.
+- If a company is both upstream and downstream, pick the primary direction
+- For companies with no clear supply chain, return empty arrays with a summary note"""
 
 _FALLBACK = {"upstream": [], "downstream": [], "supply_chain_summary": ""}
 

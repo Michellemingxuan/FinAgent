@@ -114,20 +114,21 @@ class TickerProduct:
     industry: str
     quarterly_revenue: list[QuarterlySnapshot]
     earnings_history: list[EarningsBeat]
+    segments: tuple = field(default_factory=lambda: ([], ""))  # (list[dict], value_driver str)
     # Forward estimate metrics
-    revenue_growth: Optional[float]       # TTM YoY
-    earnings_growth: Optional[float]      # TTM YoY
-    earnings_quarterly_growth: Optional[float]
-    gross_margins: Optional[float]
-    operating_margins: Optional[float]
-    return_on_equity: Optional[float]
-    peg_ratio: Optional[float]
-    price_to_sales: Optional[float]
-    eps_forward: Optional[float]
-    target_mean_price: Optional[float]
-    current_price: Optional[float]
-    recommendation: str
-    ai_analysis: str                      # Claude narrative
+    revenue_growth: Optional[float] = None       # TTM YoY
+    earnings_growth: Optional[float] = None      # TTM YoY
+    earnings_quarterly_growth: Optional[float] = None
+    gross_margins: Optional[float] = None
+    operating_margins: Optional[float] = None
+    return_on_equity: Optional[float] = None
+    peg_ratio: Optional[float] = None
+    price_to_sales: Optional[float] = None
+    eps_forward: Optional[float] = None
+    target_mean_price: Optional[float] = None
+    current_price: Optional[float] = None
+    recommendation: str = ""
+    ai_analysis: str = ""                        # Claude narrative
     error: Optional[str] = None
 
 

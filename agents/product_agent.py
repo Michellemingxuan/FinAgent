@@ -5,6 +5,7 @@ and Claude-generated product & catalyst analysis.
 
 import json
 import logging
+import re
 from typing import Optional
 
 from .base_agent import BaseAgent
@@ -13,22 +14,30 @@ from models.report import EarningsBeat, QuarterlySnapshot, TickerProduct
 
 logger = logging.getLogger(__name__)
 
-SYSTEM = """You are a sell-side equity research analyst. Given a company's quarterly revenue
-trend, earnings beat/miss history, forward growth estimates, and margin profile, write a
-concise product and business momentum analysis that is specifically informative for stock price
-direction. Cover:
+SEGMENT_SYSTEM = """You are a financial research analyst with deep knowledge of public company filings.
+Given a company description and financial data, return a JSON object with:
 
-1. **Revenue momentum** — Is growth accelerating or decelerating? Cite the most recent quarter's
-   YoY growth rate and trend direction.
-2. **Earnings quality** — Beat/miss streak and magnitude. Is the company sandbagging or struggling?
-3. **Margin trajectory** — Are gross/operating margins expanding or compressing? What drives this?
-4. **Key product catalysts** — Based on the sector/industry and current growth profile, what are
-   the 1-2 most important product or business catalysts the market will be pricing in next?
-5. **Estimate revision risk** — Given growth vs. consensus target price, is this stock more likely
-   to see estimate upgrades or cuts? Assign a direction: Upward / Neutral / Downward.
+1. "segments": array of the company's main business segments/product lines that drive revenue.
+   Each entry: {"name": "...", "pct": <estimated % of total revenue as integer>, "trend": "growing|stable|declining", "description": "one sentence on what it is and why it matters"}
+   - Base percentages on the most recent public filings, investor presentations, or well-known facts.
+   - Percentages must sum to 100. Use your knowledge of recent annual reports.
+   - List at most 6 segments, combining minor ones into "Other".
 
-Use 5-6 bullet points. Be specific with numbers. Focus on what drives the stock, not generic
-boilerplate. Do not add investment advice."""
+2. "value_driver": string — which 1-2 segments are the PRIMARY stock price drivers right now and why (1-2 sentences).
+
+Return ONLY valid JSON, no markdown fences."""
+
+ANALYSIS_SYSTEM = """You are a sell-side equity research analyst. Given a company's quarterly revenue
+trend, earnings beat/miss history, forward growth estimates, margin profile, and estimate revision data,
+write a concise product and business momentum analysis informative for stock price direction. Cover:
+
+1. **Revenue momentum** — accelerating or decelerating? Cite latest quarter YoY growth rate.
+2. **Earnings quality** — beat/miss streak and magnitude. Sandbagging or struggling?
+3. **Margin trajectory** — gross/operating margins expanding or compressing and why.
+4. **Key product catalysts** — 1-2 most important upcoming catalysts the market will price in.
+5. **Estimate revision trend** — Based on analyst up/down revisions, direction: Upward / Neutral / Downward.
+
+Use 5 bullet points. Be specific with numbers. No investment advice."""
 
 
 class ProductAgent(BaseAgent):
@@ -46,16 +55,17 @@ class ProductAgent(BaseAgent):
         quarterly_snapshots: list[QuarterlySnapshot] = []
         earnings_beats: list[EarningsBeat] = []
         estimates: dict = {}
+        forward_data: dict = {}
 
         try:
-            q_data = self._yf.get_quarterly_financials(symbol, quarters=6)
+            q_data = self._yf.get_quarterly_financials(symbol, quarters=8)
             eh_data = self._yf.get_earnings_history(symbol)
             estimates = self._yf.get_analyst_estimates(symbol)
+            forward_data = self._yf.get_revenue_and_eps_estimates(symbol)
 
-            # Build quarterly snapshots with YoY growth
+            # Build quarterly snapshots with YoY growth (need 8Q to compute YoY for last 4)
             raw_quarters = q_data.get("quarters", [])
             for i, q in enumerate(raw_quarters):
-                # YoY = compare to 4 quarters ago (index i - 4)
                 yoy = None
                 if i >= 4 and raw_quarters[i - 4].get("revenue") and q.get("revenue"):
                     prev = raw_quarters[i - 4]["revenue"]
@@ -70,8 +80,9 @@ class ProductAgent(BaseAgent):
                     net_income=q.get("net_income"),
                     yoy_revenue_growth=yoy,
                 ))
+            # Keep only last 6 for display
+            quarterly_snapshots = quarterly_snapshots[-6:]
 
-            # Build earnings beat history
             for rec in eh_data:
                 earnings_beats.append(EarningsBeat(
                     period=rec.get("period", ""),
@@ -84,8 +95,16 @@ class ProductAgent(BaseAgent):
             logger.error("Product data fetch failed for %s: %s", symbol, exc)
             error = str(exc)
 
+        # Generate segment breakdown (separate Claude call)
+        segments = self._generate_segments(
+            symbol, name,
+            estimates.get("long_business_summary", ""),
+            estimates.get("sector", ""),
+            estimates.get("industry", ""),
+        )
+
         ai_analysis = self._generate_analysis(
-            symbol, name, quarterly_snapshots, earnings_beats, estimates
+            symbol, name, quarterly_snapshots, earnings_beats, estimates, forward_data
         )
 
         return TickerProduct(
@@ -95,6 +114,7 @@ class ProductAgent(BaseAgent):
             industry=estimates.get("industry", ""),
             quarterly_revenue=quarterly_snapshots,
             earnings_history=earnings_beats,
+            segments=segments,
             revenue_growth=estimates.get("revenue_growth"),
             earnings_growth=estimates.get("earnings_growth"),
             earnings_quarterly_growth=estimates.get("earnings_quarterly_growth"),
@@ -111,6 +131,37 @@ class ProductAgent(BaseAgent):
             error=error,
         )
 
+    def _generate_segments(
+        self, symbol: str, name: str, description: str, sector: str, industry: str
+    ) -> tuple[list[dict], str]:
+        """Ask Claude to return structured segment/product breakdown."""
+        user_msg = (
+            f"Company: {name} ({symbol})\n"
+            f"Sector: {sector} | Industry: {industry}\n\n"
+            f"Business description: {description[:600]}\n\n"
+            "Return the JSON segment breakdown."
+        )
+        raw = self._simple_completion(SEGMENT_SYSTEM, user_msg, max_tokens=600)
+        try:
+            clean = re.sub(r"```(?:json)?\s*", "", raw).strip().rstrip("`").strip()
+            # Find balanced JSON object
+            start = clean.find("{")
+            if start == -1:
+                raise ValueError("No JSON object found")
+            depth = 0
+            for i, ch in enumerate(clean[start:], start):
+                if ch == "{":
+                    depth += 1
+                elif ch == "}":
+                    depth -= 1
+                    if depth == 0:
+                        data = json.loads(clean[start:i + 1])
+                        return data.get("segments", []), data.get("value_driver", "")
+            raise ValueError("Unbalanced JSON")
+        except Exception as exc:
+            logger.warning("Segment JSON parse failed for %s: %s", symbol, exc)
+            return [], ""
+
     def _generate_analysis(
         self,
         symbol: str,
@@ -118,6 +169,7 @@ class ProductAgent(BaseAgent):
         quarters: list[QuarterlySnapshot],
         earnings: list[EarningsBeat],
         estimates: dict,
+        forward_data: dict,
     ) -> str:
         quarters_data = [
             {
@@ -134,13 +186,12 @@ class ProductAgent(BaseAgent):
                 "period": e.period,
                 "eps_estimate": e.eps_estimate,
                 "eps_actual": e.eps_actual,
-                "beat_miss_pct": _fmt_pct(e.surprise_pct / 100 if e.surprise_pct else None),
+                "surprise_pct": f"{e.surprise_pct:+.1f}%" if e.surprise_pct is not None else None,
             }
             for e in earnings
         ]
         metrics = {
             "sector": estimates.get("sector", ""),
-            "industry": estimates.get("industry", ""),
             "ttm_revenue_growth": _fmt_pct(estimates.get("revenue_growth")),
             "ttm_earnings_growth": _fmt_pct(estimates.get("earnings_growth")),
             "earnings_quarterly_growth": _fmt_pct(estimates.get("earnings_quarterly_growth")),
@@ -148,23 +199,21 @@ class ProductAgent(BaseAgent):
             "operating_margin": _fmt_pct(estimates.get("operating_margins")),
             "return_on_equity": _fmt_pct(estimates.get("return_on_equity")),
             "peg_ratio": estimates.get("peg_ratio"),
-            "price_to_sales": estimates.get("price_to_sales"),
-            "forward_eps": estimates.get("eps_forward"),
-            "analyst_target_mean": estimates.get("target_mean"),
-            "current_price": estimates.get("current_price"),
             "consensus": estimates.get("recommendation", ""),
             "num_analysts": estimates.get("number_of_analysts"),
         }
+        revisions = forward_data.get("eps_revisions", {})
 
         user_msg = (
             f"Company: {name} ({symbol})\n\n"
-            f"Last 6 quarters (oldest → newest):\n{json.dumps(quarters_data, indent=2)}\n\n"
-            f"Earnings beat/miss history (oldest → newest):\n{json.dumps(earnings_data, indent=2)}\n\n"
-            f"Growth & margin metrics:\n{json.dumps(metrics, indent=2)}\n\n"
-            "Write product and business momentum analysis."
+            f"Quarterly revenue (oldest→newest):\n{json.dumps(quarters_data, indent=2)}\n\n"
+            f"Earnings beat/miss:\n{json.dumps(earnings_data, indent=2)}\n\n"
+            f"Metrics:\n{json.dumps(metrics, indent=2)}\n\n"
+            f"Analyst EPS revisions (current quarter, last 30 days): {revisions.get('0q', {})}\n\n"
+            "Write the analysis."
         )
 
-        system = SYSTEM
+        system = ANALYSIS_SYSTEM
         if self._lang == "zh":
             system += "\n\nIMPORTANT: Write your entire response in Chinese (简体中文)."
 
