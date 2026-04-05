@@ -149,11 +149,16 @@
 
     /* ── News ── */
     .news-list { divide-y: var(--border-light); }
-    .news-item { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
+    .news-item { padding: 11px 16px; border-bottom: 1px solid var(--border-light); display: flex; gap: 10px; align-items: flex-start; }
     .news-item:last-child { border-bottom: none; }
+    .news-item-body { flex: 1; min-width: 0; }
     .news-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
-    .news-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
-    .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; }
+    .news-title a { color: var(--text); }
+    .news-title a:hover { color: var(--accent); text-decoration: none; }
+    .news-summary { font-size: 12px; color: var(--text-secondary); margin-top: 3px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .news-meta-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+    .full-text-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; flex-shrink: 0; }
+    .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; background: var(--border-light); color: var(--text-secondary); }
     .source-wsj { background: #fef3c7; color: #92400e; }
     .source-yahoofinance { background: #ede9fe; color: #5b21b6; }
     .source-googlenews { background: #e0f2fe; color: #075985; }
@@ -617,15 +622,17 @@
           <div class="subsec-title">Direct Coverage</div>
           {% for item in direct %}
           <div class="news-item">
-            <div class="news-title">
-              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
-              {% if item.full_text_available %}<span class="full-text-dot" title="Full article available"></span>{% endif %}
+            <div class="news-item-body">
+              <div class="news-title">
+                <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+                {% if item.full_text_available %}&nbsp;<span class="full-text-dot" title="Full article available"></span>{% endif %}
+              </div>
+              {% if item.summary %}<div class="news-summary">{{ item.summary[:200] }}</div>{% endif %}
+              <div class="news-meta-row">
+                <span class="source-tag source-{{ item.source.lower().replace(' ','').replace('.','') }}">{{ item.source }}</span>
+                <span class="news-date">{{ item.published }}</span>
+              </div>
             </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-{{ item.source.lower().replace(' ','') }}">{{ item.source }}</span>
-              <span class="news-date">{{ item.published }}</span>
-            </div>
-            {% if item.summary %}<div class="news-summary">{{ item.summary[:240] }}{% if item.summary|length > 240 %}…{% endif %}</div>{% endif %}
           </div>
           {% endfor %}
           {% endif %}
@@ -634,17 +641,19 @@
           <div class="subsec-title">Supply Chain &amp; Adjacent</div>
           {% for item in related %}
           <div class="news-item">
-            <div class="news-title">
-              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+            <div class="news-item-body">
+              <div class="news-title">
+                <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+              </div>
+              {% if item.summary %}<div class="news-summary">{{ item.summary[:200] }}</div>{% endif %}
+              <div class="news-meta-row">
+                <span class="source-tag source-{{ item.source.lower().replace(' ','').replace('.','') }}">{{ item.source }}</span>
+                <span class="news-date">{{ item.published }}</span>
+                {% for t in item.relevant_tickers %}
+                <span class="ticker-tag">{{ t }}</span>
+                {% endfor %}
+              </div>
             </div>
-            <div class="news-meta-row">
-              <span class="source-tag source-{{ item.source.lower().replace(' ','') }}">{{ item.source }}</span>
-              <span class="news-date">{{ item.published }}</span>
-              {% for t in item.relevant_tickers %}
-              <span class="ticker-tag">{{ t }}</span>
-              {% endfor %}
-            </div>
-            {% if item.summary %}<div class="news-summary">{{ item.summary[:240] }}{% if item.summary|length > 240 %}…{% endif %}</div>{% endif %}
           </div>
           {% endfor %}
           {% endif %}
@@ -1238,19 +1247,17 @@
       <div class="card">
         {% for item in ctx.news.macro_news %}
         <div class="news-item">
-          <div class="news-title">
-            <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+          <div class="news-item-body">
+            <div class="news-title">
+              <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+            </div>
+            {% if item.summary %}<div class="news-summary">{{ item.summary[:200] }}</div>{% endif %}
+            <div class="news-meta-row">
+              <span class="source-tag source-{{ item.source.lower().replace(' ','').replace('.','') }}">{{ item.source }}</span>
+              <span class="news-date">{{ item.published }}</span>
+              {% for t in item.relevant_tickers %}<span class="ticker-tag">{{ t }}</span>{% endfor %}
+            </div>
           </div>
-          <div class="news-meta-row">
-            <span class="source-tag source-{{ item.source.lower().replace(' ','') }}">{{ item.source }}</span>
-            <span class="news-date">{{ item.published }}</span>
-          </div>
-          {% if item.summary %}<div class="news-summary">{{ item.summary[:240] }}…</div>{% endif %}
-          {% if item.relevant_tickers %}
-          <div class="ticker-tags">
-            {% for t in item.relevant_tickers %}<span class="ticker-tag">{{ t }}</span>{% endfor %}
-          </div>
-          {% endif %}
         </div>
         {% endfor %}
       </div>

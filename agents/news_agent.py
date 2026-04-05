@@ -67,13 +67,19 @@ class NewsAgent(BaseAgent):
             raw_items.extend(self._rss.fetch_yahoo_for_ticker(symbol))
         raw_items.extend(self._rss.fetch_yahoo_general())
 
-        # Deduplicate by URL
+        # Deduplicate by URL and near-duplicate titles
         seen_urls: set[str] = set()
+        seen_title_keys: set[str] = set()
         unique_items: list[dict] = []
         for item in raw_items:
-            if item["url"] not in seen_urls:
-                seen_urls.add(item["url"])
-                unique_items.append(item)
+            if item["url"] in seen_urls:
+                continue
+            title_key = _title_key(item["title"])
+            if title_key in seen_title_keys:
+                continue
+            seen_urls.add(item["url"])
+            seen_title_keys.add(title_key)
+            unique_items.append(item)
 
         if not unique_items:
             return NewsSection(
@@ -185,6 +191,13 @@ class NewsAgent(BaseAgent):
 
 def _top_n(items: list[NewsItem], n: int) -> list[NewsItem]:
     return items[:n]
+
+
+def _title_key(title: str) -> str:
+    """Normalize title to a dedup key — removes punctuation, lowercases, takes first 8 words."""
+    import re
+    words = re.sub(r'[^a-z0-9\s]', '', title.lower()).split()
+    return ' '.join(words[:8])
 
 
 def _extract_json(text: str, log) -> dict | None:

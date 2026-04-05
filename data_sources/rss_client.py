@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import feedparser
@@ -68,12 +69,30 @@ class RSSClient:
                 published = _parse_date(entry)
                 if published and published < self._cutoff:
                     continue
+
+                raw_title = entry.get("title", "").strip()
+                raw_summary = entry.get("summary", "")
+                is_google = "news.google.com" in url
+
+                # For Google News: extract real source from title suffix " - Publisher"
+                # and clean the title
+                display_source = source
+                if is_google:
+                    raw_title, display_source = _clean_google_news_title(raw_title)
+
+                # Strip HTML tags from summary (Google News summaries are raw <a> HTML)
+                clean_summary = _strip_html(raw_summary).strip()
+
+                title = _unescape_html(raw_title).strip()
+                if not title:
+                    continue
+
                 items.append({
-                    "title": entry.get("title", ""),
+                    "title": title,
                     "url": entry.get("link", ""),
-                    "summary": entry.get("summary", ""),
+                    "summary": clean_summary,
                     "published": published.strftime("%Y-%m-%d %H:%M UTC") if published else "",
-                    "source": source,
+                    "source": display_source,
                     "full_text_available": False,
                 })
             return items
@@ -84,10 +103,50 @@ class RSSClient:
 
 def _parse_date(entry) -> Optional[datetime]:
     try:
-        import time
         t = entry.get("published_parsed") or entry.get("updated_parsed")
         if t:
             return datetime(*t[:6], tzinfo=timezone.utc)
     except Exception:
         pass
     return None
+
+
+def _clean_google_news_title(title: str) -> tuple[str, str]:
+    """
+    Google News titles look like: "Headline text here - publisher.com"
+    Extract and return (clean_title, publisher_name).
+    """
+    # Match the trailing " - Something" suffix
+    match = re.search(r'\s+-\s+([^-]+)$', title)
+    if match:
+        publisher = match.group(1).strip()
+        clean = title[:match.start()].strip()
+        # Format publisher: strip .com/.net etc, title-case it
+        publisher_display = re.sub(r'\.(com|net|org|io|co|news|finance).*$', '', publisher, flags=re.I)
+        publisher_display = publisher_display.strip().title()
+        return clean, publisher_display or "Google News"
+    return title, "Google News"
+
+
+def _strip_html(text: str) -> str:
+    """Remove HTML tags and decode common entities."""
+    if not text:
+        return ""
+    # Remove HTML tags
+    clean = re.sub(r'<[^>]+>', ' ', text)
+    clean = _unescape_html(clean)
+    # Collapse whitespace
+    clean = re.sub(r'\s+', ' ', clean).strip()
+    return clean
+
+
+def _unescape_html(text: str) -> str:
+    """Decode common HTML entities."""
+    replacements = [
+        ('&amp;', '&'), ('&lt;', '<'), ('&gt;', '>'),
+        ('&quot;', '"'), ('&#39;', "'"), ('&nbsp;', ' '),
+        ('&#x27;', "'"), ('&#x2F;', '/'), ('&apos;', "'"),
+    ]
+    for entity, char in replacements:
+        text = text.replace(entity, char)
+    return text
