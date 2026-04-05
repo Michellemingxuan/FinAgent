@@ -19,6 +19,7 @@ from .analyst_ratings_agent import AnalystRatingsAgent
 from .news_agent import NewsAgent
 from .financials_agent import FinancialsAgent
 from .geopolitical_agent import GeopoliticalAgent
+from .product_agent import ProductAgent
 from models.report import (
     EarningsEvent,
     InsiderTransaction,
@@ -27,6 +28,7 @@ from models.report import (
     ReportContext,
     ShortData,
     TickerFinancials,
+    TickerProduct,
     TickerRatings,
 )
 
@@ -74,6 +76,10 @@ class Orchestrator:
             anthropic_api_key=anthropic_api_key,
             lang=self._lang,
         )
+        self._product_agent = ProductAgent(
+            anthropic_api_key=anthropic_api_key,
+            lang=self._lang,
+        )
 
     def run(self, ticker_configs: list[dict], themes: Optional[list[dict]] = None, supply_chain_detail: Optional[dict] = None) -> ReportContext:
         errors: list[str] = []
@@ -82,6 +88,7 @@ class Orchestrator:
 
         ratings_results: list[TickerRatings] = []
         financials_results: list[TickerFinancials] = []
+        product_results: list[TickerProduct] = []
         news_result = None
 
         # Extra data collected per ticker from FinancialsAgent
@@ -90,7 +97,7 @@ class Orchestrator:
         all_short: dict[str, ShortData] = {}
         all_price_history: dict[str, list[PricePoint]] = {}
 
-        with ThreadPoolExecutor(max_workers=6) as pool:
+        with ThreadPoolExecutor(max_workers=8) as pool:
             futures = {}
 
             for tc in ticker_configs:
@@ -103,6 +110,10 @@ class Orchestrator:
             for tc in ticker_configs:
                 f = pool.submit(self._financials_agent.run, tc)
                 futures[f] = ("financials", tc["symbol"])
+
+            for tc in ticker_configs:
+                f = pool.submit(self._product_agent.run, tc)
+                futures[f] = ("product", tc["symbol"])
 
             for future in as_completed(futures):
                 kind, label = futures[future]
@@ -123,6 +134,8 @@ class Orchestrator:
                             all_short[tf.symbol] = short_data
                         if price_pts:
                             all_price_history[tf.symbol] = price_pts
+                    elif kind == "product":
+                        product_results.append(result)
                 except Exception as exc:
                     logger.error("%s failed for %s: %s", kind, label, exc)
                     errors.append(f"{kind}/{label}: {exc}")
@@ -130,6 +143,7 @@ class Orchestrator:
         order = {t["symbol"]: i for i, t in enumerate(ticker_configs)}
         ratings_results.sort(key=lambda r: order.get(r.symbol, 99))
         financials_results.sort(key=lambda r: order.get(r.symbol, 99))
+        product_results.sort(key=lambda r: order.get(r.symbol, 99))
 
         if news_result is None:
             from models.report import NewsSection
@@ -167,6 +181,7 @@ class Orchestrator:
             peer_table=peer_table,
             themes=themes or [],
             supply_chain_detail=supply_chain_detail or {},
+            product_analysis=product_results,
         )
 
     def render_html(

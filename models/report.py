@@ -89,6 +89,49 @@ class GeopoliticalTheme:
 
 
 @dataclass
+class QuarterlySnapshot:
+    period: str             # "YYYY-MM"
+    revenue: Optional[float]
+    gross_profit: Optional[float]
+    operating_income: Optional[float]
+    net_income: Optional[float]
+    yoy_revenue_growth: Optional[float] = None   # computed by agent
+
+
+@dataclass
+class EarningsBeat:
+    period: str             # "YYYY-MM"
+    eps_estimate: Optional[float]
+    eps_actual: Optional[float]
+    surprise_pct: Optional[float]   # positive = beat
+
+
+@dataclass
+class TickerProduct:
+    symbol: str
+    name: str
+    sector: str
+    industry: str
+    quarterly_revenue: list[QuarterlySnapshot]
+    earnings_history: list[EarningsBeat]
+    # Forward estimate metrics
+    revenue_growth: Optional[float]       # TTM YoY
+    earnings_growth: Optional[float]      # TTM YoY
+    earnings_quarterly_growth: Optional[float]
+    gross_margins: Optional[float]
+    operating_margins: Optional[float]
+    return_on_equity: Optional[float]
+    peg_ratio: Optional[float]
+    price_to_sales: Optional[float]
+    eps_forward: Optional[float]
+    target_mean_price: Optional[float]
+    current_price: Optional[float]
+    recommendation: str
+    ai_analysis: str                      # Claude narrative
+    error: Optional[str] = None
+
+
+@dataclass
 class EarningsEvent:
     symbol: str
     earnings_date: str           # "YYYY-MM-DD" or "YYYY-MM-DD to YYYY-MM-DD" range
@@ -155,3 +198,4 @@ class ReportContext:
     peer_table: list[PeerRow] = field(default_factory=list)
     themes: list[dict] = field(default_factory=list)  # from config
     supply_chain_detail: dict = field(default_factory=dict)  # symbol -> {upstream, downstream, supply_chain_summary}
+    product_analysis: list["TickerProduct"] = field(default_factory=list)

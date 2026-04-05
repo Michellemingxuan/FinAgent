@@ -263,6 +263,41 @@
     .insider-table tbody tr:hover { background: var(--bg); }
     .insider-summary { padding: 8px 14px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--bg); }
 
+    /* ── Product Analysis ── */
+    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px 16px; }
+    @media (max-width: 700px) { .product-grid { grid-template-columns: 1fr; } }
+    .product-metric-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+    .product-metric-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
+    .product-metric-value { font-size: 18px; font-weight: 700; color: var(--text); }
+    .product-metric-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    /* Quarterly revenue chart */
+    .qrev-chart { padding: 14px 16px; }
+    .qrev-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+    .qrev-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .qrev-bar { width: 100%; border-radius: 3px 3px 0 0; background: var(--accent); opacity: 0.8; transition: opacity 0.15s; min-height: 4px; }
+    .qrev-bar:hover { opacity: 1; }
+    .qrev-label { font-size: 9px; color: var(--text-muted); text-align: center; white-space: nowrap; }
+    .qrev-yoy { font-size: 9px; font-weight: 700; text-align: center; }
+    .qrev-yoy.pos { color: var(--green); }
+    .qrev-yoy.neg { color: var(--red); }
+    /* Earnings beat/miss table */
+    .beat-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .beat-table thead th { padding: 8px 14px; text-align: center; font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .beat-table thead th:first-child { text-align: left; }
+    .beat-table tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border-light); text-align: center; }
+    .beat-table tbody td:first-child { text-align: left; font-weight: 600; }
+    .beat-table tbody tr:last-child td { border-bottom: none; }
+    .beat-table tbody tr:hover { background: var(--bg); }
+    .beat-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .beat-pos { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .beat-neg { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .beat-neutral { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+    /* Revision badge */
+    .revision-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .revision-up { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .revision-down { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .revision-neutral { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+
     /* ── Toggle buttons (dark mode + language) ── */
     .toggle-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text); transition: background 0.15s, border-color 0.15s; display: inline-flex; align-items: center; gap: 4px; }
     .toggle-btn:hover { background: var(--bg); border-color: var(--accent); }
@@ -420,6 +455,8 @@
   {% for tr in ctx.ratings %}
   {% set loop_idx = loop.index0 %}
   {% set tf = ctx.financials[loop_idx] if loop_idx < ctx.financials|length else none %}
+  {% set tp_list = ctx.product_analysis | selectattr("symbol", "equalto", tr.symbol) | list %}
+  {% set tp = tp_list[0] if tp_list else none %}
   {% set sym_earnings = ctx.earnings_events | selectattr("symbol", "equalto", tr.symbol) | list %}
   {% set sym_insider = ctx.insider_transactions.get(tr.symbol, []) %}
   {% set sym_short = ctx.short_data.get(tr.symbol, none) %}
@@ -697,6 +734,170 @@
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">{{ tf.ai_analysis }}</div>
         </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── SECTION: PRODUCT ANALYSIS ── -->
+    {% if tp %}
+    <div class="section">
+      <div class="section-header">
+        <span class="section-title">Product &amp; Business Momentum</span>
+        {% if tp.sector %}<span style="font-size:11px;color:var(--text-muted);">{{ tp.sector }}{% if tp.industry %} &middot; {{ tp.industry }}{% endif %}</span>{% endif %}
+      </div>
+      <div class="card">
+
+        <!-- Key metrics strip -->
+        <div class="product-grid">
+          <!-- Revenue growth -->
+          <div class="product-metric-card">
+            <div class="product-metric-label">TTM Revenue Growth</div>
+            {% if tp.revenue_growth is not none %}
+            <div class="product-metric-value {% if tp.revenue_growth >= 0 %}upside-positive{% else %}upside-negative{% endif %}">
+              {{ "%.1f"|format(tp.revenue_growth * 100) }}%
+            </div>
+            {% else %}<div class="product-metric-value">N/A</div>{% endif %}
+            <div class="product-metric-sub">Year-over-year</div>
+          </div>
+          <!-- Earnings growth -->
+          <div class="product-metric-card">
+            <div class="product-metric-label">TTM Earnings Growth</div>
+            {% if tp.earnings_growth is not none %}
+            <div class="product-metric-value {% if tp.earnings_growth >= 0 %}upside-positive{% else %}upside-negative{% endif %}">
+              {{ "%.1f"|format(tp.earnings_growth * 100) }}%
+            </div>
+            {% else %}<div class="product-metric-value">N/A</div>{% endif %}
+            <div class="product-metric-sub">Year-over-year</div>
+          </div>
+          <!-- Gross margin -->
+          <div class="product-metric-card">
+            <div class="product-metric-label">Gross Margin</div>
+            {% if tp.gross_margins is not none %}
+            <div class="product-metric-value">{{ "%.1f"|format(tp.gross_margins * 100) }}%</div>
+            {% else %}<div class="product-metric-value">N/A</div>{% endif %}
+            {% if tp.operating_margins is not none %}
+            <div class="product-metric-sub">Op. margin: {{ "%.1f"|format(tp.operating_margins * 100) }}%</div>
+            {% endif %}
+          </div>
+          <!-- Return on equity -->
+          <div class="product-metric-card">
+            <div class="product-metric-label">Return on Equity</div>
+            {% if tp.return_on_equity is not none %}
+            <div class="product-metric-value {% if tp.return_on_equity >= 0 %}upside-positive{% else %}upside-negative{% endif %}">
+              {{ "%.1f"|format(tp.return_on_equity * 100) }}%
+            </div>
+            {% else %}<div class="product-metric-value">N/A</div>{% endif %}
+            {% if tp.peg_ratio is not none %}
+            <div class="product-metric-sub">PEG ratio: {{ "%.2f"|format(tp.peg_ratio) }}</div>
+            {% endif %}
+          </div>
+          <!-- Forward EPS -->
+          <div class="product-metric-card">
+            <div class="product-metric-label">Forward EPS</div>
+            {% if tp.eps_forward is not none %}
+            <div class="product-metric-value">${{ "%.2f"|format(tp.eps_forward) }}</div>
+            {% else %}<div class="product-metric-value">N/A</div>{% endif %}
+            {% if tp.price_to_sales is not none %}
+            <div class="product-metric-sub">P/S: {{ "%.1f"|format(tp.price_to_sales) }}x</div>
+            {% endif %}
+          </div>
+          <!-- Consensus target -->
+          <div class="product-metric-card">
+            <div class="product-metric-label">Consensus Target</div>
+            {% if tp.target_mean_price is not none %}
+            <div class="product-metric-value">${{ "%.2f"|format(tp.target_mean_price) }}</div>
+            {% if tp.current_price and tp.current_price > 0 %}
+            {% set upside = (tp.target_mean_price - tp.current_price) / tp.current_price %}
+            <div class="product-metric-sub {% if upside >= 0 %}upside-positive{% else %}upside-negative{% endif %}">
+              {{ "%+.1f"|format(upside * 100) }}% vs current
+            </div>
+            {% endif %}
+            {% else %}<div class="product-metric-value">N/A</div>{% endif %}
+          </div>
+        </div>
+
+        <!-- Quarterly revenue bar chart -->
+        {% if tp.quarterly_revenue %}
+        <div class="qrev-chart" style="border-top:1px solid var(--border);">
+          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.4px;">Quarterly Revenue Trend</div>
+          {% set max_rev = tp.quarterly_revenue | map(attribute='revenue') | select | list %}
+          {% if max_rev %}
+          {% set max_val = max_rev | max %}
+          <div class="qrev-bars">
+            {% for q in tp.quarterly_revenue %}
+            {% set bar_h = ((q.revenue / max_val * 72) | int) if q.revenue and max_val else 4 %}
+            <div class="qrev-bar-wrap">
+              <div style="font-size:8px;color:var(--text-muted);text-align:center;margin-bottom:2px;">
+                {% if q.revenue %}${{ "%.1f"|format(q.revenue / 1e9) }}B{% endif %}
+              </div>
+              <div class="qrev-bar" style="height:{{ bar_h }}px;"
+                   title="{{ q.period }}{% if q.revenue %}: ${{ '%.2f'|format(q.revenue/1e9) }}B{% endif %}{% if q.yoy_revenue_growth %} ({{ '%+.1f'|format(q.yoy_revenue_growth*100) }}% YoY){% endif %}">
+              </div>
+              <div class="qrev-label">{{ q.period }}</div>
+              {% if q.yoy_revenue_growth is not none %}
+              <div class="qrev-yoy {% if q.yoy_revenue_growth >= 0 %}pos{% else %}neg{% endif %}">
+                {{ "%+.0f"|format(q.yoy_revenue_growth * 100) }}%
+              </div>
+              {% else %}
+              <div class="qrev-yoy">&nbsp;</div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Earnings beat / miss -->
+        {% if tp.earnings_history %}
+        <div style="border-top:1px solid var(--border);padding:14px 16px 0;">
+          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.4px;">EPS Estimate vs Actual</div>
+        </div>
+        <table class="beat-table">
+          <thead>
+            <tr>
+              <th>Quarter</th>
+              <th>Estimate</th>
+              <th>Actual</th>
+              <th>Surprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for beat in tp.earnings_history %}
+            <tr>
+              <td>{{ beat.period }}</td>
+              <td>{% if beat.eps_estimate is not none %}${{ "%.2f"|format(beat.eps_estimate) }}{% else %}—{% endif %}</td>
+              <td>{% if beat.eps_actual is not none %}${{ "%.2f"|format(beat.eps_actual) }}{% else %}—{% endif %}</td>
+              <td>
+                {% if beat.surprise_pct is not none %}
+                {% if beat.surprise_pct > 1 %}
+                <span class="beat-pill beat-pos">+{{ "%.1f"|format(beat.surprise_pct) }}%</span>
+                {% elif beat.surprise_pct < -1 %}
+                <span class="beat-pill beat-neg">{{ "%.1f"|format(beat.surprise_pct) }}%</span>
+                {% else %}
+                <span class="beat-pill beat-neutral">In-line</span>
+                {% endif %}
+                {% else %}—{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+
+        <!-- AI product analysis -->
+        <div class="ai-block">
+          <div class="ai-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>AI Product &amp; Catalyst Analysis</span>
+            {% if tp.recommendation %}
+            <span class="revision-badge {% if 'buy' in tp.recommendation or 'strong' in tp.recommendation %}revision-up{% elif 'sell' in tp.recommendation %}revision-down{% else %}revision-neutral{% endif %}">
+              {{ tp.recommendation | upper }}
+            </span>
+            {% endif %}
+          </div>
+          <div class="ai-text">{{ tp.ai_analysis }}</div>
+        </div>
+
       </div>
     </div>
     {% endif %}

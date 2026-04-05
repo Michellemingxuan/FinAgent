@@ -182,6 +182,89 @@ class YFinanceClient:
             return None
 
 
+    def get_quarterly_financials(self, symbol: str, quarters: int = 6) -> dict:
+        """Returns last N quarters of revenue, gross profit, operating income, net income."""
+        result: list[dict] = []
+        try:
+            t = yf.Ticker(symbol)
+            df = t.quarterly_income_stmt
+            if df is None or df.empty:
+                return {"quarters": []}
+            cols = list(df.columns)[:quarters]
+            for col in cols:
+                label = str(col)[:7]  # YYYY-MM
+                row: dict = {"period": label}
+                for src_name, dst_key in [
+                    ("Total Revenue", "revenue"),
+                    ("Gross Profit", "gross_profit"),
+                    ("Operating Income", "operating_income"),
+                    ("Net Income", "net_income"),
+                ]:
+                    if src_name in df.index:
+                        row[dst_key] = _safe_float(df.loc[src_name, col])
+                result.append(row)
+        except Exception as exc:
+            logger.warning("yfinance quarterly financials failed for %s: %s", symbol, exc)
+        return {"quarters": list(reversed(result))}  # oldest first
+
+    def get_earnings_history(self, symbol: str) -> list[dict]:
+        """Returns EPS actual vs estimate for the last ~4 quarters."""
+        try:
+            t = yf.Ticker(symbol)
+            df = t.earnings_history
+            if df is None or df.empty:
+                return []
+            df = df.sort_index(ascending=False).head(4).reset_index()
+            results = []
+            for _, row in df.iterrows():
+                period = str(row.get("period") or row.get("Quarter") or row.get("index", ""))[:7]
+                eps_est = _safe_float(row.get("epsestimate") or row.get("EPS Estimate"))
+                eps_act = _safe_float(row.get("epsactual") or row.get("EPS Actual"))
+                surprise_pct = _safe_float(row.get("epssurprisepct") or row.get("Surprise(%)"))
+                results.append({
+                    "period": period,
+                    "eps_estimate": eps_est,
+                    "eps_actual": eps_act,
+                    "surprise_pct": surprise_pct,
+                })
+            return list(reversed(results))  # oldest first
+        except Exception as exc:
+            logger.warning("yfinance earnings history failed for %s: %s", symbol, exc)
+            return []
+
+    def get_analyst_estimates(self, symbol: str) -> dict:
+        """Returns forward EPS/revenue estimates and revision trend from ticker.info."""
+        try:
+            t = yf.Ticker(symbol)
+            info = t.info or {}
+            return {
+                "eps_current_year": _safe_float(info.get("epsCurrentYear")),
+                "eps_forward": _safe_float(info.get("epsForward") or info.get("forwardEps")),
+                "revenue_growth": _safe_float(info.get("revenueGrowth")),
+                "earnings_growth": _safe_float(info.get("earningsGrowth")),
+                "earnings_quarterly_growth": _safe_float(info.get("earningsQuarterlyGrowth")),
+                "gross_margins": _safe_float(info.get("grossMargins")),
+                "operating_margins": _safe_float(info.get("operatingMargins")),
+                "profit_margins": _safe_float(info.get("profitMargins")),
+                "return_on_equity": _safe_float(info.get("returnOnEquity")),
+                "return_on_assets": _safe_float(info.get("returnOnAssets")),
+                "revenue_per_share": _safe_float(info.get("revenuePerShare")),
+                "peg_ratio": _safe_float(info.get("pegRatio")),
+                "price_to_sales": _safe_float(info.get("priceToSalesTrailing12Months")),
+                "price_to_book": _safe_float(info.get("priceToBook")),
+                "long_business_summary": info.get("longBusinessSummary", ""),
+                "sector": info.get("sector", ""),
+                "industry": info.get("industry", ""),
+                "number_of_analysts": info.get("numberOfAnalystOpinions"),
+                "recommendation": info.get("recommendationKey", ""),
+                "target_mean": _safe_float(info.get("targetMeanPrice")),
+                "current_price": _safe_float(info.get("currentPrice") or info.get("regularMarketPrice")),
+            }
+        except Exception as exc:
+            logger.warning("yfinance analyst estimates failed for %s: %s", symbol, exc)
+            return {}
+
+
 def _safe_float(val) -> Optional[float]:
     try:
         f = float(val)
