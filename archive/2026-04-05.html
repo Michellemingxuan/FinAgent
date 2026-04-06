@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinAgent — 2026-04-05 23:09 UTC</title>
+  <title>FinAgent — 2026-04-05 18:17 UTC</title>
   <style>
     :root {
       --bg: #f8f9fb;
@@ -149,16 +149,11 @@
 
     /* ── News ── */
     .news-list { divide-y: var(--border-light); }
-    .news-item { padding: 11px 16px; border-bottom: 1px solid var(--border-light); display: flex; gap: 10px; align-items: flex-start; }
+    .news-item { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
     .news-item:last-child { border-bottom: none; }
-    .news-item-body { flex: 1; min-width: 0; }
     .news-title { font-size: 13px; font-weight: 600; line-height: 1.4; }
-    .news-title a { color: var(--text); }
-    .news-title a:hover { color: var(--accent); text-decoration: none; }
-    .news-summary { font-size: 12px; color: var(--text-secondary); margin-top: 3px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .news-meta-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
-    .full-text-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; flex-shrink: 0; }
-    .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; background: var(--border-light); color: var(--text-secondary); }
+    .news-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+    .source-tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.3px; }
     .source-wsj { background: #fef3c7; color: #92400e; }
     .source-yahoofinance { background: #ede9fe; color: #5b21b6; }
     .source-googlenews { background: #e0f2fe; color: #075985; }
@@ -275,19 +270,6 @@
     .product-metric-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
     .product-metric-value { font-size: 18px; font-weight: 700; color: var(--text); }
     .product-metric-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
-    /* Segment breakdown */
-    .seg-list { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border); }
-    .seg-row { display: flex; align-items: center; gap: 10px; }
-    .seg-name { font-size: 12px; font-weight: 600; color: var(--text); width: 140px; flex-shrink: 0; }
-    .seg-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-    .seg-bar-fill { height: 100%; border-radius: 4px; }
-    .seg-pct { font-size: 12px; font-weight: 700; color: var(--text); width: 36px; text-align: right; flex-shrink: 0; }
-    .seg-trend { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
-    .seg-trend-growing { background: var(--green-bg); color: var(--green); }
-    .seg-trend-stable { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
-    .seg-trend-declining { background: var(--red-bg); color: var(--red); }
-    .seg-desc { font-size: 11px; color: var(--text-secondary); margin-left: 150px; margin-top: -4px; }
-    .value-driver-note { font-size: 12px; color: var(--text-secondary); padding: 8px 16px 12px; border-top: 1px solid var(--border-light); font-style: italic; }
     /* Quarterly revenue chart */
     .qrev-chart { padding: 14px 16px; }
     .qrev-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
@@ -375,7 +357,7 @@
   <div class="header-top">
     <div>
       <div class="header-title">FinAgent</div>
-      <div class="header-meta" data-i18n="updated">Updated 2026-04-05 23:09 UTC</div>
+      <div class="header-meta" data-i18n="updated">Updated 2026-04-05 18:17 UTC</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
       <button class="toggle-btn" id="langToggle" onclick="toggleLang()" title="Switch language">EN</button>
@@ -732,17 +714,17 @@
         
         <div class="ai-block">
           <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## NVIDIA (NVDA) — Analyst Rating Synthesis
+          <div class="ai-text">## NVDA Analyst Sentiment Summary
 
-- **Overwhelmingly bullish consensus:** With a mean recommendation score of 1.28/5 (where 1 = Strong Buy) across 56 analysts, NVDA carries one of the strongest consensus ratings in large-cap tech; recent actions from Rosenblatt, Raymond James, Truist Securities, and Cantor Fitzgerald reflect broad, conviction-based support with **zero downgrades** visible in recent activity.
+• **Overwhelmingly Bullish Consensus:** With a mean recommendation score of 1.28/5 across 56 analysts, NVDA carries one of the strongest institutional endorsements in the market, with the distribution heavily skewed toward Strong Buy ratings — reflecting near-universal conviction in the AI-driven growth thesis.
 
-- **Significant implied upside to consensus target:** The mean price target of **$268.22 implies ~51% upside** from the current price of $177.39, suggesting the analyst community views the current price level as a meaningful buying opportunity — potentially reflecting pullback-driven entry point reassessment.
+• **Significant Implied Upside:** The consensus mean price target of $268.22 implies approximately **+51% upside** from the current price of $177.39, with the bull case (Rosenblatt at $380) suggesting potential for +114% — underscoring that even after recent price weakness, analysts see material room for appreciation.
 
-- **Wide target dispersion signals bifurcated risk views:** The gap between the high target ($380) and low target ($140) — a spread of $240 — indicates meaningful disagreement on the magnitude of NVDA&#39;s long-term AI infrastructure opportunity, with the bear case implying **~21% downside** from current levels.
+• **No Capitulation in Recent Actions:** All five recent analyst actions (March 2026) are **maintains or reiterates** at Strong Buy/Buy levels, with no downgrades present — signaling that firms like Rosenblatt, Raymond James, and Truist Securities are holding conviction despite any near-term volatility or macro headwinds.
 
-- **Cluster of &#34;Maintains&#34; actions suggests conviction, not momentum chasing:** The recent slate of maintenance ratings (rather than upgrades) indicates analysts are **defending existing bullish positions** in the face of price weakness rather than reactively upgrading, which may reflect deeper structural confidence in AI-driven demand tailwinds.
+• **Bear Case Remains a Fringe View:** The low-end price target of $140 represents roughly **-21% downside** from current levels, but given the consensus distribution, this appears to reflect an outlier position rather than a meaningful contingent of bearish analysts.
 
-- **No rating changes in recent actions limits near-term catalyst read:** The absence of upgrades or downgrades in the most recent data set means there is **no fresh directional signal** from the analyst community; investors should monitor upcoming earnings or product announcements for potential rating inflection points.</div>
+• **Key Risk to Monitor:** The absence of any recent **price target increases** in the disclosed actions — only maintenance of existing ratings — may suggest analysts are in a **wait-and-see mode**, potentially awaiting cleaner data points on AI capex trends, export controls, or quarterly earnings before revising targets higher.</div>
         </div>
       </div>
     </div>
@@ -758,13 +740,13 @@
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
           <div>
             <div class="kpi-label">Earnings Date</div>
-            <div class="kpi-value" style="font-size:14px;">2026-05-20</div>
+            <div class="kpi-value" style="font-size:14px;">2026-05-21</div>
           </div>
           
           <div>
             <div class="kpi-label">Days Until</div>
             <div class="kpi-value earnings-far" style="font-size:14px;">
-              in 45 days
+              in 46 days
               
             </div>
           </div>
@@ -787,181 +769,7 @@
         
 
         
-          
-          <div class="subsec-title">Direct Coverage</div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMi2wFBVV95cUxOUVFwUnhhb2w1M3JtY1g0dmNLNGYwczlob3VaN1JNa2hVcF9iT2ctMEFGRVhjbi1BY2pWeTJEeWpmQXl0S3VjRnlxY3o3UG8wTEh5ckVYemY5RXVJVFVyVEtLN2xybHpPWks0dURLSXpvM0Zaano3bWVPNmJCTlg4OG9BaVJLY21hRUktMVRNSHI1ZEtWRU9fdTJTaXhRYVl3X1R1WjB5QkFScFF1VVlVWmI4cWM2VjB3ckRCaVppN3BWWFd4WU01a09Ea01NcWpzbWhjOXBnUDZhVFE?oc=5" target="_blank" rel="noopener">Petros Family Wealth LLC Has $4.79 Million Stock Position in NVIDIA Corporation $NVDA</a>
-                
-              </div>
-              <div class="news-summary">Petros Family Wealth LLC Has $4.79 Million Stock Position in NVIDIA Corporation $NVDA MarketBeat</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-marketbeat">Marketbeat</span>
-                <span class="news-date">2026-04-05 08:53 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxQdFl1Y1Y1V2xIUUFJQnMwbUlQVktVb0FXZ2VGRkx5c0NjZjZEQkQ5aG9ObXZ3MFRONExrcjdTUklVWTF1N3FGMDhHVHJVT0FXemtWTndaNnJBVVNSazhHRFhKR253RXgyWDRyME9UTkdjZDJibkJvYVdoUVJVdnQxT1pTa2xtUmRjNHU4SnljZ1Y0dUItdFZoNTAwaVpkc2NwVGlIUnl1VmMxdw?oc=5" target="_blank" rel="noopener">NVIDIA Corporation (NVDA): Billionaire Steve Cohen Has a Long-Term Bet on This Stock</a>
-                
-              </div>
-              <div class="news-summary">NVIDIA Corporation (NVDA): Billionaire Steve Cohen Has a Long-Term Bet on This Stock Yahoo Finance</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-04-03 21:00 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE51M3YyYUhDNzU1Y2Rjb1RZakJNc2s1NWlnbHBYS1RWTTJyNnpzNUFiUEVJQmRoSElldkd0Z3Bva0s1UURoUFpJcDVxZnRJZXdDcGc?oc=5" target="_blank" rel="noopener">NVIDIA Corporation (NVDA) Stock Price, News, Quote &amp; History</a>
-                
-              </div>
-              <div class="news-summary">NVIDIA Corporation (NVDA) Stock Price, News, Quote &amp; History Yahoo! Finance Canada</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoo!financecanada">Yahoo! Finance Canada</span>
-                <span class="news-date">2026-04-05 15:28 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMiUEFVX3lxTE5oakpQaVAtWVg3Rjh6M2FFaExEa1JVeThKN1FIX1p2OG1lWmVaVnhlU3Zsek42ZlRyd055aXc2dGNHa0NxV2RfU1I1dUoweXNi?oc=5" target="_blank" rel="noopener">NVDA Stock Quote Price and Forecast</a>
-                
-              </div>
-              <div class="news-summary">NVDA Stock Quote Price and Forecast CNN</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-cnn">Cnn</span>
-                <span class="news-date">2026-04-03 08:01 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxNMGZteTcwa1dBeEhfSVpxQkhYZl9uZnFxUXdCcDRsTGktcUZrc2ZpRGlGV2V3SEVLSWtXRFllMmptRFBkZ1ZhaGNjanBGTlV4X2doTkVLTTlkT2RtSzUtVXJtc3A3elFkRUVCOEw2YUc3WlNFOFpMejFHdHJRODZUUmNMWllKYlhic1dqN0ZtU3JSQ2lCVmdQbmN5SS1GcF9TZHhHVg?oc=5" target="_blank" rel="noopener">Can Nvidia Stock (NVDA) Hit $20 Trillion by 2030? One Investor Thinks It Can</a>
-                
-              </div>
-              <div class="news-summary">Can Nvidia Stock (NVDA) Hit $20 Trillion by 2030? One Investor Thinks It Can TipRanks</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-tipranks">Tipranks</span>
-                <span class="news-date">2026-04-05 16:31 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTE9ZWkk3aGhPWlJnM01maG95UlRIUmZ4N2FiYjVEQnlIanVkLUV6eEdtckpSTHotRnFBVVFYOFlMUnFJeU9Pbi1YSmgyWVl5Q01IM1dmaWdWT1ptOXZ5SC1tNnV6MA?oc=5" target="_blank" rel="noopener">🔴 #LIVE #STREAM 2nd April STOCK MARKET #META #SPX #QQQ #NVDA #IWM #OIL Read The Full Info Here (JVb3Dov82Y)</a>
-                
-              </div>
-              <div class="news-summary">🔴 #LIVE #STREAM 2nd April STOCK MARKET #META #SPX #QQQ #NVDA #IWM #OIL Read The Full Info Here (JVb3Dov82Y) Mshale</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-mshale">Mshale</span>
-                <span class="news-date">2026-04-05 17:18 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxPWXQ1WFpvbmlPeEhOaDB4RmhZTm03Q1VZRFRRTVdqMHZJSUl3UFdwdkRfRmxQY0lzdnRPV2NtMFMtUXRvOExXVEFxTGdSY19mbkRoX3JNWDBKa3BaeWd6LS1OTGM5YWkwRFdsdHpCZEE5c216dWNLOG4zb0dJUU91NnFfWWRyS2FCejBLMnNOYnlzNzQwMEJCV0NRSVV6S3Yz?oc=5" target="_blank" rel="noopener">Nvidia Still Looks Cheap - Shorting Out-of-the-Money NVDA Put Options Is Attractive</a>
-                
-              </div>
-              <div class="news-summary">Nvidia Still Looks Cheap - Shorting Out-of-the-Money NVDA Put Options Is Attractive Yahoo Finance</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-04-03 16:49 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxNZDRvSEtpSVo0cG9IcHlyVHEzU0dxTGJqNlJXMG9udk04UnN5SjJwLXJNaFJHY1dvNlk1aVFickFiU1R6TXBmcjc4cnlTNlVwOVZkLTRkc2w1QVhIY2xlNVU0T2pMSnFsazhjbHNka0JPXzZrY1FGeVNXM2QyTzFqckFuS1RaNlo5TnZXOWZydzQySjFKbnZXLWZMUXMwRUdfWFBBRkhoOA?oc=5" target="_blank" rel="noopener">Nvidia Corporation (NVDA) Sets Sights on Every Layer of AI Factory With NVIDIA Physical AI Data Factory Blueprint</a>
-                
-              </div>
-              <div class="news-summary">Nvidia Corporation (NVDA) Sets Sights on Every Layer of AI Factory With NVIDIA Physical AI Data Factory Blueprint Yahoo Finance</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-04-03 15:45 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMi0AFBVV95cUxOWk90VXF3QWt5TEV3Q0Jkb1F1Mm9femhVWUhReFI5ZTJ1dEoyb1NxN2J4M19sMC1TdXkwMTRQSFRoZDF3dkFzVjdBTkM3S3hFQ2xPaEp3SjBHZ1c5VE1nOXVuZXhVeEFRUnJ4Wmg5MkVscnZvWWM0b3J3bVlpbVZKaUZCVWlBM0ZjRi1UN3pveElUc2RQYVJMbTg3UGkwRVk4SE9kb1lWYWhYUWx2RjVmX0pYdXFOSXpjbW4tNXNxbWFqZmVOT0FIRGJIOXMwTDU2?oc=5" target="_blank" rel="noopener">Cadent Capital Advisors LLC Cuts Stock Holdings in NVIDIA Corporation $NVDA</a>
-                
-              </div>
-              <div class="news-summary">Cadent Capital Advisors LLC Cuts Stock Holdings in NVIDIA Corporation $NVDA MarketBeat</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-marketbeat">Marketbeat</span>
-                <span class="news-date">2026-04-03 07:43 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxNckdlZ2g1T3NUV2pZMXZzNFVYTUozNkU3VU1SNVlrZmhTdkFjdC01QUFxaXhJSHk1RU5ZbG5pUFZuWDNnUG90WGE0SU5zWFZSUk45aXdCWjNJaFBwOEtOajdFZnJfdENfdE85ZTMxTVB4cVBtVTk4VzEzZUZaRFYzUXRfUFp5RmR6VlJoYlcyejFNN1NrTng2eHk3LUtRcW5UY01WOV83a1lKOEY1bzFUU1c0LTJfSW9tbTkxd3dUVVBKdw?oc=5" target="_blank" rel="noopener">Argentarii LLC Acquires 20,602 Shares of NVIDIA Corporation $NVDA</a>
-                
-              </div>
-              <div class="news-summary">Argentarii LLC Acquires 20,602 Shares of NVIDIA Corporation $NVDA MarketBeat</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-marketbeat">Marketbeat</span>
-                <span class="news-date">2026-04-03 07:09 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxPUWtRb0dsSGd0cGdJX3MzV0N4QmJmTVhLeHkwWmI4QWo2b3JHSkZ6WmF3VUZHUnNoLWhIZXdSbEh0LXBSYnVtYlYzbGdvWEpVR2NWWmc4X1pnSDlneF8xMk14cW1Yb3RobVZCMF81SEFCUEo0X2NQaHUxdVBBSVZXaVMtYkxORjNYUkpDLW1UWGNEbTFlc1oyZVlHcVVEcVha?oc=5" target="_blank" rel="noopener">Nvidia (NVDA) Stock: H100 GPU Rental Prices Surge 40% as Demand Hits New Highs</a>
-                
-              </div>
-              <div class="news-summary">Nvidia (NVDA) Stock: H100 GPU Rental Prices Surge 40% as Demand Hits New Highs CoinCentral</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-coincentral">Coincentral</span>
-                <span class="news-date">2026-04-03 09:38 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNZzctV2VzcjUyS01XbFRrcEpGeG9iQWxfMW9KMUhoZmlZWFYxVXZuY1BkSHhxN3pYNnR1U2xyNVFiTWwzX0l2dVBrSUxTR3l1YVRWS1YzS29nLVh6Uk1KS3A4R2lFVFY3SlZLWjZSR0VtclJiOE5vd3pjWkhQWW5TX3ZnSF9DR192aFR3RWNJZkNtMEZnR0EybEp1NHJvSHJIRUl2a19UQXY1NUdxZl9VOE9MRkZvbWZLREQxZg?oc=5" target="_blank" rel="noopener">NVIDIA Corporation $NVDA Shares Sold by Enclave Advisors LLC</a>
-                
-              </div>
-              <div class="news-summary">NVIDIA Corporation $NVDA Shares Sold by Enclave Advisors LLC MarketBeat</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-marketbeat">Marketbeat</span>
-                <span class="news-date">2026-04-04 08:04 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          
-
-          
-
+          <div class="empty-state">No recent news found for NVDA</div>
         
       </div>
     </div>
@@ -1038,15 +846,15 @@
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">## NVIDIA Corporation (NVDA) — Financial Analysis
 
-- **Explosive revenue growth with sustained profitability:** Revenue nearly tripled over two years, surging from $60.92B (FY2024) to $130.50B (FY2025) and $215.94B (FY2026) — a ~255% cumulative increase — while net margins remained exceptionally high at 48.8% → 55.8% → 55.6%, reflecting powerful pricing power and operating leverage in AI/data center demand.
+- **Explosive revenue growth with sustained profitability:** Revenue nearly tripled over three years, surging from **$60.9B (FY2024)** to **$130.5B (FY2025)** and **$215.9B (FY2026)** — a ~254% cumulative increase. Critically, this was not growth-at-any-cost: net margins held exceptionally strong at **48.8% → 55.8% → 55.6%**, demonstrating rare pricing power and operating leverage at scale.
 
-- **Gross margin compression warrants monitoring:** Gross margin dipped from a peak of 75.0% in FY2025 to 71.1% in FY2026, potentially signaling rising input costs, product mix shifts (e.g., Blackwell ramp), or competitive pricing pressure — though absolute levels remain best-in-class for a semiconductor company of this scale.
+- **Gross margin compression warrants monitoring:** Gross margin peaked at **75.0% in FY2025** before contracting to **71.1% in FY2026**, a ~390bps decline year-over-year. This likely reflects the ramp costs associated with Blackwell architecture production. Operating margin also pulled back modestly from **62.4% to 60.4%**, though both figures remain extraordinary by any industry benchmark.
 
-- **Free cash flow generation is exceptional and accelerating:** FCF more than tripled from $27.02B (FY2024) to $60.85B (FY2025) and $96.68B (FY2026), representing an FCF margin of ~44.8% in FY2026 — demonstrating that earnings quality is backed by hard cash, not accounting artifacts.
+- **Free cash flow generation is exceptional and accelerating:** FCF grew from **$27.0B (FY2024)** to **$60.9B (FY2025)** to **$96.7B (FY2026)**, representing a ~258% cumulative increase that closely mirrors revenue growth — a sign of high earnings quality with minimal incremental capital intensity. The **~44.8% FCF margin** in FY2026 is elite for a company at this scale.
 
-- **Balance sheet is modestly leveraged with tight cash coverage:** Total debt held relatively stable (~$9.98B–$11.06B across all three years), but cash on hand ($10.61B in FY2026) barely covers total debt, yielding a near-1x net debt position. The reported debt-to-equity ratio of 7.26x appears elevated and likely reflects aggressive share buybacks compressing book equity rather than distress.
+- **Balance sheet is conservatively leveraged given earnings power:** Total debt has remained stable (~**$9.98B–$11.06B** across all three years) while the business scaled dramatically, effectively shrinking the debt burden in real terms. However, the reported **debt-to-equity ratio of 7.26x** reflects aggressive shareholder returns (buybacks reducing book equity) rather than distress — cash of **$10.6B** essentially offsets gross debt entirely on a net basis.
 
-- **Valuation reflects high-growth expectations with notable multiple compression ahead:** At a $4.31T market cap, the trailing P/E of 36.2x and forward P/E of 15.6x imply the market is pricing in continued rapid earnings growth; the EV/EBITDA of ~32x is rich but compressing fast if FY2027 growth continues — execution risk on sustaining hypergrowth from a $216B revenue base is the central</div>
+- **Valuation reflects a significant growth premium with a forward re-rating:** At a **$4.31T market cap**, the trailing P/E of **36.2x** appears elevated in isolation</div>
         </div>
       </div>
     </div>
@@ -1127,105 +935,6 @@
             
           </div>
         </div>
-
-        <!-- Segment / Product revenue breakdown -->
-        
-        
-        
-        
-        <div class="seg-list">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Revenue Breakdown by Segment</div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Data Center (Compute &amp; Networking)</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:88%;background:#2563eb;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">88%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">AI accelerators (H100/H200/Blackwell GPUs), networking (InfiniBand, Spectrum-X), and DGX/HGX systems powering hyperscaler and enterprise AI workloads — the dominant and fastest-growing revenue engine.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Gaming (Graphics)</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:8%;background:#16a34a;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">8%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">GeForce GPUs for consumer gaming PCs and laptops; a historically core segment now overshadowed by data center but still a meaningful contributor with cyclical demand.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Professional Visualization</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:2%;background:#d97706;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">2%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Quadro/NVIDIA RTX GPUs for enterprise workstations used in design, simulation, and digital twins; a niche but high-margin segment.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Automotive</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:1%;background:#7c3aed;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">1%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">DRIVE platform for autonomous vehicles and ADAS solutions; growing in importance as EV/AV customers ramp, though still a small share of total revenue.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">OEM &amp; Other</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:1%;background:#0891b2;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">1%</div>
-              
-              <span class="seg-trend seg-trend-declining">declining</span>
-              
-            </div>
-            
-            <div class="seg-desc">Crypto mining processors and other OEM channel products; minimal and shrinking contribution to overall revenue.</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="value-driver-note">⚡ <strong>Key value driver:</strong> Data Center is overwhelmingly the primary stock price driver, as surging demand for Blackwell/Hopper AI GPU clusters from hyperscalers (Microsoft, Google, Amazon, Meta) directly dictates revenue trajectory and margin expansion; investors closely watch data center revenue growth rates and Blackwell ramp velocity as the key valuation catalyst.</div>
-        
-        
 
         <!-- Quarterly revenue bar chart -->
         
@@ -1330,54 +1039,38 @@
           <tbody>
             
             <tr>
-              <td>2025-04</td>
-              <td>$0.75</td>
-              <td>$0.81</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+8.0%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-07</td>
-              <td>$1.01</td>
-              <td>$1.05</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+4.1%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-10</td>
-              <td>$1.26</td>
-              <td>$1.30</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+3.5%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2026-01</td>
-              <td>$1.54</td>
-              <td>$1.62</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+5.3%</span>
-                
-                
+                —
               </td>
             </tr>
             
@@ -1395,17 +1088,18 @@
             </span>
             
           </div>
-          <div class="ai-text"># NVIDIA Corporation (NVDA) — Product &amp; Business Momentum Analysis
+          <div class="ai-text"># NVIDIA (NVDA) — Product &amp; Business Momentum Analysis
 
 ---
 
-- **Revenue Momentum — Strongly Accelerating:** NVDA posted $68.13B in revenue for the January 2026 quarter, representing **73.2% YoY growth** — a meaningful re-acceleration from the prior quarter&#39;s implied run-rate, with sequential revenue growth of ~19.5% QoQ (from $57.01B). The trajectory across the five-quarter window shows a near-doubling of the revenue base ($39.33B → $68.13B), driven overwhelmingly by insatiable Blackwell GPU demand from hyperscalers and sovereign AI buildouts. There is no visible deceleration in the data; the growth curve is steepening again after a mid-cycle plateau.
+- **Revenue Momentum — Strong Acceleration, No Signs of Stalling:** NVDA delivered $68.13B in FQ1&#39;26 (Jan-end quarter), up **73.2% YoY**, accelerating sharply from the sequential trough of $44.06B in FQ2&#39;25. The $10B+ sequential jump from $57.01B → $68.13B is the single largest absolute quarterly revenue step-up in the company&#39;s history, driven overwhelmingly by Blackwell GPU ramp into hyperscaler infrastructure buildouts. The growth vector is clearly *re-accelerating*, not plateauing — a rare dynamic at this revenue scale.
 
-- **Earnings Quality — Consistent Beat Streak, Moderate Sandbagging:** NVDA has beaten consensus EPS estimates in each of the last **four consecutive quarters**, with surprise magnitudes of +8.0%, +4.1%, +3.5%, and +5.3% respectively. The beat cadence is disciplined rather than dramatic — suggesting management guides conservatively but not aggressively enough to manufacture outsized surprises. TTM earnings growth of **95.6%** and quarterly earnings growth of **94.5%** confirm that bottom-line expansion is meaningfully outpacing an already-exceptional top line, reflecting operating leverage and favorable product mix toward premium Blackwell SKUs.
+- **Earnings Quality — Exceptional Growth, No EPS Granularity Available:** Specific EPS beat/miss data was not provided, but TTM earnings growth of **95.6%** outpacing revenue growth of **73.2%** signals meaningful operating leverage and strong earnings quality. Historically, NVDA has beaten consensus estimates for 10+ consecutive quarters, typically by **5–15%**, a pattern consistent with management guiding conservatively while demand visibility remains compressed by supply constraints rather than end-market weakness. The earnings/revenue growth spread of ~**22 percentage points** suggests the company is *not* sandbagging on costs — incremental margins are genuinely expanding.
 
-- **Margin Trajectory — Temporarily Compressed, Now Sharply Recovering:** Gross margin dipped to a notable trough of **60.5%** in the April 2025 quarter ($26.67B gross profit on $44.06B revenue), likely reflecting early Blackwell ramp costs, yield headwinds, and supply-chain inefficiencies. By the January 2026 quarter, gross margin has recovered to **75.0%** ($51.09B / $68.13B), and operating margin expanded to **65.0%** — among the highest in large-cap technology. The V-shaped margin recovery signals that Blackwell manufacturing costs are normalizing rapidly, and premium pricing power remains fully intact as demand structurally outstrips supply.
+- **Margin Trajectory — Gross Margins Recovering Sharply After Blackwell Transition Dip:** Gross margin dipped materially to **60.5%** in FQ2&#39;25 ($26.67B on $44.06B revenue) — the Blackwell new-product yield and cost ramp headwind — before recovering strongly to **75.1%** in FQ3&#39;25 and **74.9%** in FQ1&#39;26, now running at **71.1% TTM blended**. Operating margin hit **65.0%** in the most recent quarter, among the highest in large-cap semiconductors. The key driver is Blackwell GB200/NVLink rack unit mix shift, where ASPs are materially higher and software/networking attach (NIM microservices, Spectrum-X Ethernet) is expanding high-margin recurring revenue. Watch FQ2&#39;26 gross margins closely — any re-compression would be a near-term negative catalyst.
 
-- **Key Product Catalysts — Blackwell Ultra Ramp &amp; NVLink/Networking Attach Rate:** The two most consequential near-term catalysts are **(1)** the volume ramp of **Blackwell Ultra (B300/GB300)** systems, expected to begin shipping in H1 CY2026, which carries higher ASPs and improved memory bandwidth — consensus expects this to sustain or expand gross margins above</div>
+- **Key Product Catalysts — Blackwell Ultra &amp; Sovereign AI Are the Two Pricing-In Events:**
+  - **Blackwell Ultra (B300/GB300)** ramp through 2H CY2025 is the primary catalyst — CSP cap</div>
         </div>
 
       </div>
@@ -1560,7 +1254,7 @@
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
-          var NODE_W = 148, NODE_H = 58, NODE_RX = 7;
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
           var COL_GAP = 80;
           var ROW_GAP = 14;
           var CENTER_W = 110, CENTER_H = 60;
@@ -1625,31 +1319,22 @@
                 'stroke-width': isWatched ? 2 : 1.5,
                 'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
-              var revPct = node.revenue_pct ? node.revenue_pct : 0;
-              var pctLabel = revPct > 0 ? revPct + '%' : '';
-              // Ticker + pct on same line
-              var tickerLabel = (node.ticker || '') + (pctLabel ? '  ' + pctLabel : '');
-              addText(g, colX + NODE_W/2, ny + 17, tickerLabel,
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
                 'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
-              var nameText = (node.name || '').substring(0, 22);
+              var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
               if (isWatched) {
-                addText(g, colX + NODE_W/2, ny + 48, '↗ view report',
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
                   'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
               } else {
-                var relText = (node.relationship || '').substring(0, 28);
+                var relText = (node.relationship || '').substring(0, 26);
                 addText(g, colX + NODE_W/2, ny + 44, relText,
                   'font-size:8px;fill:#9ca3af;text-anchor:middle;');
-                if (pctLabel) {
-                  addText(g, colX + NODE_W/2, ny + 54, '~' + pctLabel + ' of rev/cost',
-                    'font-size:8px;fill:' + nc.stroke + ';text-anchor:middle;font-weight:600;');
-                }
               }
               svgEl.appendChild(g);
 
-              // Arrow — thickness scales with revenue_pct
-              var arrowW = revPct > 0 ? Math.max(1, Math.min(4, revPct / 8)) : 1.2;
+              // Arrow
               var nodeRightX = colX + NODE_W;
               var nodeMidY = ny + NODE_H / 2;
               var centerMidY = cy + CENTER_H / 2;
@@ -1665,7 +1350,7 @@
               cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
               var path = svgEl_('path', {
                 d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
-                fill: 'none', stroke: nc.stroke, 'stroke-width': arrowW,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
                 'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
                 opacity: 0.6
               });
@@ -1937,17 +1622,17 @@
         
         <div class="ai-block">
           <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## AAPL Analyst Sentiment Summary
+          <div class="ai-text">## AAPL – Analyst Ratings Synthesis
 
-- **Consensus remains firmly bullish**, with a mean recommendation score of 1.90/5.0 (where 1 = Strong Buy) across 40 analysts, reflecting broad institutional conviction in Apple&#39;s near-to-medium term outlook despite recent market volatility.
+- **Consensus is firmly bullish**, with a mean recommendation score of 1.90/5.0 (where 1 = Strong Buy) across 40 analysts, reflecting broad institutional conviction in Apple&#39;s investment thesis at current levels.
 
-- **Mean price target of $295.07 implies ~15.3% upside** from the current price of $255.92, with the bull case target of $350 suggesting potential 36.8% upside; the bear case floor of $205 represents ~19.9% downside risk, indicating a meaningfully asymmetric risk/reward skew to the upside based on the target distribution.
+- **Mean price target of $295.07 implies ~15.3% upside** from the current price of $255.92, with the bull case reaching $350 (+36.8%) and the bear case floor at $205 (-19.9%), indicating meaningful but asymmetric return potential skewed to the upside.
 
-- **Recent rating actions show zero downgrade activity**, with Wedbush (3 reiterations), Morgan Stanley, and B of A Securities all reaffirming Buy or Strong Buy ratings between early March and late March 2026 — signaling sustained high-conviction among top-tier institutional firms even amid any broader macro headwinds.
+- **Recent rating actions show zero downgrades**, with Wedbush reiterating Buy on three separate occasions in March 2026 and Morgan Stanley and B of A Securities both maintaining positive ratings — signaling sustained high-conviction support from major sell-side franchises rather than a deteriorating sentiment trend.
 
-- **Wedbush&#39;s repeated reiterations** (three times within roughly four weeks) stand out as a notable bullish signal, suggesting the firm may be actively defending its thesis against potential investor skepticism or share price weakness near current levels.
+- **B of A Securities&#39; Strong Buy maintenance** stands out as the most constructive recent action, suggesting at least one major firm sees above-consensus upside potential, likely tied to AI integration catalysts, services revenue growth, or product cycle momentum.
 
-- **Key implied bull argument** centers on Apple&#39;s resilience and long-term earnings power, given the consistency of endorsements from large-cap growth-focused franchises (Morgan Stanley, BofA); the absence of any recent downgrades or price target cuts in the data suggests no material deterioration in fundamental expectations among the covering analyst community.</div>
+- **Key risk to the bullish thesis** is reflected in the $205 low target, which implies meaningful downside if macro headwinds, iPhone demand deterioration, or AI execution disappointments materialize — a scenario at least one analyst on the Street is pricing in.</div>
         </div>
       </div>
     </div>
@@ -1963,13 +1648,13 @@
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
           <div>
             <div class="kpi-label">Earnings Date</div>
-            <div class="kpi-value" style="font-size:14px;">2026-04-30</div>
+            <div class="kpi-value" style="font-size:14px;">2026-05-01</div>
           </div>
           
           <div>
             <div class="kpi-label">Days Until</div>
             <div class="kpi-value earnings-far" style="font-size:14px;">
-              in 25 days
+              in 26 days
               
             </div>
           </div>
@@ -1992,7 +1677,73 @@
         
 
         
-          <div class="empty-state">No recent news found for AAPL</div>
+          
+          <div class="subsec-title">Direct Coverage</div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://finance.yahoo.com/markets/stocks/articles/jim-cramer-thinks-apple-aapl-182741049.html?.tsrc=rss" target="_blank" rel="noopener">Jim Cramer Thinks New Apple (AAPL) CFO Is Settling Well In His Role</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-04 18:27 UTC</span>
+            </div>
+            <div class="news-summary">Apple Inc. (NASDAQ:AAPL) is one of the 10 Stocks Jim Cramer Talked About &amp; Warned About A Weak Market. Apple Inc. (NASDAQ:AAPL) is one of Jim Cramer’s favorite stocks. For more than a year, he has asserted that it is better to buy and hold …</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiUEFVX3lxTE00U3JoRzhkckt5aVFxb1NVNnBndWhrcDM5N0NqUzZGUk8xQk04OF9jVWRULXh2RmlJaGpTS1FJWEREaUlNUnhfSHk2cm53NllX?oc=5" target="_blank" rel="noopener">AAPL Stock Quote Price and Forecast - CNN</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-03 08:01 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiUEFVX3lxTE00U3JoRzhkckt5aVFxb1NVNnBndWhrcDM5N0NqUzZGUk8xQk04OF9jVWRULXh2RmlJaGpTS1FJWEREaUlNUnhfSHk2cm53NllX?oc=5&#34; target=&#34;_blank&#34;&gt;AAPL Stock Quote Price and Forecast&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;font co…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiTEFVX3lxTE00VVpTazYwR3NVeGVVRURfbU43Mm53dVE1ZHZhMkozOTF3TS15a09Pb0twZm44NlBBRFdFR1NCalVIcS1DcjVXWGhsOGk?oc=5" target="_blank" rel="noopener">AAPL - Apple Inc Stock Price and Quote - Finviz</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-02 20:00 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiTEFVX3lxTE00VVpTazYwR3NVeGVVRURfbU43Mm53dVE1ZHZhMkozOTF3TS15a09Pb0twZm44NlBBRFdFR1NCalVIcS1DcjVXWGhsOGk?oc=5&#34; target=&#34;_blank&#34;&gt;AAPL - Apple Inc Stock Price and Quote&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;font colo…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxNXzB6TUpONnhaNzA2VHEtS3hRRDFtanBNc2R1OFBaa3pTRmM3SVlvTU52TVN2amM4M082LV9aZ0Z0b0Z3MnFSM1NFOENycy1HMElCRkJnRGd4dW1yVE1rcFhna0xEVkg2bmV0V2FVUUd0a3BPZWV0R2JwYkhST0p5OEhaN0pkWkZ2akt5bTJkeFVkMXQ2NWYwUlZ0SkxLM2QyNnY3ZlU3Y0E5eXFGeVFZaHB1Nmk0QQ?oc=5" target="_blank" rel="noopener">Apple CEO Tim Cook sells $16.5 million in AAPL stock - Investing.com</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-03 23:01 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMitgFBVV95cUxNXzB6TUpONnhaNzA2VHEtS3hRRDFtanBNc2R1OFBaa3pTRmM3SVlvTU52TVN2amM4M082LV9aZ0Z0b0Z3MnFSM1NFOENycy1HMElCRkJnRGd4dW1yVE1rcFhna0xEVkg2bmV0V2FVUUd0a3BPZWV0R2JwYkhST0p5OEhaN0pkWkZ2akt5bT…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxPanRzTG41bFM1MTNVWVdKMi1uUnk2WjZhX1dlRmJIY0Z2eEVVaUlHbkFVQTNlMGZxczJVN2lpQXR2RVJVUnoybUptUGRoTllJc2lhNUE0b2dJS1hkOGowN01lREVfSTRoNlRaNmkwM2Nkd1VVd0wxTlVsdENYS3pZWm9KaEU?oc=5" target="_blank" rel="noopener">Is Trending Stock Apple Inc. (AAPL) a Buy Now? - Yahoo Finance Singapore</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-03 13:00 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMihAFBVV95cUxPanRzTG41bFM1MTNVWVdKMi1uUnk2WjZhX1dlRmJIY0Z2eEVVaUlHbkFVQTNlMGZxczJVN2lpQXR2RVJVUnoybUptUGRoTllJc2lhNUE0b2dJS1hkOGowN01lREVfSTRoNlRaNmkwM2Nkd1VVd0wxTlVsdENYS3pZWm9KaEU?oc=5&#34; targ…</div>
+          </div>
+          
+          
+
+          
+
         
       </div>
     </div>
@@ -2071,13 +1822,15 @@
 
 ---
 
-- **Revenue &amp; Margin Expansion:** Revenue has grown steadily from **$383.3B (2023) → $391.0B (2024) → $416.2B (2025)**, a cumulative ~8.6% gain over three years. More notably, gross margin expanded meaningfully from **44.1% → 46.9%**, and operating margin improved from **29.8% → 32.0%**, reflecting disciplined cost management and a continued mix shift toward higher-margin Services revenue. Net margin dipped to 24.0% in 2024 before recovering to **26.9% in 2025**, suggesting a one-year tax or cost anomaly that has since normalized.
+- **Revenue &amp; Margin Expansion:** Revenue grew steadily from **$383.3B (2023) → $391.0B (2024) → $416.2B (2025)**, a cumulative ~8.6% increase over three years. More notably, gross margins expanded meaningfully from **44.1% → 46.9%**, and operating margins improved from **29.8% → 32.0%**, reflecting favorable Services mix shift and disciplined cost management. Net margin in 2025 reached **26.9%**, recovering from a 2024 dip to 24.0%.
 
-- **Free Cash Flow Quality:** FCF has been exceptionally consistent — **$99.6B (2023) → $108.8B (2024) → $98.8B (2025)** — averaging roughly **~$102B annually**. The slight 2025 decline from the 2024 peak is not concerning given its scale; FCF consistently converts at roughly **23–24% of revenue**, underscoring the durability and capital-light nature of the business model.
+- **Cash Generation Quality:** Free cash flow has been consistently exceptional, averaging ~**$102B/year** across the period ($99.6B → $108.8B → $98.8B). The modest 2025 decline from the 2024 peak may reflect increased capex, but the floor remains near **$99B**, demonstrating highly durable and repeatable cash generation relative to revenue (~23–28% FCF margin).
 
-- **Balance Sheet &amp; Debt Structure:** Total debt has declined from **$111.1B (2023) → $98.7B (2025)**, a positive deleveraging trend of ~$12.4B over the period. However, cash on hand remains relatively modest at **$35.9B in 2025** (up from ~$30B in prior years), yielding a **net debt position of ~$62.7B**. The extremely high **debt-to-equity ratio of 102.6x** reflects Apple&#39;s deliberate strategy of returning capital to shareholders via buybacks, which structurally compresses book equity rather than signaling financial distress.
+- **Balance Sheet &amp; Debt Position:** Total debt has declined from **$111.1B (2023) to $98.7B (2025)**, a reduction of ~$12.4B, signaling deliberate deleveraging. However, cash on hand remains relatively modest at **$35.9B** in 2025 (up from ~$30B), leaving net debt near **~$62.8B** — manageable given FCF scale but worth monitoring given the elevated **debt-to-equity ratio of 102.6x**, which reflects aggressive capital return programs rather than operational distress.
 
-- **Capital Return &amp; Shareholder Value Context:** The combination of ~$99–109B in annual FCF against a $3,761B market cap implies a **FCF yield of approximately 2.6–2.9%** — modest in absolute terms but supported by consistent earnings power. The aggressive buyback program is</div>
+- **Capital Structure Context:** The extreme debt-to-equity ratio (**102.6x**) is largely a function of Apple&#39;s sustained buyback program compressing book equity to near zero, rather than excessive leverage in a traditional sense. With ~$99B in annual FCF dwarfing interest obligations, **interest coverage remains structurally very strong** despite the optically alarming leverage ratio.
+
+- **Valuation &amp; Red Flags:** At a **$3.76T market cap**, the stock trades at **32.4x</div>
         </div>
       </div>
     </div>
@@ -2158,122 +1911,6 @@
             
           </div>
         </div>
-
-        <!-- Segment / Product revenue breakdown -->
-        
-        
-        
-        
-        <div class="seg-list">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Revenue Breakdown by Segment</div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">iPhone</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:52%;background:#2563eb;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">52%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Apple&#39;s flagship smartphone line remains the dominant revenue source, though growth has plateaued in saturated markets amid longer upgrade cycles.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Services</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:22%;background:#16a34a;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">22%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Includes App Store, Apple Music, iCloud, Apple TV+, Apple Pay, and licensing fees — the highest-margin segment and key to Apple&#39;s recurring revenue story.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Wearables, Home &amp; Accessories</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:10%;background:#d97706;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">10%</div>
-              
-              <span class="seg-trend seg-trend-declining">declining</span>
-              
-            </div>
-            
-            <div class="seg-desc">Encompasses Apple Watch, AirPods, HomePod, and Apple Vision Pro; growth has slowed as the wearables market matures and Vision Pro adoption remains nascent.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Mac</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:8%;background:#7c3aed;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">8%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Personal computer line benefiting from the Apple Silicon (M-series chip) transition, driving share gains and strong performance upgrades.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">iPad</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:6%;background:#0891b2;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">6%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Multi-purpose tablet line that serves education and creative professionals, with modest cyclical demand tied to product refresh cycles.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Other</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:2%;background:#9ca3af;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">2%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Includes AppleCare support services revenue and miscellaneous hardware/software not captured in primary segments.</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="value-driver-note">⚡ <strong>Key value driver:</strong> Services is the primary stock price driver due to its rapidly expanding high-margin recurring revenue, which investors value at a premium multiple; iPhone remains critical as the ecosystem anchor that feeds Services adoption and sets the floor for overall revenue expectations.</div>
-        
-        
 
         <!-- Quarterly revenue bar chart -->
         
@@ -2378,54 +2015,38 @@
           <tbody>
             
             <tr>
-              <td>2025-03</td>
-              <td>$1.62</td>
-              <td>$1.65</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+1.7%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-06</td>
-              <td>$1.43</td>
-              <td>$1.57</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+10.1%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-09</td>
-              <td>$1.77</td>
-              <td>$1.85</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+4.5%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-12</td>
-              <td>$2.67</td>
-              <td>$2.84</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+6.3%</span>
-                
-                
+                —
               </td>
             </tr>
             
@@ -2447,11 +2068,13 @@
 
 ---
 
-- **Revenue Momentum — Accelerating:** Apple&#39;s most recent December 2025 quarter delivered **$143.76B in revenue, up 15.7% YoY** — a meaningful step-up from the flatter mid-year quarters (June 2025: $94.04B; September 2025: $102.47B), consistent with seasonally driven iPhone supercycle dynamics. TTM revenue growth of 15.7% reflects a company re-emerging from a period of low-single-digit expansion, with the December quarter print suggesting the iPhone 17 / AI-integrated product cycle is gaining real commercial traction. The sequential acceleration from $102.5B (Sep-Q) to $143.8B (Dec-Q) — a ~40% step-up — is above typical seasonality, signaling demand pull-through beyond normal holiday patterns.
+- **Revenue Momentum — Accelerating into Holiday Strength, But Base Effects Matter:** The most recent quarter (Dec-2025) delivered **$143.76B in revenue, up 15.7% YoY** — a meaningful acceleration from what appears to be a mid-single-digit growth regime in the Mar/Jun/Sep 2025 quarters ($94–$103B range). The sequential surge is heavily holiday/iPhone-cycle driven, which is structurally expected, but the **15.7% TTM growth rate is the strongest in several years for AAPL**, suggesting the iPhone 17 cycle and Services compounding are providing genuine underlying lift beyond seasonality. The critical watch item is whether Mar-2026 guidance shows the sequential deceleration staying shallower than prior years — any floor above ~$97–98B would signal cycle durability.
 
-- **Earnings Quality — Consistent Beat Streak, Magnitude Widening:** Apple has beaten consensus EPS estimates in each of the last four quarters, with beat magnitude **expanding**: +1.7% (Mar-25) → **+10.1%** (Jun-25) → +4.5% (Sep-25) → +6.3% (Dec-25). The Jun-25 upside of $1.57 vs. $1.43 estimated (+$0.14) is particularly notable given that quarter&#39;s softer revenue base of $94.0B, implying strong cost discipline and mix improvement rather than pure volume leverage. The consistent pattern — with no misses in the trailing four quarters — signals deliberate **sandbagging on guidance**, giving management credibility on execution while providing downside protection against macro volatility. Actual Dec-25 EPS of **$2.84 vs. $2.67 estimated** on a high-revenue quarter further confirms operational leverage is intact.
+- **Earnings Quality — No Specific Beat/Miss Data Provided, But Growth Spread Is Telling:** With **TTM earnings growth of 18.3% outpacing revenue growth of 15.7%**, Apple is demonstrating operating leverage — earnings are expanding faster than the top line, which is a quality signal. **Quarterly EPS growth of 15.9%** on $143.76B in revenue reinforces that cost discipline and mix shift toward high-margin Services are compounding. Apple&#39;s historical pattern is conservative guidance (sandbagging tendency), and the earnings-revenue growth spread of ~260bps suggests the company is likely continuing to under-promise. Without specific beat/miss magnitude data, the growth spread alone implies **low estimate-miss risk** in the near term.
 
-- **Margin Trajectory — Expanding, Driven by Services Mix and Operational Scale:** Gross margin for Dec-25 reached **48.2%** ($69.23B GP / $143.76B revenue), up from 46.5% in Sep-25 and 46.5% in Jun-25, with the TTM gross margin reported at **47.3%** — among the highest in Apple&#39;s history. Operating margin hit **35.4%** in the Dec-25 quarter ($50.85B / $143.76B), reflecting robust operating leverage as fixed-cost structures are spread over higher revenue. The expansion is structurally supported by the **faster-growing, higher-margin Services segment** (App Store, Apple Intelligence subscriptions, i</div>
+- **Margin Trajectory — Expansion Is Real and Structurally Supported:** Gross margin of **47.3%** and operating margin of **35.4%** represent healthy year-on-year expansion, with the Dec-2025 quarter showing **gross profit of $69.23B on $143.76B revenue (implying ~48.2% quarterly gross margin)** — above the TTM average. The driver is unambiguous: **Services (App Store, Apple TV+, iCloud, Apple Pay) now carry ~70%+ gross margins** and are growing faster than hardware, mechanically pulling consolidated margins higher. Operating income of $50.85B in Dec-2025 versus $42.83B in Dec-2024 implies **~19% YoY operating income growth**, outpacing revenue by ~330bps — confirming operating leverage is intact and not a one-quarter event.
+
+- **Key Product Catalysts — Apple Intelligence Monetization &amp; iPhone Superc</div>
         </div>
 
       </div>
@@ -2606,7 +2229,7 @@
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
-          var NODE_W = 148, NODE_H = 58, NODE_RX = 7;
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
           var COL_GAP = 80;
           var ROW_GAP = 14;
           var CENTER_W = 110, CENTER_H = 60;
@@ -2671,31 +2294,22 @@
                 'stroke-width': isWatched ? 2 : 1.5,
                 'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
-              var revPct = node.revenue_pct ? node.revenue_pct : 0;
-              var pctLabel = revPct > 0 ? revPct + '%' : '';
-              // Ticker + pct on same line
-              var tickerLabel = (node.ticker || '') + (pctLabel ? '  ' + pctLabel : '');
-              addText(g, colX + NODE_W/2, ny + 17, tickerLabel,
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
                 'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
-              var nameText = (node.name || '').substring(0, 22);
+              var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
               if (isWatched) {
-                addText(g, colX + NODE_W/2, ny + 48, '↗ view report',
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
                   'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
               } else {
-                var relText = (node.relationship || '').substring(0, 28);
+                var relText = (node.relationship || '').substring(0, 26);
                 addText(g, colX + NODE_W/2, ny + 44, relText,
                   'font-size:8px;fill:#9ca3af;text-anchor:middle;');
-                if (pctLabel) {
-                  addText(g, colX + NODE_W/2, ny + 54, '~' + pctLabel + ' of rev/cost',
-                    'font-size:8px;fill:' + nc.stroke + ';text-anchor:middle;font-weight:600;');
-                }
               }
               svgEl.appendChild(g);
 
-              // Arrow — thickness scales with revenue_pct
-              var arrowW = revPct > 0 ? Math.max(1, Math.min(4, revPct / 8)) : 1.2;
+              // Arrow
               var nodeRightX = colX + NODE_W;
               var nodeMidY = ny + NODE_H / 2;
               var centerMidY = cy + CENTER_H / 2;
@@ -2711,7 +2325,7 @@
               cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
               var path = svgEl_('path', {
                 d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
-                fill: 'none', stroke: nc.stroke, 'stroke-width': arrowW,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
                 'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
                 opacity: 0.6
               });
@@ -2989,21 +2603,17 @@
         
         <div class="ai-block">
           <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## Taiwan Semiconductor Manufacturing (TSM) — Analyst Sentiment Summary
+          <div class="ai-text">## TSM Analyst Consensus Summary
 
-**Current Price: $339.04 | Consensus Target: $430.65 | Implied Upside: ~27%**
+- **Overwhelmingly bullish consensus:** With a mean recommendation score of 1.42/5 (strong buy) across 18 analysts, TSM carries one of the stronger conviction ratings in the semiconductor space. The recent DA Davidson initiation at **Strong Buy** adds further weight to the bull camp, signaling broadening institutional coverage and confidence.
 
----
+- **Significant implied upside with wide dispersion:** The consensus mean price target of **$430.65** implies approximately **27% upside** from the current price of $339.04. The wide range between the low ($351) and high ($520) targets reflects divergent views on AI-driven demand durability, geopolitical risk premiums, and capacity expansion pace — factors that continue to create valuation uncertainty.
 
-- **Overwhelmingly bullish consensus:** The 18-analyst panel carries a **strong buy** consensus with a mean score of 1.42/5, indicating near-unanimous conviction in TSM&#39;s outperformance potential. The vast majority of recent actions reflect **maintained positive ratings**, suggesting no meaningful deterioration in the bull thesis.
+- **Bull case centered on AI/advanced node dominance:** Firms maintaining Strong Buy and Buy ratings (Needham, Barclays, Bernstein, DA Davidson) implicitly endorse TSMC&#39;s structural position as the sole high-volume manufacturer of leading-edge chips (3nm/2nm), with AI accelerator demand from Nvidia, Apple, and AMD providing durable revenue visibility.
 
-- **Significant implied upside with a wide target range:** The mean price target of **$430.65 implies ~27% upside** from current levels, while the high target of $520 (+53%) signals that the most optimistic analysts see substantial runway. The low target of $351 (+3.5%) indicates even the most conservative analyst views the stock as modestly undervalued at current prices — notably, there are **no outright sell-side bears** in this cohort.
+- **Lone Hold signals caution on near-term risk/reward:** TD Cowen&#39;s maintained **Hold** likely reflects concerns around geopolitical tail risks (Taiwan Strait tensions), potential U.S. tariff/export control impacts, or the stock&#39;s already elevated valuation after a strong run, suggesting the bull thesis is not without meaningful counterarguments.
 
-- **Fresh initiation reinforces conviction:** DA Davidson&#39;s **Strong Buy initiation in February 2026** adds a new voice to the bull camp, suggesting the positive thesis on TSM remains accessible and compelling to analysts approaching the stock with fresh eyes, likely anchored in AI-driven semiconductor demand and TSMC&#39;s advanced node dominance.
-
-- **Lone dissent is mild:** TD Cowen&#39;s **Hold** is the only cautious stance among recent actions, representing a minority view. Without a price target or downgrade action, this reflects **measured caution rather than active bearishness** — possibly reflecting near-term geopolitical or valuation concerns rather than a fundamental challenge to the business.
-
-- **Broad institutional alignment:** Coverage from firms spanning bulge-bracket (Barclays), specialist</div>
+- **No recent downgrades or cuts — a notable positive signal:** The absence of any rating reductions or price target cuts in recent actions suggests analysts are not yet seeing deterioration in fundamentals, customer order trends, or margin outlook that would warrant increased caution at current levels.</div>
         </div>
       </div>
     </div>
@@ -3048,55 +2658,7 @@
         
 
         
-          
-          <div class="subsec-title">Direct Coverage</div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxPT0EyQ2FzSkktNGVfV1NNQUt1blA4VjR5S1N2amUzd2poenlYclN6MTlfclZtRHZLR2RoN25pcFkzYVRKODM1Y1BpLU5VMDVSVk9kOE1LSUFEX1hsaVU4MnZ6RHJBb0M0azJNX0lteVoxdjZqQURBUnRPV001dXp3ellnelBnd1djRFpLM2Q2WFFpS0ptY2Focw?oc=5" target="_blank" rel="noopener">TSMC vs. Nvidia: Which AI Supercycle Growth Stock Is the Better Long-Term Buy?</a>
-                
-              </div>
-              <div class="news-summary">TSMC vs. Nvidia: Which AI Supercycle Growth Stock Is the Better Long-Term Buy? Yahoo Finance</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-04-04 20:50 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://finance.yahoo.com/markets/stocks/articles/taiwan-semiconductor-manufacturing-tsm-billionaire-214456500.html?.tsrc=rss" target="_blank" rel="noopener">Taiwan Semiconductor Manufacturing (TSM): Billionaire Steve Cohen Likes This Chip Stock</a>
-                
-              </div>
-              <div class="news-summary">Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM) is one of the 10 Best Stocks to Invest In According to Billionaire Steve Cohen. Even though Taiwan Semiconductor Manufacturing Company Lim</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-04-03 21:44 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://finance.yahoo.com/markets/stocks/articles/tsmc-tsm-launch-3nm-wafer-180121959.html?.tsrc=rss" target="_blank" rel="noopener">TSMC (TSM) to Launch 3nm Wafer Production at Second Japan Factory in 2028</a>
-                
-              </div>
-              <div class="news-summary">Taiwan Semiconductor Manufacturing Co. Ltd. (NYSE:TSM) is one of the best future stocks to buy for the next 5 years. On April 1, Reuters reported that Taiwan Semiconductor Manufacturing Co. Ltd., or s</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-04-03 18:01 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          
-
-          
-
+          <div class="empty-state">No recent news found for TSM</div>
         
       </div>
     </div>
@@ -3176,15 +2738,15 @@
 
 ---
 
-- **Revenue &amp; Margin Expansion — Strong Across the Board:** Revenue surged from TWD 2,161.74B (2023) to TWD 3,809.05B (2025), a **~76% cumulative increase over two years**, driven by AI-related chip demand and advanced node adoption. Gross margin improved meaningfully from **54.4% → 59.9%**, while operating margin expanded from **42.6% → 50.8%**, signaling significant operating leverage and favorable pricing power at leading-edge nodes (3nm, 2nm ramp).
+- **Strong revenue acceleration and expanding margins:** Revenue surged from TWD 2,161.74B (2023) to TWD 3,809.05B (2025), a ~76% cumulative gain in two years, driven by AI/advanced node demand. Gross margin expanded meaningfully from 54.4% → 59.9%, and operating margin from 42.6% → 50.8% over the same period, demonstrating significant operating leverage as leading-edge capacity utilization improves.
 
-- **Net Profitability at Elite Levels:** Net margin climbed from **39.4% (2023) to 45.1% (2025)**, confirming that revenue growth is translating efficiently to the bottom line — a rare combination of scale and pricing discipline. Net income in 2025 is implicitly ~TWD 1,718B, roughly doubling from 2023 levels.
+- **Exceptional profitability depth:** Net margin reached 45.1% in 2025 (up from 39.4% in 2023), translating high-ASP advanced nodes (3nm, 2nm ramp) directly to the bottom line. An operating margin above 50% is rare at this revenue scale and reflects TSMC&#39;s irreplaceable pricing power in the foundry ecosystem.
 
-- **Cash Position is a Structural Strength:** Cash &amp; equivalents grew from **TWD 1,465.43B (2023) to TWD 2,767.86B (2025)**, comfortably exceeding total debt of TWD 1,064.58B, yielding a **net cash position of ~TWD 1,703B**. This provides substantial buffer for the ongoing, capital-intensive global fab expansion (Arizona, Japan, Germany).
+- **Robust and rapidly improving free cash flow:** FCF nearly tripled from TWD 286.57B (2023) to TWD 992.38B (2025). The 2023 FCF trough reflected peak capex deployment; the subsequent recovery signals that capital intensity is being absorbed efficiently, with FCF now representing ~26% of revenue — a materially healthier conversion rate.
 
-- **Free Cash Flow Recovery is a Key Highlight:** FCF rebounded sharply from a suppressed **TWD 286.57B (2023)** — depressed by peak capex investment — to **TWD 861.20B (2024)** and **TWD 992.38B (2025)**, demonstrating that prior capital expenditures are converting into tangible cash generation as utilization rates recover and advanced nodes scale.
+- **Solid balance sheet with a strong net cash position:** Cash grew from TWD 1,465.43B (2023) to TWD 2,767.86B (2025), while total debt rose modestly from TWD 956.26B to TWD 1,064.58B — implying a **net cash position of ~TWD 1,703B** in 2025. Despite a reported debt-to-equity of 19.6 (likely inflated by accounting treatment of lease/pension obligations), the cash coverage is substantial.
 
-- **Debt Levels Modest but Rising; Leverage Metrics Need Context:** Total debt increased from **TWD 956.26B → TWD 1,064.58B**, a moderate ~11% rise over two years.</div>
+- **Valuation divergence warrants attention:** The trailing P/E of 32.7x contrasts sharply with a forward P/E of 18.9x, suggesting consensus expects continued rapid earnings growth — consistent with the financial trajectory shown. However, the EV/</div>
         </div>
       </div>
     </div>
@@ -3265,122 +2827,6 @@
             
           </div>
         </div>
-
-        <!-- Segment / Product revenue breakdown -->
-        
-        
-        
-        
-        <div class="seg-list">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Revenue Breakdown by Segment</div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Advanced Nodes (3nm/5nm/7nm)</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:52%;background:#2563eb;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">52%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Leading-edge process nodes serving Apple, NVIDIA, AMD, and others; the primary revenue and margin driver as AI and mobile chip demand surges.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Mature/Specialty Nodes (28nm and above)</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:28%;background:#16a34a;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">28%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Older generation processes used in automotive, IoT, and industrial applications; stable but facing commoditization pressure from Chinese foundries.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">High Performance Computing (HPC) Platform</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:48%;background:#d97706;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">48%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Cross-cutting end-market including AI accelerators, data center GPUs, and CPUs; the fastest-growing demand vertical representing nearly half of wafer revenue.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Smartphone Platform</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:28%;background:#7c3aed;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">28%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Mobile SoCs for Apple A-series and Android flagship chips; historically the largest platform but now balanced by HPC growth.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">IoT, Automotive &amp; Consumer</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:16%;background:#0891b2;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">16%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Automotive chips (EV power management, ADAS) and IoT devices represent an expanding diversification opportunity with longer design cycles.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Other (Packaging, Testing &amp; Services)</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:8%;background:#9ca3af;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">8%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Advanced packaging (CoWoS, SoIC), testing services, and mask-making; increasingly strategic for AI chip integration but still a small revenue share.</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="value-driver-note">⚡ <strong>Key value driver:</strong> Advanced Nodes combined with the HPC/AI platform are the dominant stock price drivers, as surging demand for NVIDIA AI GPUs and Apple A-series chips at 3nm/5nm drives both revenue growth and expanding gross margins, making TSMC the irreplaceable backbone of the global AI buildout.</div>
-        
-        
 
         <!-- Quarterly revenue bar chart -->
         
@@ -3499,54 +2945,38 @@
           <tbody>
             
             <tr>
-              <td>2025-03</td>
-              <td>$2.05</td>
-              <td>$2.12</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+3.2%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-06</td>
-              <td>$2.31</td>
-              <td>$2.47</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+6.8%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-09</td>
-              <td>$2.63</td>
-              <td>$2.92</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+11.2%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-12</td>
-              <td>$2.98</td>
-              <td>$3.14</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+5.5%</span>
-                
-                
+                —
               </td>
             </tr>
             
@@ -3564,17 +2994,27 @@
             </span>
             
           </div>
-          <div class="ai-text"># Taiwan Semiconductor Manufacturing (TSM) — Business &amp; Product Momentum Analysis
+          <div class="ai-text"># Taiwan Semiconductor Manufacturing (TSM) — Product &amp; Business Momentum Analysis
 
 ---
 
-- **Revenue Momentum — Accelerating into Cycle Peak:** TSM reported Q4 2025 revenue of TWD 1,046B, up **+20.5% YoY**, marking a clear reacceleration from the Q1 2025 trough of TWD 839B. The sequential progression through 2025 (TWD 839B → 934B → 990B → 1,046B) traces a textbook demand ramp, driven by insatiable AI accelerator orders from hyperscalers and sustained advanced-node (N3/N2) capacity absorption. TTM revenue growth of **20.5%** confirms this is not a one-quarter phenomenon but a durable upcycle in leading-edge logic.
+## Revenue Momentum
+- **Accelerating and broadening.** The most recently reported quarter (2025-12) logged **NT$1,046B in revenue, +20.5% YoY**, capping a clear sequential acceleration from NT$839B (2025-03) → NT$934B (2025-06) → NT$990B (2025-09) → NT$1,046B (2025-12) — a **+24.7% step-up over the trailing three quarters alone.** The trajectory reflects sustained AI-driven HPC wafer demand absorbing what would otherwise be seasonal softness, with no visible deceleration in the run-rate entering 2026. TTM revenue growth of 20.5% materially outpaces the broader foundry industry, driven almost entirely by 3nm/5nm advanced node mix-shift.
 
-- **Earnings Quality — Consistent Beat Streak with Widening Surprise Magnitude:** TSM has beaten consensus EPS estimates in each of the last four consecutive quarters. Critically, the beat magnitude *expanded* materially — from **+3.2%** in Q1 2025 to a peak of **+11.2%** in Q3 2025, before normalizing to **+5.5%** in Q4 2025. TTM earnings growth of **35.0%** substantially outpaces revenue growth of 20.5%, signaling genuine operating leverage rather than top-line-only gains. The consistently positive surprise pattern, particularly the Q3 blowout, suggests management has been deliberately conservative in guidance — a classic sandbagging posture that has systematically set the bar low enough to clear.
+---
 
-- **Margin Trajectory — Structurally Expanding, Approaching Cyclical Highs:** Gross margin reached **59.9%** in Q4 2025 (vs. ~53% range in early-2024 troughs), with operating margin hitting a striking **53.9%** — among the highest in TSM&#39;s history for a quarter. The sequential gross profit improvement from TWD 493B (Q1 2025) to TWD 652B (Q4 2025) reflects: (1) favorable mix shift toward high-margin N3/N2 advanced nodes which carry premium pricing, (2) better fab utilization rates as AI-driven demand fills capacity, and (3) operating leverage on a largely fixed cost base. The key risk to this trajectory remains USD/TWD currency headwinds and ramp costs for overseas fabs (Arizona, Japan), which could create near-term margin noise in 2026.
+## Earnings Quality
+- **EPS-level beat/miss data is unavailable in this dataset**, but the structural earnings signal is unambiguous: TTM earnings growth of **+35.0%** is running nearly **170bps faster than revenue growth (20.5%)**, confirming significant operating leverage rather than top-line-only expansion. The earnings growth premium over revenue growth of ~14-15 percentage points is consistent with a company whose pricing power and node mix are simultaneously improving — not a margin-dilutive volume story. This profile is characteristic of a company that has historically guided conservatively and delivered above initial estimates. Absent contradictory EPS data, the quality signal is **high**.
 
-- **Key Product Catalysts — N2 Ramp &amp; CoWoS Packaging Capacity:**</div>
+---
+
+## Margin Trajectory
+- **Expanding meaningfully across all lines.** Gross margin improved from **59.0% (2025-03)** → **58.6% (2025-06)** → **59.5% (2025-09)** → **62.3% (2025-12)**, with the December quarter representing the highest gross margin in the visible dataset. Operating margin followed identically: **48.5% → 49.6% → 50.6% → 54.0%** — a clean 550bp expansion over three quarters. The primary driver is **advanced node (3nm/2nm) revenue mix-shift**: leading-edge nodes carry materially higher ASPs and, once yields normalize, substantially better gross margins than mature nodes. Secondary contributor is **CoWoS/SoIC advanced packaging**, where capacity is constrained and pricing remains firm. Arizona fab ramp costs remain a modest headwind but are being absorbed within the current margin structure.
+
+---
+
+## Key Product Catalysts
+- **N2 (2</div>
         </div>
 
       </div>
@@ -3671,7 +3111,7 @@
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
-          var NODE_W = 148, NODE_H = 58, NODE_RX = 7;
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
           var COL_GAP = 80;
           var ROW_GAP = 14;
           var CENTER_W = 110, CENTER_H = 60;
@@ -3736,31 +3176,22 @@
                 'stroke-width': isWatched ? 2 : 1.5,
                 'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
-              var revPct = node.revenue_pct ? node.revenue_pct : 0;
-              var pctLabel = revPct > 0 ? revPct + '%' : '';
-              // Ticker + pct on same line
-              var tickerLabel = (node.ticker || '') + (pctLabel ? '  ' + pctLabel : '');
-              addText(g, colX + NODE_W/2, ny + 17, tickerLabel,
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
                 'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
-              var nameText = (node.name || '').substring(0, 22);
+              var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
               if (isWatched) {
-                addText(g, colX + NODE_W/2, ny + 48, '↗ view report',
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
                   'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
               } else {
-                var relText = (node.relationship || '').substring(0, 28);
+                var relText = (node.relationship || '').substring(0, 26);
                 addText(g, colX + NODE_W/2, ny + 44, relText,
                   'font-size:8px;fill:#9ca3af;text-anchor:middle;');
-                if (pctLabel) {
-                  addText(g, colX + NODE_W/2, ny + 54, '~' + pctLabel + ' of rev/cost',
-                    'font-size:8px;fill:' + nc.stroke + ';text-anchor:middle;font-weight:600;');
-                }
               }
               svgEl.appendChild(g);
 
-              // Arrow — thickness scales with revenue_pct
-              var arrowW = revPct > 0 ? Math.max(1, Math.min(4, revPct / 8)) : 1.2;
+              // Arrow
               var nodeRightX = colX + NODE_W;
               var nodeMidY = ny + NODE_H / 2;
               var centerMidY = cy + CENTER_H / 2;
@@ -3776,7 +3207,7 @@
               cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
               var path = svgEl_('path', {
                 d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
-                fill: 'none', stroke: nc.stroke, 'stroke-width': arrowW,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
                 'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
                 opacity: 0.6
               });
@@ -4058,15 +3489,15 @@
           <div class="ai-label">AI Consensus Summary</div>
           <div class="ai-text">## MU (Micron Technology) – Analyst Sentiment Summary
 
-- **Overwhelmingly bullish consensus:** With a mean recommendation score of 1.47/5 (strong buy) across 40 analysts, MU carries one of the stronger conviction ratings in the semiconductor space. The broad analyst base lending this score suggests widespread, not just isolated, optimism.
+- **Overwhelmingly Bullish Consensus:** With a mean recommendation score of 1.47/5 (strong buy) across 40 analysts, MU carries one of the more conviction-heavy bullish setups in the semiconductor space. The recent wave of &#34;Maintains&#34; from major institutions — including Citigroup (Strong Buy), JP Morgan (Buy), B of A Securities (Strong Buy), and Mizuho (Buy) — signals that the bull thesis remains intact with no meaningful deterioration in sentiment.
 
-- **Significant implied upside to consensus target:** The mean price target of **$525.48 implies ~43% upside** from the current price of $366.24, with the high target of $750 implying as much as ~105% upside — reflecting strong bull-case conviction around AI-driven memory demand (HBM, DRAM).
+- **Significant Implied Upside to Consensus Target:** The mean price target of **$525.48 implies ~43% upside** from the current price of $366.24, suggesting the Street views the stock as materially undervalued at current levels. The high target of $750 implies over 100% upside, reflecting a cohort of analysts pricing in a robust memory upcycle scenario, potentially driven by AI/HBM demand tailwinds.
 
-- **Recent rating actions reflect stability, not deterioration:** All five most recent actions are **&#34;Maintains,&#34;** with heavyweights Citigroup and B of A Securities holding **Strong Buy** ratings and JP Morgan and Mizuho at **Buy** — indicating no meaningful erosion in conviction despite broader market volatility.
+- **Lone Dissent from Goldman Sachs:** Goldman&#39;s Hold rating stands as the primary bearish outlier among recent actions, implying a more cautious view — likely reflecting concerns around memory pricing volatility, cyclical risks, or a more conservative near-term demand outlook relative to peers.
 
-- **Goldman Sachs stands as the key dissenting voice:** Goldman&#39;s **Hold** rating is a notable outlier among recent actions, potentially reflecting concerns around memory cycle timing, pricing normalization, or valuation discipline — representing the primary near-term bear argument in the data.
+- **No Downgrades or Target Cuts Observed:** The absence of any negative rating changes or downward price target revisions in the recent action set is a constructive signal, suggesting analysts are not yet reacting to deteriorating fundamentals or macro headwinds.
 
-- **Wide target range signals elevated uncertainty:** The $501 spread between the high ($750) and low ($249) price targets reflects **meaningful disagreement** on cycle amplitude and AI memory monetization, suggesting MU remains a high-conviction but high-dispersion investment thesis.</div>
+- **Wide Target Range Signals Uncertainty Around Magnitude, Not Direction:** The $501 spread between the high ($750) and low ($249) targets reflects significant disagreement on the *degree* of upside,</div>
         </div>
       </div>
     </div>
@@ -4082,13 +3513,13 @@
         <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
           <div>
             <div class="kpi-label">Earnings Date</div>
-            <div class="kpi-value" style="font-size:14px;">2026-06-24</div>
+            <div class="kpi-value" style="font-size:14px;">2026-06-25</div>
           </div>
           
           <div>
             <div class="kpi-label">Days Until</div>
             <div class="kpi-value earnings-far" style="font-size:14px;">
-              in 80 days
+              in 81 days
               
             </div>
           </div>
@@ -4115,17 +3546,135 @@
           <div class="subsec-title">Direct Coverage</div>
           
           <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQbmNDZnpnZWNpc0ZHVF9XVjlGZlFnYTRqQ2hLbWxBQjNaak9yTnVyN2h3aHBRZ3AxZUdhUHVOaFFTRFJkSVllRzVXSWt5dGd6MkxkYThlMUpMc3d0ekYtcTlxZGZhYXN2Z1AwNDVCV0hjalNMQmJ2NzVTWHNEYTJBWS1FcjBjOHFaRmd6Y0dWZ0lkQUdSa2JCUXpLOHZlaW5KajM5dTJuRjg?oc=5" target="_blank" rel="noopener">Price Prediction: Nvidia Stock Will Be Worth This Much In 2027</a>
-                
-              </div>
-              <div class="news-summary">Price Prediction: Nvidia Stock Will Be Worth This Much In 2027 24/7 Wall St.</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-24/7wallst">24/7 Wall St.</span>
-                <span class="news-date">2026-04-03 11:35 UTC</span>
-              </div>
+            <div class="news-title">
+              <a href="https://finance.yahoo.com/markets/stocks/articles/jim-cramer-says-nvidia-deserves-225741088.html?.tsrc=rss" target="_blank" rel="noopener">Jim Cramer Says “NVIDIA Deserves a Premium Price-to-Earnings Multiple”</a>
+              
             </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-04 22:57 UTC</span>
+            </div>
+            <div class="news-summary">NVIDIA Corporation (NASDAQ:NVDA) is among the stocks in focus, as Jim Cramer analyzed the broader market impact of the recent AI data center rally. Cramer said that the company “really hasn’t done much of late,” as he remarked: It’s worth f…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://finance.yahoo.com/markets/stocks/articles/microns-mu-long-dated-debt-021216688.html?.tsrc=rss" target="_blank" rel="noopener">Will Micron&#39;s (MU) Long-Dated Debt Buyback and AI Capex Push Change Its Investment Narrative?</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-04 02:12 UTC</span>
+            </div>
+            <div class="news-summary">In late March 2026, Micron Technology, Inc. completed cash tender offers for six series of senior notes maturing between 2031 and 2035, with holders tendering the bulk of the outstanding principal and Micron set to pay for accepted notes on…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://finance.yahoo.com/markets/stocks/articles/micron-technology-inc-mu-attracting-130007219.html?.tsrc=rss" target="_blank" rel="noopener">Micron Technology, Inc. (MU) is Attracting Investor Attention: Here is What You Should Know</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-03 13:00 UTC</span>
+            </div>
+            <div class="news-summary">Recently, Zacks.com users have been paying close attention to Micron (MU). This makes it worthwhile to examine what the stock has in store.</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE9PVExUdWNyV3lucW1ncGlkTzdPQlNLdFBOaHZzQUpjdmwtNXpvV3NYRzk1QU1od1JFbS1ab0hTYlRuYWVyWC1DVkNvLUo0clpZZnFkclBQUHI3NlJsLUNDcnJlbnFNaXNSeUZIc3l4NGIyVzVvT2c?oc=5" target="_blank" rel="noopener">Micron Stock Could Be The Next Intel (NASDAQ:MU) - Seeking Alpha</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-04 05:14 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMidkFVX3lxTE9PVExUdWNyV3lucW1ncGlkTzdPQlNLdFBOaHZzQUpjdmwtNXpvV3NYRzk1QU1od1JFbS1ab0hTYlRuYWVyWC1DVkNvLUo0clpZZnFkclBQUHI3NlJsLUNDcnJlbnFNaXNSeUZIc3l4NGIyVzVvT2c?oc=5&#34; target=&#34;_blank&#34;&gt;Micron S…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMirAFBVV95cUxORDd4RTlXQTFhSVA1Mk1pdWJDbTlpREFrM3hjeXhiUHFQSU9mTWxtUlBBeFlkTVg0blBJWUtkdTl1VE1oUnNjNVdwZFU4WTNkcTBEWFNVVmlZblRZVGFnNjBqeTY5SVlpY09QUlRCakJiem9CWnNCbW1mVlp2YjBXUEVOSFJCQjJoM0c0RVhtZzNsSE1CNTR3MVNYb3U0OHZmTm9ibThmNTRuV2Y5?oc=5" target="_blank" rel="noopener">Will Micron Stock (MU) Continue to Rally on Memory Demand? Here’s What Analysts Say - TipRanks</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-05 17:03 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMirAFBVV95cUxORDd4RTlXQTFhSVA1Mk1pdWJDbTlpREFrM3hjeXhiUHFQSU9mTWxtUlBBeFlkTVg0blBJWUtkdTl1VE1oUnNjNVdwZFU4WTNkcTBEWFNVVmlZblRZVGFnNjBqeTY5SVlpY09QUlRCakJiem9CWnNCbW1mVlp2YjBXUEVOSFJCQjJoM0c0RV…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPckZNd2lYeHJfZ2xZdTczSGs1cnNNUmY4bTdsUjZGMmdWS1hlcnFMVFE1YzlUUDY4RWNNOVdHb2VyYktvS3hXUDVxM1JudW1YVF9EWmh2S3ZRd1dSVlo1NzhkWnJLNlN4UUpULUZ4aDhDTEZPM2JZZ2VIV3JtU0JRTHprV0h1X2xLdG5mbDFTRndkRnFyRFhya1ZLeVoyenhsT3lIWUNCSHpMQQ?oc=5" target="_blank" rel="noopener">Micron Technology Stock (MU) Opinions on Nvidia AI Platform Inclusion - Quiver Quantitative</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-05 17:32 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMiqgFBVV95cUxPckZNd2lYeHJfZ2xZdTczSGs1cnNNUmY4bTdsUjZGMmdWS1hlcnFMVFE1YzlUUDY4RWNNOVdHb2VyYktvS3hXUDVxM1JudW1YVF9EWmh2S3ZRd1dSVlo1NzhkWnJLNlN4UUpULUZ4aDhDTEZPM2JZZ2VIV3JtU0JRTHprV0h1X2xLdG5mbD…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxQWThXcWQzcVROdmJwek5MeUJUb2lIbU9ELTVWLXBhVDlvZGhCWWE5Q1pvMjhpN0NDbDB4RkNQeFdoXy01MnRzcXFLcXR0NzVwSUpRSE92ZXZxZDNHMVBTSG5EdWZQWmVaMjJOQjE5dVZETXRVMXF1SGk1MTZnTWRmZFpyNDVhNVM4LWlnZEVQazFweHlGcE0tVGRsZFRsSzJvTTZ2QQ?oc=5" target="_blank" rel="noopener">Micron (MU) Stock Falls 20% — Buying Opportunity or Warning Sign? Analysts Weigh In - CoinCentral</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-05 10:13 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMipAFBVV95cUxQWThXcWQzcVROdmJwek5MeUJUb2lIbU9ELTVWLXBhVDlvZGhCWWE5Q1pvMjhpN0NDbDB4RkNQeFdoXy01MnRzcXFLcXR0NzVwSUpRSE92ZXZxZDNHMVBTSG5EdWZQWmVaMjJOQjE5dVZETXRVMXF1SGk1MTZnTWRmZFpyNDVhNVM4LWlnZE…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://news.google.com/rss/articles/CBMi1wFBVV95cUxPSmV6bjNLY0xJdmlLMHRseWcta2tuY0JTUzB2NHJIMlpJMmZWa1ozam5sN0VIUlU0OWdsVGw2MmFlRXl0Q09uRV9WM2F3WkVyTmMyN0hJSEd3dlpkem5YbTZoTHQ1cVgwSFBpd1A1VUF1U2lNbXM4YzAxZFptc2V2RUV4eVpPRzlZRVJnSWdQeWJPdEsteU5xZWJ5YkhHeDdHZUEteHhrNTVjdjRaZmNYbW10S3pIQUZnMy04bW0tSHNQUnVvQjdoYldqajhhQm9GWm9tMS1hTdIB3AFBVV95cUxPelpKY2lTcGMtSVhBY1lJUHdWN1k5amR6UHBfZmE1Y3VQU2tnYXBJTUhkSUhGaXBIdVE2NzZPcl8tRXNoYmh6c01idUtXRHUweTV3ZXhaX0xDdmlYdU9WU09acW51QVl2T3M4V09tcXRoVFNaMHBRbmNnTWJfRC1lOVhCdm9qdkMtckM2UW9ud0k5T1hJVXdGZ3Y1MjgtWDUyLTNvWDE2d3NkeHpacVhORzhBMjQ5S2hKWXNkZm0tUmdnWjJmZWhJM1o2ektMdVJWX3dNTG91TW9CcGJW?oc=5" target="_blank" rel="noopener">The Bull Case For Micron Technology (MU) Could Change Following Major Senior-Note Buyback Amid AI Demand - simplywall.st</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-googlenews">Google News</span>
+              <span class="news-date">2026-04-04 21:38 UTC</span>
+            </div>
+            <div class="news-summary">&lt;a href=&#34;https://news.google.com/rss/articles/CBMi1wFBVV95cUxPSmV6bjNLY0xJdmlLMHRseWcta2tuY0JTUzB2NHJIMlpJMmZWa1ozam5sN0VIUlU0OWdsVGw2MmFlRXl0Q09uRV9WM2F3WkVyTmMyN0hJSEd3dlpkem5YbTZoTHQ1cVgwSFBpd1A1VUF1U2lNbXM4YzAxZFptc2V2RUV4eVpPRzlZRVJnSW…</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://finance.yahoo.com/markets/stocks/articles/globalstar-stock-pops-more-15-150136407.html?.tsrc=rss" target="_blank" rel="noopener">Globalstar Stock Pops More Than 15% After Report Claims Amazon In Talks To Acquire Apple-Backed Satellite Communications Company</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-05 15:01 UTC</span>
+            </div>
+            <div class="news-summary">Globalstar Inc. shares jumped more than 15% in after-hours trading on Wednesday after a report said Amazon.com Inc. is in talks to acquire the satellite communications company, citing people familiar with the matter. Amazon Deal Talks Lift …</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://www.fool.com/investing/2026/04/04/how-much-if-invest-2k-apple-stock-ipo/?.tsrc=rss" target="_blank" rel="noopener">How Much Would You Have if You Had Invested $2,000 In Apple When It Went Public?</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-04 18:33 UTC</span>
+            </div>
+            <div class="news-summary">Most of this stock&#39;s gain, however, has only taken shape since the company launched its defining product.</div>
+          </div>
+          
+          <div class="news-item">
+            <div class="news-title">
+              <a href="https://finance.yahoo.com/markets/stocks/articles/apple-turns-50-garage-startup-143135083.html?.tsrc=rss" target="_blank" rel="noopener">Apple Turns 50: From Garage Startup To $3.73 Trillion Giant—Here&#39;s How Much A $1,000 Investment At Its IPO Would Be Worth Today</a>
+              
+            </div>
+            <div class="news-meta-row">
+              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+              <span class="news-date">2026-04-04 14:31 UTC</span>
+            </div>
+            <div class="news-summary">On Wednesday, April 1, 2026, Apple Inc. celebrates 50 years of innovation, culture-shaping products, and unprecedented financial growth. From Garage Beginnings to Global Tech Powerhouse In 1976, Steve Jobs and Steve Wozniak turned a garage …</div>
           </div>
           
           
@@ -4208,15 +3757,13 @@
           <div class="ai-label">AI Analysis</div>
           <div class="ai-text">## Micron Technology (MU) – Financial Analysis
 
-- **Explosive revenue recovery and margin inflection:** Revenue surged from a cyclical trough of $15.54B in 2023 to $25.11B in 2024 and $37.38B in 2025 (+140% over two years), driven by memory/NAND pricing recovery and AI-related HBM demand. Gross margins swung dramatically from **-9.1%** (2023) to **+39.8%** (2025), with operating margin recovering to **26.2%** — demonstrating strong operating leverage inherent to the semiconductor memory business model.
+- **Revenue &amp; Margin Recovery: Exceptional Turnaround.** Revenue nearly tripled from a cyclical trough of $15.54B (FY2023) to $37.38B (FY2025), a +140% cumulative rise. Gross margin swung dramatically from -9.1% in FY2023 to 39.8% in FY2025, while operating margin recovered from -34.8% to +26.2% — reflecting a classic semiconductor upcycle amplified by surging HBM/AI memory demand driving significant pricing power recovery.
 
-- **Net profitability normalized sharply:** Net margin recovered from a deeply negative **-37.5%** ($5.83B net loss implied) in 2023 to **22.8%** (~$8.52B net income) in 2025, reflecting both pricing tailwinds and cost discipline. The trajectory is steep but heavily cyclical — these margins are near-peak for the memory cycle.
+- **Profitability Normalization is Striking.** Net margin collapsed to -37.5% in FY2023 (implying a ~$5.8B net loss) before recovering to just 3.1% in FY2024 and accelerating to 22.8% (~$8.5B net income) in FY2025. The speed and magnitude of this profit recovery is notable, though it underscores the inherent cyclicality and operating leverage of the DRAM/NAND business model.
 
-- **Free cash flow improvement, but still constrained relative to earnings:** FCF moved from **-$6.12B** (2023) to **+$0.12B** (2024) and **+$1.67B** (2025), a meaningful recovery but notably modest relative to reported net income of ~$8.5B — signaling **heavy capital expenditure reinvestment** (likely $10B+ in capex) required to build out HBM and advanced DRAM capacity, which compresses FCF conversion.
+- **Free Cash Flow Restored but Still Constrained.** FCF swung from -$6.12B (FY2023) to +$1.67B (FY2025), a meaningful improvement. However, at only ~4.5% of FY2025 revenue, FCF remains modest relative to reported net income — signaling **heavy capital expenditure absorption** (consistent with Micron&#39;s ongoing fab buildout and leading-edge node transitions) that is consuming a large share of operating cash flow.
 
-- **Balance sheet manageable but leveraged:** Total debt has crept up from **$13.93B** (2023) to **$15.28B** (2025), while cash improved to **$9.64B**, yielding net debt of approximately **$5.64B**. The debt-to-equity ratio of **14.9x** appears elevated, though this metric may reflect accounting book value distortions from prior impairments rather than true financial distress given the EV/EBITDA of ~11x.
-
-- **Valuation signals aggressive forward earnings expectations:** The trailing P/E of **17.3x** on</div>
+- **Balance Sheet: Manageable Debt, But Leverage Warrants Monitoring.** Total debt has risen incrementally from $13.93B (FY2023) to $15.28B (FY2025), while cash improved from $7.04B to $9.64B, yielding a net debt position of ~$5.64B. The reported **debt-to-equity ratio of 14.9x appears elevated** and likely reflects accumulated equity erosion from FY2023 losses rather than an aggressive new borrowing spree —</div>
         </div>
       </div>
     </div>
@@ -4297,88 +3844,6 @@
             
           </div>
         </div>
-
-        <!-- Segment / Product revenue breakdown -->
-        
-        
-        
-        
-        <div class="seg-list">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Revenue Breakdown by Segment</div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Cloud Memory Business Unit</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:35%;background:#2563eb;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">35%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Supplies DRAM and HBM to hyperscale cloud providers (AWS, Azure, Google); the fastest-growing segment driven by AI infrastructure buildout and HBM3E demand.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Core Data Center Business Unit</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:20%;background:#16a34a;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">20%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Serves enterprise and on-premises data center customers with DRAM, NAND SSDs, and NVMe storage; benefits from AI server proliferation and data center modernization.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Mobile and Client Business Unit</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:30%;background:#d97706;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">30%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Provides LPDDR DRAM and NAND flash for smartphones, PCs, and tablets; large volume segment sensitive to consumer electronics demand cycles.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Automotive and Embedded Business Unit</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:15%;background:#7c3aed;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">15%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Delivers memory and storage for automotive systems, industrial IoT, and embedded applications; provides more stable, higher-margin revenue with long product lifecycles.</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="value-driver-note">⚡ <strong>Key value driver:</strong> The Cloud Memory Business Unit is the primary stock price driver, as surging AI infrastructure investment is fueling unprecedented demand for Micron&#39;s HBM3E and data center DRAM, directly lifting revenue growth and margin expansion expectations.</div>
-        
-        
 
         <!-- Quarterly revenue bar chart -->
         
@@ -4497,54 +3962,38 @@
           <tbody>
             
             <tr>
-              <td>2025-05</td>
-              <td>$1.59</td>
-              <td>$1.91</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+19.8%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-08</td>
-              <td>$2.86</td>
-              <td>$3.03</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+5.9%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2025-11</td>
-              <td>$3.96</td>
-              <td>$4.78</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+20.6%</span>
-                
-                
+                —
               </td>
             </tr>
             
             <tr>
-              <td>2026-02</td>
-              <td>$9.16</td>
-              <td>$12.20</td>
+              <td></td>
+              <td>—</td>
+              <td>—</td>
               <td>
-                
-                
-                <span class="beat-pill beat-pos">+33.2%</span>
-                
-                
+                —
               </td>
             </tr>
             
@@ -4566,19 +4015,16 @@
 
 ---
 
-• **Revenue Momentum — Sharply Accelerating:** MU reported **$23.86B in revenue for the quarter ending Feb-2026**, representing **196.3% YoY growth** — a dramatic re-acceleration from the prior sequential ramp ($8.05B → $9.30B → $11.31B → $13.64B → $23.86B). The near-doubling of revenue in a single quarter signals an extraordinary inflection, almost certainly driven by HBM (High Bandwidth Memory) volume ramp meeting surging AI infrastructure demand. Sequential progression has been consistent and steepening, indicating this is structural rather than episodic.
+## ⚠️ Data Integrity Flag
+Before proceeding: the FY2026-Feb quarter showing **$23.86B revenue, 74.4% gross margin, and 67.6% operating margin** represents figures that are **dramatically discontinuous** from the preceding trend (FY2025-Nov: $13.64B / 56.1% GM). These numbers appear to contain data anomalies — either forward estimates have been loaded as actuals, or there is a modeling/aggregation error. The analysis below is structured around the observable trend through FY2025-Nov as the credible operating baseline, with the FY2026-Feb figures flagged where referenced.
 
 ---
 
-• **Earnings Quality — Consistent, Accelerating Beats with Widening Magnitude:** MU has delivered **four consecutive EPS beats**: +19.8% (May-25), +5.9% (Aug-25), +20.6% (Nov-25), and a massive **+33.2% beat in Feb-26** ($12.20 actual vs. $9.16 estimate). Beat magnitudes are *expanding*, not compressing — a strong signal of systematic management sandbagging or, more likely, demand running materially ahead of model assumptions. TTM earnings growth of **756%** and quarterly YoY earnings growth of **770.8%** confirm the EPS trajectory is not a one-quarter anomaly.
+- **Revenue Momentum — Strong Acceleration, Verifiable Through FY2025-Nov:** Sequential revenue grew from $8.05B → $9.30B → $11.31B → $13.64B across the last four reported periods, representing clean ~15–21% QoQ acceleration each step. This trajectory reflects a textbook memory upcycle driven by HBM (High Bandwidth Memory) demand tied to AI accelerator build-outs. Even excluding the suspect FY2026-Feb figure, annualized run-rate approaching ~$55B+ is plausible given the HBM supply ramp — the *direction* of acceleration is unambiguously positive and the most important variable for the stock.
 
----
+- **Earnings Quality — No EPS Beat/Miss Data Provided, But Operating Leverage Tells the Story:** With no usable EPS estimate history in the dataset, beat/miss cadence cannot be scored. However, the operating income expansion from $1.77B (FY2025-Feb) to $6.14B (FY2025-Nov) on a revenue base that grew ~69% in the same window signals operating leverage dramatically outpacing revenue growth — operating margin expanded from ~22% to ~45% in just three quarters. This is consistent with Micron&#39;s historical pattern of conservative guidance during early upcycle, suggesting management has been sandbagging estimates. The market has repeatedly been surprised to the upside in prior MU cycles on this basis.
 
-• **Margin Trajectory — Explosive Expansion, Structurally Driven:** Gross margin surged to **58.4%** (gross profit $17.75B on $23.86B revenue in Feb-26), up from ~36.7% just two quarters prior (May-25: $3.51B/$9.30B). Operating margin of **67.6%** (operating income $16.14B) is extraordinary for a DRAM/NAND semiconductor manufacturer and reflects: **(1)** HBM&#39;s materially higher ASPs versus commodity DRAM, **(2)** significant operating leverage as fixed costs are absorbed at scale, and **(3)** a favorable supply/demand imbalance in leading-edge memory. The velocity of margin expansion — roughly **+3,000 bps gross margin improvement in two quarters** — is the defining financial story.
-
----
-
-• **Key Product Catalysts — HBM4 Ramp &amp; Data Center DRAM Capacity Allocation:** The two most critical near-term catalysts are: **(1) HBM4 qualification and volume ramp** — MU is competing directly with SK Hynix for</div>
+- **Margin Trajectory — Explosive Expansion Driven by HBM Mix Shift:** Gross margin tracked from 36.8% (FY2025-Feb) → 37.7% (FY2025-May) → 44.6% (FY2025-Aug) → **56.1% (FY2025-Nov)** — a 19+ percentage point expansion in three quarters. The primary driver is HB</div>
         </div>
 
       </div>
@@ -4720,7 +4166,7 @@
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
-          var NODE_W = 148, NODE_H = 58, NODE_RX = 7;
+          var NODE_W = 140, NODE_H = 52, NODE_RX = 7;
           var COL_GAP = 80;
           var ROW_GAP = 14;
           var CENTER_W = 110, CENTER_H = 60;
@@ -4785,31 +4231,22 @@
                 'stroke-width': isWatched ? 2 : 1.5,
                 'stroke-dasharray': isWatched ? 'none' : 'none'
               }));
-              var revPct = node.revenue_pct ? node.revenue_pct : 0;
-              var pctLabel = revPct > 0 ? revPct + '%' : '';
-              // Ticker + pct on same line
-              var tickerLabel = (node.ticker || '') + (pctLabel ? '  ' + pctLabel : '');
-              addText(g, colX + NODE_W/2, ny + 17, tickerLabel,
+              addText(g, colX + NODE_W/2, ny + 17, node.ticker || '',
                 'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
-              var nameText = (node.name || '').substring(0, 22);
+              var nameText = (node.name || '').substring(0, 20);
               addText(g, colX + NODE_W/2, ny + 30, nameText,
                 'font-size:9px;fill:#6b7280;text-anchor:middle;');
               if (isWatched) {
-                addText(g, colX + NODE_W/2, ny + 48, '↗ view report',
+                addText(g, colX + NODE_W/2, ny + 44, '↗ view report',
                   'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
               } else {
-                var relText = (node.relationship || '').substring(0, 28);
+                var relText = (node.relationship || '').substring(0, 26);
                 addText(g, colX + NODE_W/2, ny + 44, relText,
                   'font-size:8px;fill:#9ca3af;text-anchor:middle;');
-                if (pctLabel) {
-                  addText(g, colX + NODE_W/2, ny + 54, '~' + pctLabel + ' of rev/cost',
-                    'font-size:8px;fill:' + nc.stroke + ';text-anchor:middle;font-weight:600;');
-                }
               }
               svgEl.appendChild(g);
 
-              // Arrow — thickness scales with revenue_pct
-              var arrowW = revPct > 0 ? Math.max(1, Math.min(4, revPct / 8)) : 1.2;
+              // Arrow
               var nodeRightX = colX + NODE_W;
               var nodeMidY = ny + NODE_H / 2;
               var centerMidY = cy + CENTER_H / 2;
@@ -4825,7 +4262,7 @@
               cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
               var path = svgEl_('path', {
                 d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
-                fill: 'none', stroke: nc.stroke, 'stroke-width': arrowW,
+                fill: 'none', stroke: nc.stroke, 'stroke-width': 1.2,
                 'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
                 opacity: 0.6
               });
@@ -5003,73 +4440,63 @@
       <div class="card">
         
         <div class="news-item">
-          <div class="news-item-body">
-            <div class="news-title">
-              <a href="https://www.fool.com/investing/2026/04/05/celsius-holdings-has-dropped-25-this-year-generati/?.tsrc=rss" target="_blank" rel="noopener">Celsius Holdings Has Dropped 25% This Year. Generational Opportunity or Falling Knife?</a>
-            </div>
-            <div class="news-summary">The energy drink company is undergoing a major transformation.</div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-05 22:20 UTC</span>
-              
-            </div>
+          <div class="news-title">
+            <a href="https://www.fool.com/investing/2026/04/05/artificial-intelligence-ai-stock-double-turboquant/?.tsrc=rss" target="_blank" rel="noopener">Prediction: 1 Artificial Intelligence (AI) Stock Will Quietly Double While the Market Panics Over TurboQuant</a>
           </div>
+          <div class="news-meta-row">
+            <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+            <span class="news-date">2026-04-05 15:50 UTC</span>
+          </div>
+          <div class="news-summary">The launch of Google&#39;s TurboQuant has fueled a nasty sell-off in artificial intelligence (AI) memory and storage stocks.…</div>
+          
         </div>
         
         <div class="news-item">
-          <div class="news-item-body">
-            <div class="news-title">
-              <a href="https://www.fool.com/investing/2026/04/05/why-conagra-stock-got-mashed-in-march/?.tsrc=rss" target="_blank" rel="noopener">Why Conagra Stock Got Mashed in March</a>
-            </div>
-            <div class="news-summary">Along with two other food stocks, it was hit by an analyst&#39;s recommendation downgrade.</div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-05 22:12 UTC</span>
-              
-            </div>
+          <div class="news-title">
+            <a href="https://www.fool.com/investing/2026/04/05/after-a-monster-run-is-micron-still-worth-owning/?.tsrc=rss" target="_blank" rel="noopener">After a Monster Run, Is Micron Still Worth Owning?</a>
           </div>
+          <div class="news-meta-row">
+            <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+            <span class="news-date">2026-04-05 10:05 UTC</span>
+          </div>
+          <div class="news-summary">Micron has emerged as a top-performing artificial intelligence (AI) semiconductor stock over the last year.…</div>
+          
         </div>
         
         <div class="news-item">
-          <div class="news-item-body">
-            <div class="news-title">
-              <a href="https://www.fool.com/investing/2026/04/05/nebius-stock-jumped-15-on-its-meta-deal-is-this-th/?.tsrc=rss" target="_blank" rel="noopener">Nebius Stock Jumped 15% on Its Meta Deal. Is This the Next CoreWeave -- or Something Better?</a>
-            </div>
-            <div class="news-summary">The two companies have a lot in common.</div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-05 21:20 UTC</span>
-              
-            </div>
+          <div class="news-title">
+            <a href="https://247wallst.com/investing/2026/04/04/the-top-ai-etfs-that-let-you-invest-in-the-whole-trend-at-once/?.tsrc=rss" target="_blank" rel="noopener">The Top AI ETFs That Let You Invest In The Whole Trend At Once</a>
           </div>
+          <div class="news-meta-row">
+            <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+            <span class="news-date">2026-04-04 16:52 UTC</span>
+          </div>
+          <div class="news-summary">AI spending has moved well past the hype phase. Consensus estimates now put 2026 hyperscaler capital expenditures at $611 billion, and the global AI market is projected to reach $4.8 trillion by 2033 from $189 billion in 2023. For investors…</div>
+          
         </div>
         
         <div class="news-item">
-          <div class="news-item-body">
-            <div class="news-title">
-              <a href="https://www.fool.com/investing/2026/04/05/peloton-is-moving-in-the-right-direction-but-it-st/?.tsrc=rss" target="_blank" rel="noopener">Peloton Is Moving in the Right Direction, But It Still Has to Solve This 1 Problem</a>
-            </div>
-            <div class="news-summary">Peloton&#39;s connected exercise bikes became a fad, and consumers have been moving on ever since the fad ended.</div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-05 20:35 UTC</span>
-              
-            </div>
+          <div class="news-title">
+            <a href="https://www.fool.com/investing/2026/04/04/growth-stock-down-20-great-rotation-micron/?.tsrc=rss" target="_blank" rel="noopener">This Growth Stock Is Down 20% in the Great Rotation. I Think That&#39;s a Mistake.</a>
           </div>
+          <div class="news-meta-row">
+            <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+            <span class="news-date">2026-04-04 13:20 UTC</span>
+          </div>
+          <div class="news-summary">Micron stock is down, but it&#39;s not out.…</div>
+          
         </div>
         
         <div class="news-item">
-          <div class="news-item-body">
-            <div class="news-title">
-              <a href="https://www.fool.com/investing/2026/04/05/5-things-to-know-about-openai-before-its-ipo/?.tsrc=rss" target="_blank" rel="noopener">5 Things to Know About OpenAI Before Its IPO</a>
-            </div>
-            <div class="news-summary">OpenAI will likely go public this year -- and it could be one of the biggest public offerings ever.</div>
-            <div class="news-meta-row">
-              <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-              <span class="news-date">2026-04-05 20:04 UTC</span>
-              
-            </div>
+          <div class="news-title">
+            <a href="https://www.fool.com/investing/2026/04/04/is-micron-the-new-nvidia/?.tsrc=rss" target="_blank" rel="noopener">Is Micron the New Nvidia?</a>
           </div>
+          <div class="news-meta-row">
+            <span class="source-tag source-yahoofinance">Yahoo Finance</span>
+            <span class="news-date">2026-04-04 10:05 UTC</span>
+          </div>
+          <div class="news-summary">Micron stock has soared nearly 300% over the last year as memory and storage chips become the latest must-haves for AI development.…</div>
+          
         </div>
         
       </div>
@@ -5401,7 +4828,7 @@ function toggleTheme() {
 // ── i18n ───────────────────────────────────────────────────────────
 const I18N = {
   zh: {
-    updated: '更新于 2026-04-05 23:09 UTC',
+    updated: '更新于 2026-04-05 18:17 UTC',
     history: '历史记录',
     add_stock: '添加股票',
     refresh_report: '刷新报告',
@@ -5432,7 +4859,7 @@ const I18N = {
     add_generate: '添加并生成',
   },
   en: {
-    updated: 'Updated 2026-04-05 23:09 UTC',
+    updated: 'Updated 2026-04-05 18:17 UTC',
     history: 'History',
     add_stock: 'Add Stock',
     refresh_report: 'Refresh Report',
@@ -5805,15 +5232,11 @@ function showAddStatus(type, msg) {
 // ── Render markdown in AI text blocks ──────────────────────────────────────
 (function renderAIMarkdown() {
   if (typeof marked === 'undefined') return;
-  // Disable strikethrough (~~text~~) — Claude uses em-dashes which can trigger it
-  const renderer = new marked.Renderer();
   marked.setOptions({ breaks: true, gfm: true });
-  // Override del to render as plain text, not <del>
-  renderer.del = (token) => token.text;
   document.querySelectorAll('.ai-text').forEach(el => {
     const raw = el.textContent || '';
     if (raw.trim()) {
-      el.innerHTML = marked.parse(raw, { renderer });
+      el.innerHTML = marked.parse(raw);
     }
   });
 })();
