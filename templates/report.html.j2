@@ -107,8 +107,20 @@
     /* ── Section shells ── */
     .section { margin-bottom: 24px; }
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .section-title { font-size: 16px; font-weight: 700; letter-spacing: -0.2px; color: var(--text); }
+    .section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+
+    /* ── Tab layout with sticky TOC ── */
+    .tab-layout { display: flex; gap: 24px; align-items: flex-start; }
+    .tab-main { flex: 1; min-width: 0; }
+    .tab-toc { width: 168px; flex-shrink: 0; position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
+    .toc-list { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--border); }
+    .toc-list li { margin: 0; }
+    .toc-list a { display: block; padding: 5px 10px; font-size: 11.5px; color: var(--text-muted); text-decoration: none; line-height: 1.4; transition: color 0.15s, border-left-color 0.15s; border-left: 2px solid transparent; margin-left: -2px; }
+    .toc-list a:hover { color: var(--text); }
+    .toc-list a.toc-active { color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+    .toc-label { font-size: 10px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: var(--text-muted); padding: 0 10px 8px; }
+    @media (max-width: 900px) { .tab-toc { display: none; } .tab-layout { display: block; } }
 
     /* ── Analyst ratings table ── */
     .ratings-table { width: 100%; border-collapse: collapse; }
@@ -501,8 +513,29 @@
       </div>
     </div>
 
+    <div class="tab-layout">
+      <!-- ── Right-side sticky TOC ── -->
+      <nav class="tab-toc" id="toc-{{ tr.symbol }}" aria-label="On this page">
+        <div class="toc-label">On this page</div>
+        <ul class="toc-list">
+          <li><a href="#sec-analyst-{{ tr.symbol }}">Analyst Ratings</a></li>
+          {% if sym_earnings %}<li><a href="#sec-earnings-{{ tr.symbol }}">Upcoming Earnings</a></li>{% endif %}
+          <li><a href="#sec-news-{{ tr.symbol }}">News</a></li>
+          <li><a href="#sec-financials-{{ tr.symbol }}">Financials</a></li>
+          {% if tp %}<li><a href="#sec-product-{{ tr.symbol }}">Product &amp; Momentum</a></li>{% endif %}
+          {% if sym_insider %}<li><a href="#sec-insider-{{ tr.symbol }}">Insider Transactions</a></li>{% endif %}
+          {% set ticker_geo = ctx.geopolitical_themes | selectattr("affected_tickers", "containing", tr.symbol) | list %}
+          {% if ticker_geo %}<li><a href="#sec-geo-{{ tr.symbol }}">Geopolitical Exposure</a></li>{% endif %}
+          {% if sym_themes %}<li><a href="#sec-themes-{{ tr.symbol }}">Portfolio Themes</a></li>{% endif %}
+          <li><a href="#sec-sc-{{ tr.symbol }}">Supply Chain Map</a></li>
+        </ul>
+      </nav>
+
+      <!-- ── Main content ── -->
+      <div class="tab-main">
+
     <!-- ── SECTION: ANALYST RATINGS ── -->
-    <div class="section">
+    <div class="section" id="sec-analyst-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="analyst_ratings">Analyst Ratings</span>
       </div>
@@ -582,7 +615,7 @@
     <!-- ── SECTION: UPCOMING EARNINGS ── -->
     {% if sym_earnings %}
     {% set ev = sym_earnings[0] %}
-    <div class="section">
+    <div class="section" id="sec-earnings-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="upcoming_earnings">Upcoming Earnings</span>
       </div>
@@ -621,7 +654,7 @@
     {% endif %}
 
     <!-- ── SECTION: NEWS ── -->
-    <div class="section">
+    <div class="section" id="sec-news-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="news">News</span>
       </div>
@@ -679,7 +712,7 @@
 
     <!-- ── SECTION: FINANCIALS ── -->
     {% if tf %}
-    <div class="section">
+    <div class="section" id="sec-financials-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="financials">Financial Statements</span>
       </div>
@@ -762,7 +795,7 @@
 
     <!-- ── SECTION: PRODUCT ANALYSIS ── -->
     {% if tp %}
-    <div class="section">
+    <div class="section" id="sec-product-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title">Product &amp; Business Momentum</span>
         {% if tp.sector %}<span style="font-size:11px;color:var(--text-muted);">{{ tp.sector }}{% if tp.industry %} &middot; {{ tp.industry }}{% endif %}</span>{% endif %}
@@ -957,7 +990,7 @@
 
     <!-- ── SECTION: INSIDER TRANSACTIONS ── -->
     {% if sym_insider %}
-    <div class="section">
+    <div class="section" id="sec-insider-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="insider_txns">Insider Transactions</span>
       </div>
@@ -1002,7 +1035,7 @@
     <!-- ── SECTION: GEOPOLITICAL (filtered to this ticker) ── -->
     {% set ticker_geo = ctx.geopolitical_themes | selectattr("affected_tickers", "containing", tr.symbol) | list %}
     {% if ticker_geo %}
-    <div class="section">
+    <div class="section" id="sec-geo-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="geo_exposure">Geopolitical Exposure</span>
       </div>
@@ -1045,7 +1078,7 @@
 
     <!-- ── SECTION: PORTFOLIO THEMES ── -->
     {% if sym_themes %}
-    <div class="section">
+    <div class="section" id="sec-themes-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="portfolio_themes">Portfolio Themes</span>
       </div>
@@ -1061,7 +1094,7 @@
 
     <!-- ── SECTION: SUPPLY CHAIN MAP ── -->
     {% set sc = ctx.supply_chain_detail.get(tr.symbol, {}) %}
-    <div class="section">
+    <div class="section" id="sec-sc-{{ tr.symbol }}">
       <div class="section-header">
         <span class="section-title" data-i18n="supply_chain_map">Supply Chain Map</span>
       </div>
@@ -1216,6 +1249,9 @@
         {% endif %}
       </div>
     </div>
+
+      </div>{# end tab-main #}
+    </div>{# end tab-layout #}
 
   </div>{# end tab-content #}
   {% endfor %}
@@ -2053,6 +2089,45 @@ function showAddStatus(type, msg) {
   el.className = type ? `modal-status ${type}` : 'modal-status';
   el.textContent = msg;
 }
+
+// ── Sticky TOC scroll-spy ───────────────────────────────────────────────────
+(function initTOC() {
+  if (!('IntersectionObserver' in window)) return;
+  const observers = [];
+
+  function setupTOCForTab(sym) {
+    const tabEl = document.getElementById('tab-stock-' + sym);
+    const tocEl = document.getElementById('toc-' + sym);
+    if (!tabEl || !tocEl) return;
+    const links = Array.from(tocEl.querySelectorAll('a[href^="#"]'));
+    if (!links.length) return;
+
+    const sectionIds = links.map(a => a.getAttribute('href').slice(1));
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    if (!sections.length) return;
+
+    let activeId = null;
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          activeId = entry.target.id;
+          links.forEach(a => {
+            const isActive = a.getAttribute('href') === '#' + activeId;
+            a.classList.toggle('toc-active', isActive);
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => obs.observe(s));
+    observers.push(obs);
+  }
+
+  // Set up TOC for each ticker tab
+  {% for tr in ctx.ratings %}
+  setupTOCForTab({{ tr.symbol | tojson }});
+  {% endfor %}
+})();
 
 // ── Render markdown in AI text blocks ──────────────────────────────────────
 (function renderAIMarkdown() {

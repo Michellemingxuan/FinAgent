@@ -284,7 +284,7 @@ class FinancialsAgent(BaseAgent):
         if self._lang == "zh":
             system += "\n\nIMPORTANT: Write your entire response in Chinese (简体中文)."
 
-        return self._simple_completion(system, user_msg, max_tokens=500)
+        return self._simple_completion(system, user_msg, max_tokens=900)
 
 
 def _pick(data: dict, mapping: dict, target_key: str) -> Optional[float]:

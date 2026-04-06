@@ -134,4 +134,4 @@ class AnalystRatingsAgent(BaseAgent):
         if self._lang == "zh":
             system += "\n\nIMPORTANT: Write your entire response in Chinese (简体中文)."
 
-        return self._simple_completion(system, user_msg, max_tokens=400)
+        return self._simple_completion(system, user_msg, max_tokens=900)

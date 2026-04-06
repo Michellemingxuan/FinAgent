@@ -141,7 +141,7 @@ class ProductAgent(BaseAgent):
             f"Business description: {description[:600]}\n\n"
             "Return the JSON segment breakdown."
         )
-        raw = self._simple_completion(SEGMENT_SYSTEM, user_msg, max_tokens=600)
+        raw = self._simple_completion(SEGMENT_SYSTEM, user_msg, max_tokens=800)
         try:
             clean = re.sub(r"```(?:json)?\s*", "", raw).strip().rstrip("`").strip()
             # Find balanced JSON object
@@ -217,7 +217,7 @@ class ProductAgent(BaseAgent):
         if self._lang == "zh":
             system += "\n\nIMPORTANT: Write your entire response in Chinese (简体中文)."
 
-        return self._simple_completion(system, user_msg, max_tokens=600)
+        return self._simple_completion(system, user_msg, max_tokens=1000)
 
 
 def _fmt_b(val: Optional[float]) -> Optional[str]:
