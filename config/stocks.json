@@ -86,6 +86,27 @@
         "DELL",
         "QCOM"
       ]
+    },
+    {
+      "symbol": "IREN",
+      "name": "IREN",
+      "sector": "",
+      "market": "",
+      "upstream": [
+        "NVDA",
+        "EQIX",
+        "CAT",
+        "ETR",
+        "DELL"
+      ],
+      "downstream": [
+        "COIN",
+        "MSTR",
+        "MSFT",
+        "GOOGL",
+        "GS",
+        "CLSK"
+      ]
     }
   ],
   "supply_chain_detail": {
@@ -445,6 +466,90 @@
         }
       ],
       "supply_chain_summary": "Micron Technology sits at the center of the global memory and storage value chain, heavily dependent on a small number of specialized semiconductor equipment suppliers (ASML, AMAT, LRCX) for its capital-intensive fab operations. On the demand side, Micron's revenue is increasingly driven by AI infrastructure build-outs \u2014 particularly HBM shipments to NVIDIA \u2014 alongside sustained volume from hyperscalers, mobile OEMs, and PC/server manufacturers."
+    },
+    "IREN": {
+      "upstream": [
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "Primary GPU supplier for AI/HPC computing hardware (H100/H200 GPUs)",
+          "criticality": "high",
+          "revenue_pct": 35
+        },
+        {
+          "ticker": "EQIX",
+          "name": "Equinix Inc.",
+          "relationship": "Data center colocation and interconnection infrastructure partner",
+          "criticality": "medium",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "CAT",
+          "name": "Caterpillar Inc.",
+          "relationship": "Backup power generation and electrical infrastructure equipment supplier",
+          "criticality": "medium",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "ETR",
+          "name": "Entergy Corporation",
+          "relationship": "Electricity utility provider for North American data center and mining operations",
+          "criticality": "high",
+          "revenue_pct": 30
+        },
+        {
+          "ticker": "DELL",
+          "name": "Dell Technologies",
+          "relationship": "Server hardware and data center infrastructure equipment supplier",
+          "criticality": "medium",
+          "revenue_pct": 7
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "COIN",
+          "name": "Coinbase Global Inc.",
+          "relationship": "Primary cryptocurrency exchange for Bitcoin liquidation and custody",
+          "criticality": "high",
+          "revenue_pct": 30
+        },
+        {
+          "ticker": "MSTR",
+          "name": "MicroStrategy Incorporated",
+          "relationship": "Institutional Bitcoin buyer and OTC market participant purchasing mined BTC",
+          "criticality": "medium",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Potential AI cloud/HPC data center capacity customer for GPU infrastructure",
+          "criticality": "medium",
+          "revenue_pct": 15
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Potential enterprise AI compute and cloud customer for HPC data center services",
+          "criticality": "medium",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "GS",
+          "name": "Goldman Sachs Group Inc.",
+          "relationship": "Institutional OTC Bitcoin trading counterparty and financial services partner",
+          "criticality": "low",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "CLSK",
+          "name": "CleanSpark Inc.",
+          "relationship": "Industry peer and potential hash rate/mining pool participant in shared Bitcoin network economics",
+          "criticality": "low",
+          "revenue_pct": 3
+        }
+      ],
+      "supply_chain_summary": "IREN Limited sits at the intersection of energy-intensive Bitcoin mining and high-performance AI data center infrastructure, making it critically dependent on upstream GPU and ASIC hardware suppliers (primarily NVIDIA and Bitmain) as well as low-cost electricity providers for its Canadian and Australian operations. On the downstream side, IREN monetizes its operations primarily through Bitcoin market sales via exchanges like Coinbase, while increasingly targeting enterprise AI/HPC customers to lease GPU compute capacity, diversifying revenue beyond pure crypto mining."
     }
   },
   "supply_chain_last_updated": "2026-04-22",
