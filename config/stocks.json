@@ -107,6 +107,28 @@
         "GS",
         "CLSK"
       ]
+    },
+    {
+      "symbol": "OKLO",
+      "name": "OKLO",
+      "sector": "",
+      "market": "",
+      "upstream": [
+        "LEU",
+        "BWXT",
+        "ETN",
+        "GE",
+        "CW",
+        "ARIS"
+      ],
+      "downstream": [
+        "MSFT",
+        "AMZN",
+        "X",
+        "FCX",
+        "NEE",
+        "VLO"
+      ]
     }
   ],
   "supply_chain_detail": {
@@ -550,6 +572,97 @@
         }
       ],
       "supply_chain_summary": "IREN Limited sits at the intersection of energy-intensive Bitcoin mining and high-performance AI data center infrastructure, making it critically dependent on upstream GPU and ASIC hardware suppliers (primarily NVIDIA and Bitmain) as well as low-cost electricity providers for its Canadian and Australian operations. On the downstream side, IREN monetizes its operations primarily through Bitcoin market sales via exchanges like Coinbase, while increasingly targeting enterprise AI/HPC customers to lease GPU compute capacity, diversifying revenue beyond pure crypto mining."
+    },
+    "OKLO": {
+      "upstream": [
+        {
+          "ticker": "LEU",
+          "name": "Centrus Energy Corp.",
+          "relationship": "Supplier of High-Assay Low-Enriched Uranium (HALEU) fuel, which Aurora reactors require as primary fuel source",
+          "criticality": "high",
+          "revenue_pct": 25
+        },
+        {
+          "ticker": "BWXT",
+          "name": "BWX Technologies",
+          "relationship": "Nuclear fuel fabrication and specialized nuclear component manufacturing for advanced reactor systems",
+          "criticality": "high",
+          "revenue_pct": 20
+        },
+        {
+          "ticker": "ETN",
+          "name": "Eaton Corporation",
+          "relationship": "Electrical power management systems, switchgear, and grid interconnection equipment for powerhouse installations",
+          "criticality": "medium",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "GE",
+          "name": "GE Vernova",
+          "relationship": "Turbine-generator systems and balance-of-plant power generation equipment for Aurora powerhouses",
+          "criticality": "medium",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "CW",
+          "name": "Curtiss-Wright Corporation",
+          "relationship": "Nuclear-qualified instrumentation, control systems, and safety-critical valves for reactor systems",
+          "criticality": "medium",
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "ARIS",
+          "name": "Aris Water Solutions",
+          "relationship": "Site water management and cooling system support for nuclear plant operations",
+          "criticality": "low",
+          "revenue_pct": 3
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Anchor power purchase agreement customer for data center clean energy; strategic investor and offtake partner",
+          "criticality": "high",
+          "revenue_pct": 30
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Potential data center and hyperscale cloud infrastructure clean power customer through AWS energy procurement",
+          "criticality": "medium",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "X",
+          "name": "United States Steel Corporation",
+          "relationship": "Industrial process heat and power customer; energy-intensive manufacturing facilities seeking reliable baseload power",
+          "criticality": "medium",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "FCX",
+          "name": "Freeport-McMoRan Inc.",
+          "relationship": "Remote mining operations customer requiring off-grid reliable power solutions suited to microreactor deployment",
+          "criticality": "medium",
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "NEE",
+          "name": "NextEra Energy Inc.",
+          "relationship": "Potential utility offtake partner and grid integration customer for distributed nuclear power output",
+          "criticality": "low",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "VLO",
+          "name": "Valero Energy Corporation",
+          "relationship": "Industrial energy customer for refinery and petrochemical operations requiring stable high-temperature process heat and power",
+          "criticality": "low",
+          "revenue_pct": 4
+        }
+      ],
+      "supply_chain_summary": "Oklo occupies an early-stage, vertically ambitious position in the advanced fission value chain, sitting between specialized nuclear fuel enrichers and fabricators upstream (critically dependent on HALEU availability) and a diverse set of power-hungry industrial and data center customers downstream. The company's commercial viability is heavily contingent on NRC licensing milestones, securing a reliable HALEU fuel supply chain that is still nascent at industrial scale, and converting its letter-of-intent pipeline\u2014including the marquee Microsoft partnership\u2014into binding power purchase agreements as Aurora powerhouses move toward deployment."
     }
   },
   "supply_chain_last_updated": "2026-04-22",
