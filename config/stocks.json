@@ -8,18 +8,18 @@
       "upstream": [
         "TSM",
         "ASML",
-        "SKX",
         "AMAT",
-        "AVGO",
-        "COHR"
+        "ONTO",
+        "SKHY",
+        "MU"
       ],
       "downstream": [
         "MSFT",
         "META",
         "GOOGL",
         "AMZN",
-        "ORCL",
-        "TSLA"
+        "TSLA",
+        "DELL"
       ]
     },
     {
@@ -74,17 +74,17 @@
         "ASML",
         "AMAT",
         "LRCX",
-        "KLAC",
         "TOELY",
-        "EMN"
+        "ENTG",
+        "KLAC"
       ],
       "downstream": [
-        "AAPL",
         "NVDA",
+        "AAPL",
         "AMZN",
         "MSFT",
-        "DELL",
-        "QCOM"
+        "QCOM",
+        "GOOGL"
       ]
     },
     {
@@ -94,18 +94,17 @@
       "market": "",
       "upstream": [
         "NVDA",
+        "NEE",
         "EQIX",
         "CAT",
-        "ETR",
-        "DELL"
+        "ABB"
       ],
       "downstream": [
         "COIN",
         "MSTR",
         "MSFT",
-        "GOOGL",
-        "GS",
-        "CLSK"
+        "AMZN",
+        "GLXY"
       ]
     },
     {
@@ -116,18 +115,18 @@
       "upstream": [
         "LEU",
         "BWXT",
-        "ETN",
+        "MDU",
         "GE",
-        "CW",
-        "ARIS"
+        "ETN",
+        "UEC"
       ],
       "downstream": [
-        "MSFT",
+        "GOOGL",
+        "AXON",
         "AMZN",
-        "X",
-        "FCX",
-        "NEE",
-        "VLO"
+        "DOE",
+        "VST",
+        "MSFT"
       ]
     }
   ],
@@ -136,127 +135,127 @@
       "upstream": [
         {
           "ticker": "TSM",
-          "name": "Taiwan Semiconductor Manufacturing Co.",
-          "relationship": "Primary foundry for GPU and SoC fabrication (3nm/4nm/5nm nodes)",
+          "name": "Taiwan Semiconductor Manufacturing Company",
+          "relationship": "Primary foundry partner manufacturing all advanced NVIDIA GPUs and SoCs on 4nm/5nm nodes",
           "criticality": "high",
-          "revenue_pct": 35
+          "revenue_pct": 70
         },
         {
           "ticker": "ASML",
           "name": "ASML Holding",
-          "relationship": "EUV lithography equipment supplier to TSMC for NVIDIA chip production (indirect but critical dependency)",
+          "relationship": "Sole supplier of EUV lithography equipment enabling advanced node manufacturing at TSMC for NVIDIA chips",
           "criticality": "high",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "SKX",
-          "name": "SK Hynix",
-          "relationship": "Primary supplier of HBM3/HBM3e memory for H100/H200/Blackwell GPUs",
-          "criticality": "high",
-          "revenue_pct": 20
+          "revenue_pct": 0
         },
         {
           "ticker": "AMAT",
           "name": "Applied Materials",
-          "relationship": "Semiconductor equipment and materials supplier to NVIDIA's foundry partners",
+          "relationship": "Supplier of wafer fabrication equipment and deposition tools used in NVIDIA chip manufacturing",
           "criticality": "medium",
-          "revenue_pct": 4
+          "revenue_pct": 5
         },
         {
-          "ticker": "AVGO",
-          "name": "Broadcom Inc.",
-          "relationship": "Supplier of networking ASICs and PCIe switch silicon used in NVIDIA's DGX systems",
-          "criticality": "medium",
-          "revenue_pct": 6
-        },
-        {
-          "ticker": "COHR",
-          "name": "Coherent Corp.",
-          "relationship": "Supplier of optical transceivers and interconnect components for NVLink and data center networking",
+          "ticker": "ONTO",
+          "name": "Onto Innovation",
+          "relationship": "Advanced packaging inspection and metrology equipment supplier for HBM and CoWoS integration",
           "criticality": "medium",
           "revenue_pct": 3
+        },
+        {
+          "ticker": "SKHY",
+          "name": "SK Hynix",
+          "relationship": "Primary supplier of HBM3/HBM3E high-bandwidth memory stacked on H100/H200/B200 GPU dies",
+          "criticality": "high",
+          "revenue_pct": 15
+        },
+        {
+          "ticker": "MU",
+          "name": "Micron Technology",
+          "relationship": "Supplier of HBM and GDDR6X memory used in data center and gaming GPU products",
+          "criticality": "medium",
+          "revenue_pct": 8
         }
       ],
       "downstream": [
         {
           "ticker": "MSFT",
           "name": "Microsoft Corporation",
-          "relationship": "Largest hyperscaler customer purchasing H100/H200/Blackwell GPUs for Azure AI cloud infrastructure",
+          "relationship": "Largest hyperscaler customer purchasing H100/H200/B200 GPUs for Azure AI cloud infrastructure",
           "criticality": "high",
-          "revenue_pct": 19
+          "revenue_pct": 15
         },
         {
           "ticker": "META",
-          "name": "Meta Platforms Inc.",
-          "relationship": "Major data center GPU customer for AI training (LLaMA models) and recommendation systems",
+          "name": "Meta Platforms",
+          "relationship": "Major hyperscaler buying large GPU clusters for AI training and inference across its platforms",
           "criticality": "high",
           "revenue_pct": 13
         },
         {
           "ticker": "GOOGL",
           "name": "Alphabet Inc.",
-          "relationship": "Significant purchaser of NVIDIA GPUs for Google Cloud AI services and internal AI research",
+          "relationship": "Significant purchaser of NVIDIA GPUs for Google Cloud AI services alongside its own TPUs",
           "criticality": "high",
-          "revenue_pct": 10
+          "revenue_pct": 12
         },
         {
           "ticker": "AMZN",
           "name": "Amazon.com Inc.",
-          "relationship": "Large-scale GPU customer for AWS cloud computing and internal AI workloads",
+          "relationship": "Large AWS customer deploying NVIDIA GPU instances for cloud AI and ML workloads",
           "criticality": "high",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "ORCL",
-          "name": "Oracle Corporation",
-          "relationship": "Growing customer deploying NVIDIA GPU clusters for Oracle Cloud Infrastructure AI services",
-          "criticality": "medium",
-          "revenue_pct": 6
+          "revenue_pct": 11
         },
         {
           "ticker": "TSLA",
           "name": "Tesla Inc.",
-          "relationship": "Customer for automotive DRIVE platform and purchaser of large GPU clusters for Dojo/AI training",
+          "relationship": "Customer for NVIDIA GPUs in supercomputing clusters for autonomous driving AI training",
+          "criticality": "low",
+          "revenue_pct": 4
+        },
+        {
+          "ticker": "DELL",
+          "name": "Dell Technologies",
+          "relationship": "OEM partner integrating NVIDIA GPUs into PowerEdge AI servers and workstations sold to enterprises",
           "criticality": "medium",
-          "revenue_pct": 5
+          "revenue_pct": 7
         }
       ],
-      "supply_chain_summary": "NVIDIA sits at the critical nexus of AI infrastructure, acting as a fabless semiconductor designer that is almost entirely dependent on TSMC for advanced node manufacturing and SK Hynix/Samsung for HBM memory, creating concentrated upstream risk. Downstream, NVIDIA's revenue is heavily concentrated among a handful of hyperscalers (Microsoft, Meta, Google, Amazon) who collectively represent the majority of its data center GPU demand, making it both a key enabler and a potential bottleneck of the global AI buildout."
+      "supply_chain_summary": "NVIDIA sits at the apex of the AI accelerator value chain, functioning as a fabless semiconductor company that designs leading-edge GPUs and networking chips but relies critically on TSMC for advanced node manufacturing and HBM memory suppliers like SK Hynix for high-performance stacked memory. On the demand side, NVIDIA's revenue is heavily concentrated among a small number of hyperscale cloud providers \u2014 Microsoft, Meta, Google, and Amazon \u2014 who collectively account for the majority of data center GPU purchases, creating both massive growth leverage and meaningful customer concentration risk."
     },
     "AAPL": {
       "upstream": [
         {
           "ticker": "TSM",
           "name": "Taiwan Semiconductor Manufacturing Co.",
-          "relationship": "Primary foundry for Apple Silicon (A-series, M-series, T-series chips) on leading-edge nodes",
+          "relationship": "Primary foundry for Apple Silicon (A-series, M-series chips) on leading-edge nodes",
           "criticality": "high",
           "revenue_pct": 18
         },
         {
           "ticker": "QCOM",
           "name": "Qualcomm Inc.",
-          "relationship": "Supplier of 5G modem chips (X-series) used in iPhone models, being phased out as Apple develops in-house modems",
+          "relationship": "Supplier of 5G modem chips used in iPhone lineup (transitioning to in-house modem)",
           "criticality": "high",
           "revenue_pct": 8
         },
         {
           "ticker": "MU",
           "name": "Micron Technology",
-          "relationship": "Supplier of DRAM and NAND flash memory components used across iPhone, iPad, and Mac product lines",
+          "relationship": "Supplier of NAND flash and DRAM memory components across iPhone, Mac, and iPad lines",
           "criticality": "medium",
           "revenue_pct": 5
         },
         {
           "ticker": "AVGO",
           "name": "Broadcom Inc.",
-          "relationship": "Supplier of Wi-Fi, Bluetooth, and RF semiconductor components; multi-year supply agreement in place",
+          "relationship": "Supplier of Wi-Fi, Bluetooth, and RF/wireless connectivity chips across Apple devices",
           "criticality": "medium",
-          "revenue_pct": 6
+          "revenue_pct": 5
         },
         {
           "ticker": "HON",
           "name": "Honeywell International",
-          "relationship": "Supplier of specialty materials and advanced glass/ceramic components for device enclosures and manufacturing processes",
+          "relationship": "Supplier of specialty glass, industrial components, and materials used in device manufacturing",
           "criticality": "low",
           "revenue_pct": 2
         }
@@ -265,90 +264,90 @@
         {
           "ticker": "AMZN",
           "name": "Amazon.com Inc.",
-          "relationship": "Major retail distribution partner selling Apple hardware and accessories via Amazon marketplace and fulfillment",
+          "relationship": "Major retail and marketplace channel for Apple hardware and accessories sales",
           "criticality": "medium",
           "revenue_pct": 7
         },
         {
           "ticker": "T",
           "name": "AT&T Inc.",
-          "relationship": "Tier-1 U.S. wireless carrier distributing and subsidizing iPhone through carrier contracts and installment plans",
+          "relationship": "Wireless carrier partner distributing and subsidizing iPhone through carrier contracts and installment plans",
           "criticality": "high",
           "revenue_pct": 8
         },
         {
           "ticker": "VZ",
           "name": "Verizon Communications",
-          "relationship": "Tier-1 U.S. wireless carrier distributing iPhone; significant volume through device upgrade and trade-in programs",
+          "relationship": "Largest U.S. wireless carrier distributing iPhone via device financing and carrier promotions",
           "criticality": "high",
-          "revenue_pct": 9
+          "revenue_pct": 10
         },
         {
           "ticker": "TMUS",
-          "name": "T-Mobile US Inc.",
-          "relationship": "Major U.S. wireless carrier and iPhone distribution partner with aggressive promotional bundling",
+          "name": "T-Mobile US",
+          "relationship": "Major U.S. wireless carrier and iPhone distribution partner with aggressive upgrade promotions",
           "criticality": "medium",
-          "revenue_pct": 6
+          "revenue_pct": 7
         },
         {
           "ticker": "WMT",
           "name": "Walmart Inc.",
-          "relationship": "Large-scale retail distributor of Apple devices, accessories, and gift cards across physical and online channels",
+          "relationship": "Mass-market retail channel for Apple devices, accessories, and prepaid iPhone models",
           "criticality": "low",
           "revenue_pct": 3
         },
         {
           "ticker": "GOOGL",
           "name": "Alphabet Inc.",
-          "relationship": "Pays Apple estimated $18-20B annually as default search engine partner on iOS/Safari (Services revenue)",
+          "relationship": "Pays Apple ~$18-20B annually as default search engine on Safari/iOS, a key Services revenue driver",
           "criticality": "high",
           "revenue_pct": 5
         }
       ],
-      "supply_chain_summary": "Apple sits at the apex of a highly sophisticated consumer electronics supply chain, acting as a fabless designer of proprietary silicon and a systems integrator reliant on a concentrated network of Asian semiconductor and display manufacturers \u2014 most critically TSMC \u2014 for component production. On the downstream side, Apple distributes through major U.S. and global wireless carriers and retailers, while its high-margin Services segment creates a unique digital ecosystem dependency with partners like Alphabet, making Apple both a product seller and platform operator."
+      "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, designing its own silicon and software while outsourcing manufacturing to a concentrated network of Asian suppliers and foundries \u2014 most critically TSMC for chips and Samsung/LG for displays. On the demand side, Apple sells primarily through its own retail and online channels supplemented by major wireless carriers and retailers, with its high-margin Services segment increasingly dependent on platform relationships such as Google's search revenue sharing agreement."
     },
     "TSM": {
       "upstream": [
         {
           "ticker": "ASML",
           "name": "ASML Holding",
-          "relationship": "Sole supplier of EUV and critical DUV lithography equipment essential for advanced node manufacturing",
+          "relationship": "Sole supplier of EUV and DUV lithography equipment critical for advanced node manufacturing",
           "criticality": "high",
           "revenue_pct": 20
         },
         {
           "ticker": "AMAT",
           "name": "Applied Materials",
-          "relationship": "Major supplier of deposition, etch, and inspection equipment across all process nodes",
+          "relationship": "Major supplier of deposition, etch, and metrology equipment across all process nodes",
           "criticality": "high",
           "revenue_pct": 15
         },
         {
           "ticker": "LRCX",
           "name": "Lam Research",
-          "relationship": "Key supplier of etch and deposition equipment critical for advanced logic and memory fabrication",
+          "relationship": "Key supplier of etch and deposition equipment for logic and memory fabrication",
           "criticality": "high",
           "revenue_pct": 10
         },
         {
           "ticker": "KLAC",
           "name": "KLA Corporation",
-          "relationship": "Primary supplier of process control, metrology, and wafer inspection systems",
+          "relationship": "Primary supplier of process control, inspection, and metrology equipment",
           "criticality": "high",
           "revenue_pct": 8
         },
         {
           "ticker": "TOELY",
           "name": "Tokyo Electron",
-          "relationship": "Supplier of coater/developer, thermal processing, and cleaning equipment for wafer fabrication",
+          "relationship": "Supplier of coater/developer, thermal, and etch equipment used across fabrication lines",
           "criticality": "medium",
           "revenue_pct": 7
         },
         {
           "ticker": "EMN",
           "name": "Eastman Chemical",
-          "relationship": "Supplier of specialty photoresists and advanced process chemicals used in semiconductor fabrication",
-          "criticality": "medium",
+          "relationship": "Supplier of specialty photoresist chemicals and advanced materials used in wafer processing",
+          "criticality": "low",
           "revenue_pct": 3
         }
       ],
@@ -356,47 +355,47 @@
         {
           "ticker": "AAPL",
           "name": "Apple Inc.",
-          "relationship": "Largest customer; sole-source manufacturer of A-series and M-series SoCs for iPhone, iPad, and Mac",
+          "relationship": "Largest customer; sole-source foundry for A-series and M-series SoCs on leading-edge nodes",
           "criticality": "high",
           "revenue_pct": 25
         },
         {
           "ticker": "NVDA",
           "name": "NVIDIA Corporation",
-          "relationship": "Major customer for advanced GPU and AI accelerator chips manufactured on leading-edge nodes (4nm/3nm)",
+          "relationship": "Major customer for high-end GPU and AI accelerator wafers on advanced nodes (4nm/3nm)",
           "criticality": "high",
-          "revenue_pct": 11
+          "revenue_pct": 15
         },
         {
           "ticker": "AMD",
           "name": "Advanced Micro Devices",
-          "relationship": "Key fabless customer for CPU, GPU, and EPYC server processors on advanced nodes",
+          "relationship": "Key customer for CPU, GPU, and data center chip fabrication on leading-edge nodes",
           "criticality": "high",
-          "revenue_pct": 8
+          "revenue_pct": 10
         },
         {
           "ticker": "QCOM",
           "name": "Qualcomm",
-          "relationship": "Major customer for Snapdragon mobile SoCs and modem chips across multiple process nodes",
+          "relationship": "Significant customer for mobile SoC and modem chip fabrication across multiple nodes",
           "criticality": "high",
-          "revenue_pct": 7
+          "revenue_pct": 8
         },
         {
           "ticker": "INTC",
           "name": "Intel Corporation",
-          "relationship": "Growing customer outsourcing advanced node production including Intel 18A tiles and foundry services",
+          "relationship": "Growing customer outsourcing select product lines including Core Ultra and foundry services",
           "criticality": "medium",
           "revenue_pct": 5
         },
         {
           "ticker": "MRVL",
           "name": "Marvell Technology",
-          "relationship": "Customer for custom AI silicon, networking, and data infrastructure chips on advanced process nodes",
+          "relationship": "Customer for custom AI/cloud ASICs and networking chips on advanced process nodes",
           "criticality": "medium",
           "revenue_pct": 4
         }
       ],
-      "supply_chain_summary": "TSMC occupies the most critical chokepoint in the global semiconductor supply chain as the world's dominant pure-play foundry, manufacturing chips designed by fabless companies and IDMs across virtually every end market including mobile, AI, HPC, automotive, and IoT. The company is uniquely dependent on a concentrated set of Western equipment suppliers \u2014 particularly ASML for irreplaceable EUV lithography \u2014 while simultaneously serving as an indispensable manufacturing partner for the world's most valuable technology companies, giving TSMC both significant leverage and significant geopolitical exposure."
+      "supply_chain_summary": "TSMC sits at the pivotal center of the global semiconductor supply chain, acting as the world's dominant pure-play foundry that is almost entirely dependent on a concentrated group of specialized equipment and materials suppliers \u2014 most critically ASML for irreplaceable lithography tools \u2014 while serving virtually every major fabless chip designer and systems company globally. Its downstream customer base is highly concentrated among a few hyperscaler-driven chip designers such as Apple, NVIDIA, and AMD, making TSMC both strategically indispensable and exposed to demand cycles in consumer electronics, AI infrastructure, and cloud computing."
     },
     "MU": {
       "upstream": [
@@ -409,263 +408,256 @@
         },
         {
           "ticker": "AMAT",
-          "name": "Applied Materials Inc.",
-          "relationship": "Key supplier of deposition, etch, and CMP equipment used across Micron's fab processes",
+          "name": "Applied Materials, Inc.",
+          "relationship": "Key supplier of deposition, etch, and CMP equipment for memory fabrication processes",
           "criticality": "high",
           "revenue_pct": 10
         },
         {
           "ticker": "LRCX",
           "name": "Lam Research Corporation",
-          "relationship": "Major supplier of etch and deposition equipment critical for 3D NAND and advanced DRAM node manufacturing",
+          "relationship": "Major supplier of etch and deposition equipment critical for 3D NAND and advanced DRAM layers",
           "criticality": "high",
-          "revenue_pct": 9
-        },
-        {
-          "ticker": "KLAC",
-          "name": "KLA Corporation",
-          "relationship": "Supplier of process control, inspection, and metrology equipment used to maintain yield across memory fabs",
-          "criticality": "medium",
-          "revenue_pct": 6
+          "revenue_pct": 8
         },
         {
           "ticker": "TOELY",
           "name": "Tokyo Electron Limited",
-          "relationship": "Supplier of semiconductor production equipment including coaters, developers, and thermal processing systems",
+          "relationship": "Supplier of wafer processing equipment including coaters, developers, and thermal processing tools",
           "criticality": "medium",
-          "revenue_pct": 5
+          "revenue_pct": 6
         },
         {
-          "ticker": "EMN",
-          "name": "Eastman Chemical Company",
-          "relationship": "Supplier of specialty chemicals and advanced materials including photoresists and process chemicals for wafer fabrication",
-          "criticality": "low",
-          "revenue_pct": 3
+          "ticker": "ENTG",
+          "name": "Entegris, Inc.",
+          "relationship": "Supplier of specialty chemicals, filtration systems, and advanced materials for semiconductor fabrication",
+          "criticality": "medium",
+          "revenue_pct": 4
+        },
+        {
+          "ticker": "KLAC",
+          "name": "KLA Corporation",
+          "relationship": "Supplier of process control, inspection, and metrology equipment for yield management in memory fabs",
+          "criticality": "medium",
+          "revenue_pct": 4
         }
       ],
       "downstream": [
         {
-          "ticker": "AAPL",
-          "name": "Apple Inc.",
-          "relationship": "Major customer for LPDDR mobile DRAM and NAND flash used in iPhones, iPads, and Macs",
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "Major customer for High Bandwidth Memory (HBM3E) used in AI accelerators (H100, H200, Blackwell GPUs)",
           "criticality": "high",
           "revenue_pct": 13
         },
         {
-          "ticker": "NVDA",
-          "name": "NVIDIA Corporation",
-          "relationship": "Critical and fast-growing customer for High Bandwidth Memory (HBM3/HBM3E) used in AI GPUs and accelerators",
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "relationship": "Significant customer for LPDDR and NAND flash memory in iPhones, iPads, and Mac products",
           "criticality": "high",
-          "revenue_pct": 15
+          "revenue_pct": 11
         },
         {
           "ticker": "AMZN",
-          "name": "Amazon.com Inc.",
-          "relationship": "Large cloud hyperscaler customer purchasing server DRAM, CXL memory, and enterprise SSDs for AWS data centers",
+          "name": "Amazon.com, Inc.",
+          "relationship": "Large cloud infrastructure customer consuming DRAM and SSDs for AWS data center deployments",
           "criticality": "high",
-          "revenue_pct": 10
+          "revenue_pct": 9
         },
         {
           "ticker": "MSFT",
           "name": "Microsoft Corporation",
-          "relationship": "Significant cloud hyperscaler customer for data center DRAM and NVMe SSDs deployed in Azure infrastructure",
-          "criticality": "medium",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "DELL",
-          "name": "Dell Technologies Inc.",
-          "relationship": "Major OEM customer purchasing DRAM modules and SSDs for PowerEdge servers, workstations, and consumer PCs",
+          "relationship": "Cloud and AI data center customer purchasing DRAM modules and enterprise SSDs for Azure infrastructure",
           "criticality": "medium",
           "revenue_pct": 7
         },
         {
           "ticker": "QCOM",
           "name": "Qualcomm Incorporated",
-          "relationship": "Customer for LPDDR mobile DRAM integrated into Snapdragon mobile and automotive SoC reference designs",
+          "relationship": "Customer for mobile LPDDR memory integrated into Snapdragon platform reference designs and bundled solutions",
           "criticality": "medium",
           "revenue_pct": 5
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Data center and AI infrastructure customer for DRAM, HBM, and SSDs used in Google Cloud and TPU systems",
+          "criticality": "medium",
+          "revenue_pct": 6
         }
       ],
-      "supply_chain_summary": "Micron Technology sits at the center of the global memory and storage value chain, heavily dependent on a small number of specialized semiconductor equipment suppliers (ASML, AMAT, LRCX) for its capital-intensive fab operations. On the demand side, Micron's revenue is increasingly driven by AI infrastructure build-outs \u2014 particularly HBM shipments to NVIDIA \u2014 alongside sustained volume from hyperscalers, mobile OEMs, and PC/server manufacturers."
+      "supply_chain_summary": "Micron Technology sits at the heart of the global memory supply chain, heavily dependent on a concentrated set of semiconductor equipment suppliers (ASML, Lam Research, Applied Materials) for its capital-intensive DRAM and NAND fabrication. On the demand side, Micron's fortunes are increasingly tied to AI-driven infrastructure buildout\u2014particularly HBM sales to NVIDIA\u2014alongside secular demand from cloud hyperscalers and mobile OEMs, making its revenue highly sensitive to both equipment availability and end-market capex cycles."
     },
     "IREN": {
       "upstream": [
         {
           "ticker": "NVDA",
           "name": "NVIDIA Corporation",
-          "relationship": "Primary GPU supplier for AI/HPC computing hardware (H100/H200 GPUs)",
+          "relationship": "Primary GPU supplier for AI compute and Bitcoin mining hardware (H100/H200 GPUs)",
           "criticality": "high",
           "revenue_pct": 35
         },
         {
+          "ticker": "NEE",
+          "name": "NextEra Energy",
+          "relationship": "Electricity and power infrastructure provider for data center and mining operations",
+          "criticality": "high",
+          "revenue_pct": 20
+        },
+        {
           "ticker": "EQIX",
           "name": "Equinix Inc.",
-          "relationship": "Data center colocation and interconnection infrastructure partner",
+          "relationship": "Data center colocation and interconnection services provider",
           "criticality": "medium",
           "revenue_pct": 5
         },
         {
           "ticker": "CAT",
           "name": "Caterpillar Inc.",
-          "relationship": "Backup power generation and electrical infrastructure equipment supplier",
+          "relationship": "Backup generator and power infrastructure equipment supplier for data centers",
           "criticality": "medium",
-          "revenue_pct": 8
+          "revenue_pct": 5
         },
         {
-          "ticker": "ETR",
-          "name": "Entergy Corporation",
-          "relationship": "Electricity utility provider for North American data center and mining operations",
-          "criticality": "high",
-          "revenue_pct": 30
-        },
-        {
-          "ticker": "DELL",
-          "name": "Dell Technologies",
-          "relationship": "Server hardware and data center infrastructure equipment supplier",
+          "ticker": "ABB",
+          "name": "ABB Ltd.",
+          "relationship": "Electrical infrastructure, transformers, and switchgear supplier for data center buildout",
           "criticality": "medium",
-          "revenue_pct": 7
+          "revenue_pct": 5
         }
       ],
       "downstream": [
         {
           "ticker": "COIN",
           "name": "Coinbase Global Inc.",
-          "relationship": "Primary cryptocurrency exchange for Bitcoin liquidation and custody",
+          "relationship": "Primary cryptocurrency exchange for Bitcoin liquidation and custody services",
           "criticality": "high",
           "revenue_pct": 30
         },
         {
           "ticker": "MSTR",
           "name": "MicroStrategy Incorporated",
-          "relationship": "Institutional Bitcoin buyer and OTC market participant purchasing mined BTC",
+          "relationship": "Institutional Bitcoin buyer and OTC counterparty for mined Bitcoin sales",
           "criticality": "medium",
           "revenue_pct": 10
         },
         {
           "ticker": "MSFT",
           "name": "Microsoft Corporation",
-          "relationship": "Potential AI cloud/HPC data center capacity customer for GPU infrastructure",
+          "relationship": "Potential hyperscale AI compute customer for high-performance data center capacity",
           "criticality": "medium",
           "revenue_pct": 15
         },
         {
-          "ticker": "GOOGL",
-          "name": "Alphabet Inc.",
-          "relationship": "Potential enterprise AI compute and cloud customer for HPC data center services",
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "AI and cloud compute customer leasing GPU cluster capacity from IREN data centers",
           "criticality": "medium",
           "revenue_pct": 10
         },
         {
-          "ticker": "GS",
-          "name": "Goldman Sachs Group Inc.",
-          "relationship": "Institutional OTC Bitcoin trading counterparty and financial services partner",
+          "ticker": "GLXY",
+          "name": "Galaxy Digital Holdings",
+          "relationship": "Crypto financial services and OTC desk for Bitcoin treasury management and sales",
           "criticality": "low",
           "revenue_pct": 5
-        },
-        {
-          "ticker": "CLSK",
-          "name": "CleanSpark Inc.",
-          "relationship": "Industry peer and potential hash rate/mining pool participant in shared Bitcoin network economics",
-          "criticality": "low",
-          "revenue_pct": 3
         }
       ],
-      "supply_chain_summary": "IREN Limited sits at the intersection of energy-intensive Bitcoin mining and high-performance AI data center infrastructure, making it critically dependent on upstream GPU and ASIC hardware suppliers (primarily NVIDIA and Bitmain) as well as low-cost electricity providers for its Canadian and Australian operations. On the downstream side, IREN monetizes its operations primarily through Bitcoin market sales via exchanges like Coinbase, while increasingly targeting enterprise AI/HPC customers to lease GPU compute capacity, diversifying revenue beyond pure crypto mining."
+      "supply_chain_summary": "IREN Limited sits at the intersection of high-performance computing infrastructure and Bitcoin mining, making it heavily dependent on GPU and ASIC hardware suppliers (particularly NVIDIA and Bitmain) as well as low-cost power providers for its Canadian and Australian operations. On the downstream side, the company's revenue is primarily driven by Bitcoin spot prices and the sale of mined BTC through exchanges like Coinbase, while its growing AI cloud segment seeks hyperscale and enterprise customers for GPU-as-a-service compute capacity."
     },
     "OKLO": {
       "upstream": [
         {
           "ticker": "LEU",
           "name": "Centrus Energy Corp.",
-          "relationship": "Supplier of High-Assay Low-Enriched Uranium (HALEU) fuel, which Aurora reactors require as primary fuel source",
+          "relationship": "Domestic enriched uranium fuel supplier and HALEU enrichment partner critical for Aurora reactor fuel supply",
           "criticality": "high",
-          "revenue_pct": 25
+          "revenue_pct": 30
         },
         {
           "ticker": "BWXT",
           "name": "BWX Technologies",
-          "relationship": "Nuclear fuel fabrication and specialized nuclear component manufacturing for advanced reactor systems",
+          "relationship": "Nuclear fuel fabrication, reactor components manufacturing, and advanced nuclear technology services",
           "criticality": "high",
           "revenue_pct": 20
         },
         {
-          "ticker": "ETN",
-          "name": "Eaton Corporation",
-          "relationship": "Electrical power management systems, switchgear, and grid interconnection equipment for powerhouse installations",
+          "ticker": "MDU",
+          "name": "MDU Resources Group",
+          "relationship": "Construction and infrastructure services for power plant site development",
           "criticality": "medium",
           "revenue_pct": 8
         },
         {
           "ticker": "GE",
           "name": "GE Vernova",
-          "relationship": "Turbine-generator systems and balance-of-plant power generation equipment for Aurora powerhouses",
+          "relationship": "Turbine and power generation equipment supplier for electricity generation systems",
           "criticality": "medium",
           "revenue_pct": 10
         },
         {
-          "ticker": "CW",
-          "name": "Curtiss-Wright Corporation",
-          "relationship": "Nuclear-qualified instrumentation, control systems, and safety-critical valves for reactor systems",
-          "criticality": "medium",
-          "revenue_pct": 7
-        },
-        {
-          "ticker": "ARIS",
-          "name": "Aris Water Solutions",
-          "relationship": "Site water management and cooling system support for nuclear plant operations",
-          "criticality": "low",
-          "revenue_pct": 3
-        }
-      ],
-      "downstream": [
-        {
-          "ticker": "MSFT",
-          "name": "Microsoft Corporation",
-          "relationship": "Anchor power purchase agreement customer for data center clean energy; strategic investor and offtake partner",
-          "criticality": "high",
-          "revenue_pct": 30
-        },
-        {
-          "ticker": "AMZN",
-          "name": "Amazon.com Inc.",
-          "relationship": "Potential data center and hyperscale cloud infrastructure clean power customer through AWS energy procurement",
-          "criticality": "medium",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "X",
-          "name": "United States Steel Corporation",
-          "relationship": "Industrial process heat and power customer; energy-intensive manufacturing facilities seeking reliable baseload power",
-          "criticality": "medium",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "FCX",
-          "name": "Freeport-McMoRan Inc.",
-          "relationship": "Remote mining operations customer requiring off-grid reliable power solutions suited to microreactor deployment",
-          "criticality": "medium",
-          "revenue_pct": 7
-        },
-        {
-          "ticker": "NEE",
-          "name": "NextEra Energy Inc.",
-          "relationship": "Potential utility offtake partner and grid integration customer for distributed nuclear power output",
+          "ticker": "ETN",
+          "name": "Eaton Corporation",
+          "relationship": "Electrical components, switchgear, and power management systems for plant infrastructure",
           "criticality": "low",
           "revenue_pct": 5
         },
         {
-          "ticker": "VLO",
-          "name": "Valero Energy Corporation",
-          "relationship": "Industrial energy customer for refinery and petrochemical operations requiring stable high-temperature process heat and power",
-          "criticality": "low",
-          "revenue_pct": 4
+          "ticker": "UEC",
+          "name": "Uranium Energy Corp.",
+          "relationship": "Domestic uranium mining and supply as raw feedstock for fuel production",
+          "criticality": "medium",
+          "revenue_pct": 12
         }
       ],
-      "supply_chain_summary": "Oklo occupies an early-stage, vertically ambitious position in the advanced fission value chain, sitting between specialized nuclear fuel enrichers and fabricators upstream (critically dependent on HALEU availability) and a diverse set of power-hungry industrial and data center customers downstream. The company's commercial viability is heavily contingent on NRC licensing milestones, securing a reliable HALEU fuel supply chain that is still nascent at industrial scale, and converting its letter-of-intent pipeline\u2014including the marquee Microsoft partnership\u2014into binding power purchase agreements as Aurora powerhouses move toward deployment."
+      "downstream": [
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Signed power purchase agreement for Aurora units to supply clean energy for data center operations",
+          "criticality": "high",
+          "revenue_pct": 25
+        },
+        {
+          "ticker": "AXON",
+          "name": "Axon Enterprise",
+          "relationship": "Prospective commercial energy customer for off-grid and remote facility power needs",
+          "criticality": "low",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Potential hyperscale data center clean energy customer actively pursuing nuclear power supply contracts",
+          "criticality": "medium",
+          "revenue_pct": 15
+        },
+        {
+          "ticker": "DOE",
+          "name": "N/A - U.S. Department of Energy",
+          "relationship": "Primary regulatory counterparty, HALEU fuel access, and Idaho National Laboratory site host; not publicly traded",
+          "criticality": "high",
+          "revenue_pct": 0
+        },
+        {
+          "ticker": "VST",
+          "name": "Vistra Corp.",
+          "relationship": "Potential power off-take partner and grid integration customer for distributed nuclear generation",
+          "criticality": "low",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Prospective data center and AI infrastructure customer seeking long-term nuclear clean energy contracts",
+          "criticality": "medium",
+          "revenue_pct": 10
+        }
+      ],
+      "supply_chain_summary": "Oklo sits at a nascent but strategically critical position in the advanced fission power chain, sourcing high-assay low-enriched uranium (HALEU) fuel and specialized reactor components from a narrow set of domestic nuclear suppliers while targeting large-scale commercial and data center customers hungry for firm, carbon-free power. As a pre-revenue company still awaiting NRC licensing approval for its Aurora powerhouse, its supply chain relationships remain largely contractual or prospective, making fuel access from enrichers like Centrus and government facilitation from the DOE existential dependencies at this stage."
     }
   },
-  "supply_chain_last_updated": "2026-04-22",
+  "supply_chain_last_updated": "2026-04-26",
   "themes": [
     {
       "name": "AI Infrastructure",
