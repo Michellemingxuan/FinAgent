@@ -1,6 +1,6 @@
 # FinAgent
 
-**A personal AI-powered finance research assistant** — automatically fetches analyst ratings, news, financials, and geopolitical risk for your stock watchlist, synthesizes it with Claude AI, and delivers a polished report to your inbox every morning.
+**A personal AI-powered finance research assistant** — automatically fetches analyst ratings, news, financials, and geopolitical risk for your stock watchlist, synthesizes it with Claude AI, and delivers a polished report to your inbox at the start of each month.
 
 ---
 
@@ -52,7 +52,7 @@ main.py                        CLI entry point
 │   └── report.html.j2         Jinja2 report template (tabs, dark mode, i18n)
 │
 └── .github/workflows/
-    ├── generate_report.yml    Daily 7am SGT + on-demand trigger
+    ├── generate_report.yml    Monthly 1st 7am SGT + on-demand trigger
     └── refresh_supply_chain   Weekly Sunday supply chain refresh
 ```
 
@@ -128,9 +128,9 @@ python main.py --refresh-supply-chain
 
 ---
 
-## Daily delivery
+## Monthly delivery
 
-The workflow runs every weekday at **7:00 AM SGT** (23:00 UTC Sun–Thu). After each run, the updated report is deployed to GitHub Pages and the digest is emailed/WhatsApp'd to all subscribers.
+The workflow runs on the **1st of each month at 7:00 AM SGT** (a gate job fires on the eve-of-month UTC days and only proceeds when the next SGT day is the 1st). After each run, the updated report is deployed to GitHub Pages and the digest is emailed/WhatsApp'd to all subscribers.
 
 To trigger an immediate update, open the report and click **Refresh Report** — or go to **Actions → Generate Finance Report → Run workflow**.
 

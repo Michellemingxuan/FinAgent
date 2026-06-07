@@ -1,9 +1,11 @@
 name: Generate Finance Report
 
 on:
-  # 7:00 AM SGT = 23:00 UTC previous day — runs every weekday
+  # 7:00 AM SGT = 23:00 UTC previous day.
+  # Fire on every possible eve-of-1st (UTC days 28-31); the `gate` job below
+  # only lets the report run when the *next* SGT day is the 1st of the month.
   schedule:
-    - cron: "0 23 * * 0-4"
+    - cron: "0 23 28-31 * *"
 
   # Manual trigger — "click link to update now"
   workflow_dispatch:
@@ -26,7 +28,34 @@ permissions:
   id-token: write
 
 jobs:
+  # Decide whether today's scheduled run should proceed.
+  # Manual runs (workflow_dispatch) always proceed; scheduled runs only
+  # proceed on the eve of the 1st (so the report lands 7 AM SGT on the 1st).
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - name: Check if next SGT day is the 1st
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "Manual run — proceeding."
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          NEXT_DAY=$(date -u -d '+1 day' +%d)
+          if [ "$NEXT_DAY" = "01" ]; then
+            echo "Eve of the 1st (SGT) — proceeding."
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Not the eve of the 1st (next UTC day is $NEXT_DAY) — skipping."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   generate:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
