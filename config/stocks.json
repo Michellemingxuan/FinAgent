@@ -87,27 +87,6 @@
       ]
     },
     {
-      "symbol": "OKLO",
-      "name": "OKLO",
-      "sector": "",
-      "market": "",
-      "upstream": [
-        "LEU",
-        "BWXT",
-        "GE",
-        "PWR",
-        "MDU"
-      ],
-      "downstream": [
-        "AMZN",
-        "MSFT",
-        "EQIX",
-        "DLR",
-        "DOE",
-        "CEG"
-      ]
-    },
-    {
       "symbol": "ARM",
       "name": "ARM",
       "sector": "",
@@ -500,90 +479,6 @@
         }
       ],
       "supply_chain_summary": "Micron Technology sits in the middle of the semiconductor value chain as a vertically integrated memory manufacturer, heavily dependent on a concentrated set of capital equipment suppliers (ASML, Applied Materials, Lam Research) for its multi-billion dollar fab investments in DRAM and 3D NAND. On the demand side, Micron's revenue is driven by a diverse but concentrated customer base spanning hyperscale cloud providers, AI accelerator vendors, and consumer electronics OEMs, with AI-driven HBM demand from NVIDIA increasingly becoming a high-growth and high-criticality revenue stream."
-    },
-    "OKLO": {
-      "upstream": [
-        {
-          "ticker": "LEU",
-          "name": "Centrus Energy Corp.",
-          "relationship": "Domestic enriched uranium fuel supplier for advanced reactor fuel fabrication",
-          "criticality": "high",
-          "revenue_pct": 30
-        },
-        {
-          "ticker": "BWXT",
-          "name": "BWX Technologies",
-          "relationship": "Nuclear components manufacturer and fuel fabrication services provider",
-          "criticality": "high",
-          "revenue_pct": 20
-        },
-        {
-          "ticker": "GE",
-          "name": "GE Vernova / General Electric",
-          "relationship": "Turbine and power generation equipment supplier for powerhouse systems",
-          "criticality": "medium",
-          "revenue_pct": 15
-        },
-        {
-          "ticker": "PWR",
-          "name": "Quanta Services",
-          "relationship": "Engineering, procurement, and construction (EPC) services for plant deployment",
-          "criticality": "high",
-          "revenue_pct": 25
-        },
-        {
-          "ticker": "MDU",
-          "name": "MDU Resources Group",
-          "relationship": "Construction and materials services for plant site development",
-          "criticality": "low",
-          "revenue_pct": 5
-        }
-      ],
-      "downstream": [
-        {
-          "ticker": "AMZN",
-          "name": "Amazon.com Inc.",
-          "relationship": "Signed LOI for clean energy supply to AWS data centers via Aurora Powerhouse units",
-          "criticality": "high",
-          "revenue_pct": 25
-        },
-        {
-          "ticker": "MSFT",
-          "name": "Microsoft Corporation",
-          "relationship": "Potential hyperscale data center clean power offtake customer",
-          "criticality": "medium",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "EQIX",
-          "name": "Equinix Inc.",
-          "relationship": "Data center operator seeking firm 24/7 carbon-free power, prospective customer",
-          "criticality": "medium",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "DLR",
-          "name": "Digital Realty Trust",
-          "relationship": "Data center REIT with clean energy procurement needs, prospective Aurora customer",
-          "criticality": "low",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "DOE",
-          "name": "Constellation Energy Corp.",
-          "relationship": "Potential grid integration partner and power offtake collaborator for distributed nuclear",
-          "criticality": "medium",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "CEG",
-          "name": "Constellation Energy Group",
-          "relationship": "Nuclear industry partner and potential used fuel supply source for Oklo's fuel recycling program",
-          "criticality": "medium",
-          "revenue_pct": 15
-        }
-      ],
-      "supply_chain_summary": "Oklo sits at the early-commercialization stage of the advanced fission power value chain, sourcing enriched uranium fuel, specialized nuclear components, and EPC construction services upstream while targeting power-hungry hyperscale data center operators and industrial customers downstream as offtakers for its compact Aurora Powerhouse units. As a pre-revenue company still awaiting NRC licensing approval, its supply chain relationships are largely contractual/LOI-stage, making upstream fuel supply security and downstream anchor customer commitments the most critical near-term risks."
     },
     "ARM": {
       "upstream": [
