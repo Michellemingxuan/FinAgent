@@ -409,11 +409,9 @@
       <button class="btn" id="addStockBtn" onclick="openAddStock()">
         &#x2b;&nbsp; <span data-i18n="add_stock">Add Stock</span>
       </button>
-      <a class="btn btn-primary"
-         href="https://github.com/{{ github_repo }}/actions/workflows/generate_report.yml"
-         target="_blank" rel="noopener">
+      <button class="btn btn-primary" id="refreshReportBtn" onclick="openRefreshReport()">
         &#x21bb;&nbsp; <span data-i18n="refresh_report">Refresh Report</span>
-      </a>
+      </button>
       {% endif %}
     </div>
   </div>
@@ -1729,6 +1727,9 @@ const I18N = {
     remove_stock_title: '停止追踪 {sym}？',
     remove_stock_desc: '{sym} 将从所有未来的报告和页面中移除。系统会在不重新获取数据的情况下重建报告——只需几秒钟。',
     remove_rebuild: '移除并重建',
+    refresh_report_title: '刷新报告',
+    refresh_report_desc: '使用最新数据重新生成所有股票的完整报告。这将花费几分钟时间，完成后页面会自动刷新。',
+    refresh_now: '立即刷新',
   },
   en: {
     updated: 'Updated {{ ctx.generated_at }}',
@@ -1763,6 +1764,9 @@ const I18N = {
     remove_stock_title: 'Stop tracking {sym}?',
     remove_stock_desc: '{sym} will be removed from all future reports and from the page. This rebuilds the report without re-fetching data — it takes a few seconds.',
     remove_rebuild: 'Remove & Rebuild',
+    refresh_report_title: 'Refresh Report',
+    refresh_report_desc: 'Regenerates the full report for all stocks with the latest data. This takes a few minutes; the page reloads automatically when done.',
+    refresh_now: 'Refresh Now',
   }
 };
 
@@ -1925,7 +1929,27 @@ function _i18n(key) {
 }
 
 function _submitLabel() {
-  return _modalMode === 'remove' ? _i18n('remove_rebuild') : _i18n('add_generate');
+  if (_modalMode === 'remove') return _i18n('remove_rebuild');
+  if (_modalMode === 'refresh') return _i18n('refresh_now');
+  return _i18n('add_generate');
+}
+
+function _runNoun(ticker) {
+  if (_modalMode === 'remove') return `${ticker} removal`;
+  if (_modalMode === 'refresh') return 'full report generation';
+  return `${ticker} report generation`;
+}
+
+function openRefreshReport() {
+  _modalMode = 'refresh';
+  _removeSym = '';
+  document.getElementById('stockModalTitle').innerHTML = _i18n('refresh_report_title');
+  document.getElementById('stockModalDesc').innerHTML = _i18n('refresh_report_desc');
+  document.getElementById('tickerInputRow').style.display = 'none';
+  const btn = document.getElementById('addStockSubmit');
+  if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); btn.classList.remove('btn-danger'); }
+  document.getElementById('addStockModal').classList.add('visible');
+  initAddStock();
 }
 
 function openAddStock() {
@@ -1994,13 +2018,14 @@ async function submitAddStock() {
   const REPO = "{{ github_repo }}";
   const WORKFLOW = "generate_report.yml";
   const isRemove = _modalMode === 'remove';
-  const ticker = isRemove ? _removeSym : (document.getElementById('newTicker').value || '').trim().toUpperCase();
+  const isRefresh = _modalMode === 'refresh';
+  const ticker = isRemove ? _removeSym : isRefresh ? '' : (document.getElementById('newTicker').value || '').trim().toUpperCase();
   const savedPat = localStorage.getItem(ADD_STOCK_PAT_KEY) || '';
   const inputEl = document.getElementById('addStockPat');
   const pat = (inputEl && inputEl.offsetParent !== null ? inputEl.value.trim() : '') || savedPat;
   const btn = document.getElementById('addStockSubmit');
 
-  if (!ticker) { showAddStatus('error', isRemove ? 'No ticker selected.' : 'Please enter a ticker symbol.'); return; }
+  if (!isRefresh && !ticker) { showAddStatus('error', isRemove ? 'No ticker selected.' : 'Please enter a ticker symbol.'); return; }
   if (!pat) {
     showPatInput();
     showAddStatus('error', 'Please enter your GitHub Personal Access Token.');
@@ -2034,7 +2059,7 @@ async function submitAddStock() {
           'X-GitHub-Api-Version': '2022-11-28',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ref: 'main', inputs: isRemove ? { remove_ticker: ticker } : { section: 'all', new_ticker: ticker } }),
+        body: JSON.stringify({ ref: 'main', inputs: isRemove ? { remove_ticker: ticker } : isRefresh ? { section: 'all' } : { section: 'all', new_ticker: ticker } }),
       }
     );
 
@@ -2099,7 +2124,7 @@ async function _pollForRun(repo, pat, ticker, triggerTime) {
           setProgressStep('queue', 'done');
           setProgressStep('run', 'active');
           const elapsed = document.getElementById('pstep-run-label');
-          if (elapsed) elapsed.textContent = `Running: ${ticker} ${_modalMode === 'remove' ? 'removal' : 'report generation'}…`;
+          if (elapsed) elapsed.textContent = `Running: ${_runNoun(ticker)}…`;
         }
         return;
       }
@@ -2112,7 +2137,7 @@ async function _pollForRun(repo, pat, ticker, triggerTime) {
       // Update elapsed time label
       const elapsed = Math.round((Date.now() - triggerTime) / 1000);
       const runLabel = document.getElementById('pstep-run-label');
-      if (runLabel) runLabel.textContent = `Running: ${ticker} ${_modalMode === 'remove' ? 'removal' : 'report generation'}… (${elapsed}s)`;
+      if (runLabel) runLabel.textContent = `Running: ${_runNoun(ticker)}… (${elapsed}s)`;
 
       if (run.status === 'completed') {
         clearInterval(_pollTimer);
