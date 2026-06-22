@@ -1745,6 +1745,7 @@ const I18N = {
     admin_need_token: '请输入你的 GitHub 个人访问令牌。',
     admin_bad_token: '令牌无效。',
     admin_no_access: '该令牌没有此仓库的写入权限。',
+    admin_no_workflow: '该令牌缺少 “workflow” 权限范围。请创建一个勾选了 workflow 范围的 classic 令牌。',
   },
   en: {
     updated: 'Updated {{ ctx.generated_at }}',
@@ -1789,6 +1790,7 @@ const I18N = {
     admin_need_token: 'Please enter your GitHub Personal Access Token.',
     admin_bad_token: 'Invalid token.',
     admin_no_access: 'That token does not have write access to this repo.',
+    admin_no_workflow: "This token is missing the 'workflow' scope. Create a classic token with the workflow scope checked.",
   }
 };
 
@@ -2171,6 +2173,14 @@ async function _doUnlock(repo, pat, btn) {
     const data = await resp.json();
     if (!(data.permissions && (data.permissions.push || data.permissions.admin || data.permissions.maintain))) {
       showAddStatus('error', _i18n('admin_no_access'));
+      if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
+      return;
+    }
+    // Classic tokens report their scopes; require 'workflow' (needed to dispatch
+    // the report workflow). Fine-grained tokens omit this header — skip the check.
+    const scopes = resp.headers.get('x-oauth-scopes');
+    if (scopes !== null && !scopes.split(',').map(s => s.trim()).includes('workflow')) {
+      showAddStatus('error', _i18n('admin_no_workflow'));
       if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
       return;
     }
