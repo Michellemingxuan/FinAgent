@@ -97,9 +97,15 @@
     .tab.drag-over { border-left: 2px solid var(--accent); background: var(--accent-light); }
     .tab-close { display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 11px; line-height: 1; color: var(--text-muted); transition: background 0.1s, color 0.1s; flex-shrink: 0; }
     .tab-close:hover { background: var(--red-bg); color: var(--red); }
-    .tab-manage { display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 13px; line-height: 1; color: var(--text-muted); opacity: 0; transition: background 0.1s, color 0.1s, opacity 0.1s; flex-shrink: 0; }
-    .tab:hover .tab-manage { opacity: 1; }
+    .tab-manage { display: none; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 13px; line-height: 1; color: var(--text-muted); opacity: 0; transition: background 0.1s, color 0.1s, opacity 0.1s; flex-shrink: 0; }
+    body.admin-mode .tab-manage { display: flex; }
+    body.admin-mode .tab:hover .tab-manage { opacity: 1; }
     .tab-manage:hover { background: var(--red-bg); color: var(--red); }
+
+    /* ── Owner-only controls (hidden until admin mode) ── */
+    .admin-only { display: none !important; }
+    body.admin-mode .admin-only { display: inline-flex !important; }
+    #adminToggle.is-admin { color: var(--accent); }
     .tab-restore { padding: 6px 10px; font-size: 11px; color: var(--text-muted); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; display: none; align-items: center; gap: 3px; }
     .tab-restore.has-hidden { display: flex; }
     .tab-restore:hover { color: var(--accent); }
@@ -406,12 +412,13 @@
       </select>
       {% endif %}
       {% if github_repo %}
-      <button class="btn" id="addStockBtn" onclick="openAddStock()">
+      <button class="btn admin-only" id="addStockBtn" onclick="openAddStock()">
         &#x2b;&nbsp; <span data-i18n="add_stock">Add Stock</span>
       </button>
-      <button class="btn btn-primary" id="refreshReportBtn" onclick="openRefreshReport()">
+      <button class="btn btn-primary admin-only" id="refreshReportBtn" onclick="openRefreshReport()">
         &#x21bb;&nbsp; <span data-i18n="refresh_report">Refresh Report</span>
       </button>
+      <button class="toggle-btn" id="adminToggle" onclick="toggleAdmin()" title="Owner sign-in">&#128273;</button>
       {% endif %}
     </div>
   </div>
@@ -1668,6 +1675,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initTabs();
   initAddStock();
+  if (typeof applyAdminMode === 'function') applyAdminMode();
 });
 </script>
 
@@ -1730,6 +1738,13 @@ const I18N = {
     refresh_report_title: '刷新报告',
     refresh_report_desc: '使用最新数据重新生成所有股票的完整报告。这将花费几分钟时间，完成后页面会自动刷新。',
     refresh_now: '立即刷新',
+    admin_title: '所有者登录',
+    admin_desc: '输入你的 GitHub 个人访问令牌以管理股票。仓库所有者专用——访客无法添加、移除或刷新。',
+    admin_unlock: '解锁',
+    admin_checking: '验证中…',
+    admin_need_token: '请输入你的 GitHub 个人访问令牌。',
+    admin_bad_token: '令牌无效。',
+    admin_no_access: '该令牌没有此仓库的写入权限。',
   },
   en: {
     updated: 'Updated {{ ctx.generated_at }}',
@@ -1767,6 +1782,13 @@ const I18N = {
     refresh_report_title: 'Refresh Report',
     refresh_report_desc: 'Regenerates the full report for all stocks with the latest data. This takes a few minutes; the page reloads automatically when done.',
     refresh_now: 'Refresh Now',
+    admin_title: 'Owner sign-in',
+    admin_desc: 'Enter your GitHub Personal Access Token to manage stocks. Owner-only — visitors cannot add, remove, or refresh.',
+    admin_unlock: 'Unlock',
+    admin_checking: 'Checking…',
+    admin_need_token: 'Please enter your GitHub Personal Access Token.',
+    admin_bad_token: 'Invalid token.',
+    admin_no_access: 'That token does not have write access to this repo.',
   }
 };
 
@@ -1919,8 +1941,9 @@ function updateRestoreButton() {
 
 // ── Add / Remove Stock ────────────────────────────────────────────
 const ADD_STOCK_PAT_KEY = 'finagent_add_stock_pat';
+const ADMIN_KEY = 'finagent_admin';
 let _pollTimer = null;
-let _modalMode = 'add';   // 'add' | 'remove'
+let _modalMode = 'add';   // 'add' | 'remove' | 'refresh' | 'unlock'
 let _removeSym = '';
 
 function _i18n(key) {
@@ -1931,7 +1954,46 @@ function _i18n(key) {
 function _submitLabel() {
   if (_modalMode === 'remove') return _i18n('remove_rebuild');
   if (_modalMode === 'refresh') return _i18n('refresh_now');
+  if (_modalMode === 'unlock') return _i18n('admin_unlock');
   return _i18n('add_generate');
+}
+
+// ── Admin mode (owner-only controls) ──────────────────────────────
+function isAdmin() {
+  return localStorage.getItem(ADMIN_KEY) === '1' && !!localStorage.getItem(ADD_STOCK_PAT_KEY);
+}
+
+function applyAdminMode() {
+  const on = isAdmin();
+  document.body.classList.toggle('admin-mode', on);
+  const btn = document.getElementById('adminToggle');
+  if (btn) {
+    btn.classList.toggle('is-admin', on);
+    btn.title = on ? 'Owner mode on — click to sign out' : 'Owner sign-in';
+  }
+}
+
+function toggleAdmin() {
+  if (isAdmin()) {
+    // Sign out: hide controls. Keep the saved token so re-unlock is quick.
+    localStorage.removeItem(ADMIN_KEY);
+    applyAdminMode();
+  } else {
+    openAdminUnlock();
+  }
+}
+
+function openAdminUnlock() {
+  _modalMode = 'unlock';
+  _removeSym = '';
+  document.getElementById('stockModalTitle').innerHTML = _i18n('admin_title');
+  document.getElementById('stockModalDesc').innerHTML = _i18n('admin_desc');
+  document.getElementById('tickerInputRow').style.display = 'none';
+  const btn = document.getElementById('addStockSubmit');
+  if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); btn.classList.remove('btn-danger'); }
+  document.getElementById('addStockModal').classList.add('visible');
+  initAddStock();
+  showPatInput(); // always show the token field for sign-in
 }
 
 function _runNoun(ticker) {
@@ -1941,6 +2003,7 @@ function _runNoun(ticker) {
 }
 
 function openRefreshReport() {
+  if (!isAdmin()) { openAdminUnlock(); return; }
   _modalMode = 'refresh';
   _removeSym = '';
   document.getElementById('stockModalTitle').innerHTML = _i18n('refresh_report_title');
@@ -1953,6 +2016,7 @@ function openRefreshReport() {
 }
 
 function openAddStock() {
+  if (!isAdmin()) { openAdminUnlock(); return; }
   _modalMode = 'add';
   _removeSym = '';
   document.getElementById('stockModalTitle').innerHTML = _i18n('add_stock_title');
@@ -1966,6 +2030,7 @@ function openAddStock() {
 
 function openRemoveStock(event, sym) {
   if (event) { event.stopPropagation(); event.preventDefault(); }
+  if (!isAdmin()) { openAdminUnlock(); return; }
   _modalMode = 'remove';
   _removeSym = sym;
   document.getElementById('stockModalTitle').innerHTML = _i18n('remove_stock_title').replaceAll('{sym}', sym);
@@ -2019,11 +2084,14 @@ async function submitAddStock() {
   const WORKFLOW = "generate_report.yml";
   const isRemove = _modalMode === 'remove';
   const isRefresh = _modalMode === 'refresh';
-  const ticker = isRemove ? _removeSym : isRefresh ? '' : (document.getElementById('newTicker').value || '').trim().toUpperCase();
+  const isUnlock = _modalMode === 'unlock';
+  const ticker = isRemove ? _removeSym : (isRefresh || isUnlock) ? '' : (document.getElementById('newTicker').value || '').trim().toUpperCase();
   const savedPat = localStorage.getItem(ADD_STOCK_PAT_KEY) || '';
   const inputEl = document.getElementById('addStockPat');
   const pat = (inputEl && inputEl.offsetParent !== null ? inputEl.value.trim() : '') || savedPat;
   const btn = document.getElementById('addStockSubmit');
+
+  if (isUnlock) { await _doUnlock(REPO, pat, btn); return; }
 
   if (!isRefresh && !ticker) { showAddStatus('error', isRemove ? 'No ticker selected.' : 'Please enter a ticker symbol.'); return; }
   if (!pat) {
@@ -2088,6 +2156,32 @@ async function submitAddStock() {
     setProgressStep('trigger', 'failed');
     showAddStatus('error', `Network error: ${err.message}`);
     btn.disabled = false; btn.textContent = _submitLabel();
+  }
+}
+
+async function _doUnlock(repo, pat, btn) {
+  if (!pat) { showPatInput(); showAddStatus('error', _i18n('admin_need_token')); return; }
+  if (btn) { btn.disabled = true; btn.textContent = _i18n('admin_checking'); }
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${repo}`, {
+      headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' },
+    });
+    if (resp.status === 401) { showAddStatus('error', _i18n('admin_bad_token')); if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); } return; }
+    if (!resp.ok) { showAddStatus('error', _i18n('admin_no_access')); if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); } return; }
+    const data = await resp.json();
+    if (!(data.permissions && (data.permissions.push || data.permissions.admin || data.permissions.maintain))) {
+      showAddStatus('error', _i18n('admin_no_access'));
+      if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
+      return;
+    }
+    // Verified owner — persist and reveal controls
+    localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
+    localStorage.setItem(ADMIN_KEY, '1');
+    applyAdminMode();
+    closeAddStockModal();
+  } catch (err) {
+    showAddStatus('error', `Network error: ${err.message}`);
+    if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
   }
 }
 
