@@ -126,6 +126,28 @@
         "MRVL",
         "AMZN"
       ]
+    },
+    {
+      "symbol": "MRVL",
+      "name": "MRVL",
+      "sector": "",
+      "market": "",
+      "upstream": [
+        "TSM",
+        "ASML",
+        "AMKR",
+        "ONTO",
+        "CDNS",
+        "ARM"
+      ],
+      "downstream": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "MSFT",
+        "CSCO",
+        "WDC"
+      ]
     }
   ],
   "supply_chain_detail": {
@@ -639,6 +661,97 @@
         }
       ],
       "supply_chain_summary": "Arm Holdings sits at a uniquely central position in the semiconductor ecosystem as a pure-play IP licensor, designing and licensing CPU/GPU architectures rather than manufacturing chips itself, making it an upstream intellectual property provider to virtually the entire global chip industry. Its business model is asset-light on the upstream side (primarily dependent on EDA tools and engineering talent) but generates royalty and licensing revenue from a vast downstream network spanning mobile, cloud, automotive, and IoT \u2014 meaning disruption to key licensees like Apple, Qualcomm, or Amazon would have outsized revenue impact."
+    },
+    "MRVL": {
+      "upstream": [
+        {
+          "ticker": "TSM",
+          "name": "Taiwan Semiconductor Manufacturing Company",
+          "relationship": "Primary foundry partner for advanced node (5nm/3nm) chip fabrication",
+          "criticality": "high",
+          "revenue_pct": 35
+        },
+        {
+          "ticker": "ASML",
+          "name": "ASML Holding",
+          "relationship": "EUV lithography equipment supplier to TSMC/Samsung for Marvell chip production",
+          "criticality": "high",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "AMKR",
+          "name": "Amkor Technology",
+          "relationship": "Advanced packaging and assembly/test services for Marvell chips",
+          "criticality": "medium",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "ONTO",
+          "name": "Onto Innovation",
+          "relationship": "Metrology and process control equipment used in chip inspection",
+          "criticality": "low",
+          "revenue_pct": 3
+        },
+        {
+          "ticker": "CDNS",
+          "name": "Cadence Design Systems",
+          "relationship": "EDA software tools critical for chip design and verification",
+          "criticality": "high",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "ARM",
+          "name": "Arm Holdings",
+          "relationship": "CPU/processor IP licensing for Marvell's SoC architectures",
+          "criticality": "medium",
+          "revenue_pct": 4
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com (AWS)",
+          "relationship": "Major hyperscaler customer for custom AI/ML silicon (Trainium, Inferentia-adjacent) and data center networking chips",
+          "criticality": "high",
+          "revenue_pct": 20
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet (Google Cloud)",
+          "relationship": "Large hyperscaler customer for custom TPU-related silicon and Ethernet switching/networking ICs",
+          "criticality": "high",
+          "revenue_pct": 15
+        },
+        {
+          "ticker": "META",
+          "name": "Meta Platforms",
+          "relationship": "Hyperscaler customer for custom AI inference chips and data center networking solutions",
+          "criticality": "high",
+          "revenue_pct": 12
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft (Azure)",
+          "relationship": "Cloud infrastructure customer for Ethernet networking and custom silicon engagements",
+          "criticality": "medium",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "CSCO",
+          "name": "Cisco Systems",
+          "relationship": "Networking equipment OEM customer for Ethernet PHYs, switches, and controllers",
+          "criticality": "medium",
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "WDC",
+          "name": "Western Digital",
+          "relationship": "Storage OEM customer for Marvell's HDD/SSD controllers and storage SoCs",
+          "criticality": "medium",
+          "revenue_pct": 6
+        }
+      ],
+      "supply_chain_summary": "Marvell Technology is a fabless semiconductor company sitting at the critical intersection of cloud AI infrastructure and data networking, relying heavily on TSMC's advanced nodes for chip fabrication while serving hyperscalers (AWS, Google, Meta) and networking OEMs with custom and merchant silicon. Its strategic pivot toward custom AI accelerators (XPUs) and high-speed Ethernet solutions for data centers makes its downstream relationships with cloud giants increasingly dominant, representing the majority of its revenue growth trajectory."
     }
   },
   "supply_chain_last_updated": "2026-06-21",
