@@ -43,28 +43,6 @@
       ]
     },
     {
-      "symbol": "TSM",
-      "name": "Taiwan Semiconductor Manufacturing",
-      "sector": "Semiconductors",
-      "market": "Global Foundry",
-      "upstream": [
-        "ASML",
-        "AMAT",
-        "LRCX",
-        "TOELY",
-        "ENTG",
-        "SUMCO"
-      ],
-      "downstream": [
-        "AAPL",
-        "NVDA",
-        "AMD",
-        "QCOM",
-        "INTC",
-        "MRVL"
-      ]
-    },
-    {
       "symbol": "MU",
       "name": "MU",
       "sector": "",
@@ -297,97 +275,6 @@
         }
       ],
       "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a 'fabless-plus' designer that outsources semiconductor fabrication to TSMC and physical assembly primarily to Foxconn, while maintaining tight vertical integration over chip architecture (Apple Silicon) and software. On the downstream side, Apple sells predominantly through carriers, its own retail/online stores, and third-party retailers, while its high-margin Services segment creates a secondary revenue layer from platform participants like Google, Meta, and thousands of App Store developers."
-    },
-    "TSM": {
-      "upstream": [
-        {
-          "ticker": "ASML",
-          "name": "ASML Holding N.V.",
-          "relationship": "Sole supplier of EUV lithography equipment essential for advanced nodes (5nm, 3nm, 2nm)",
-          "criticality": "high",
-          "revenue_pct": 20
-        },
-        {
-          "ticker": "AMAT",
-          "name": "Applied Materials Inc.",
-          "relationship": "Leading supplier of deposition, etch, and inspection equipment across all process nodes",
-          "criticality": "high",
-          "revenue_pct": 15
-        },
-        {
-          "ticker": "LRCX",
-          "name": "Lam Research Corporation",
-          "relationship": "Critical supplier of etch and deposition equipment for advanced semiconductor fabrication",
-          "criticality": "high",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "TOELY",
-          "name": "Tokyo Electron Limited",
-          "relationship": "Major supplier of wafer processing equipment including coaters, developers, and thermal systems",
-          "criticality": "high",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "ENTG",
-          "name": "Entegris Inc.",
-          "relationship": "Supplier of specialty chemicals, advanced materials, and process solutions for semiconductor manufacturing",
-          "criticality": "medium",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "SUMCO",
-          "name": "SUMCO Corporation",
-          "relationship": "Key supplier of high-purity silicon wafers (300mm) used as the base substrate for all chip fabrication",
-          "criticality": "high",
-          "revenue_pct": 8
-        }
-      ],
-      "downstream": [
-        {
-          "ticker": "AAPL",
-          "name": "Apple Inc.",
-          "relationship": "Largest single customer; TSMC exclusively manufactures Apple's A-series and M-series SoCs on leading-edge nodes",
-          "criticality": "high",
-          "revenue_pct": 25
-        },
-        {
-          "ticker": "NVDA",
-          "name": "NVIDIA Corporation",
-          "relationship": "Major customer for high-performance GPU and AI accelerator chips on advanced nodes (4nm/3nm)",
-          "criticality": "high",
-          "revenue_pct": 11
-        },
-        {
-          "ticker": "AMD",
-          "name": "Advanced Micro Devices Inc.",
-          "relationship": "Significant customer for CPU, GPU, and datacenter accelerator manufacturing on leading-edge nodes",
-          "criticality": "high",
-          "revenue_pct": 9
-        },
-        {
-          "ticker": "QCOM",
-          "name": "Qualcomm Inc.",
-          "relationship": "Major customer for Snapdragon mobile SoCs and RF chips across multiple process nodes",
-          "criticality": "high",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "INTC",
-          "name": "Intel Corporation",
-          "relationship": "Significant outsourcing customer for Intel Foundry Services products on advanced nodes (3nm/18A ramp)",
-          "criticality": "medium",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "MRVL",
-          "name": "Marvell Technology Inc.",
-          "relationship": "Growing customer for custom AI/datacenter ASICs and networking chips on advanced nodes",
-          "criticality": "medium",
-          "revenue_pct": 4
-        }
-      ],
-      "supply_chain_summary": "TSMC sits at the critical nexus of the global semiconductor supply chain as the world's dominant pure-play foundry, translating upstream equipment and materials inputs from a handful of highly specialized suppliers into finished wafers for virtually every major fabless chip designer. Its position is uniquely powerful yet concentrated \u2014 extreme customer dependency on Apple and NVIDIA on the demand side is mirrored by an equally critical dependency on ASML's monopoly EUV equipment on the supply side, making geopolitical and single-source risks the defining vulnerabilities of its supply chain."
     },
     "MU": {
       "upstream": [
