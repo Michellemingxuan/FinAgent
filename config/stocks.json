@@ -87,26 +87,6 @@
       ]
     },
     {
-      "symbol": "IREN",
-      "name": "IREN",
-      "sector": "",
-      "market": "",
-      "upstream": [
-        "NVDA",
-        "ENPH",
-        "CAT",
-        "VRT",
-        "EMR"
-      ],
-      "downstream": [
-        "COIN",
-        "MSTR",
-        "MSFT",
-        "GOOGL",
-        "CLBT"
-      ]
-    },
-    {
       "symbol": "OKLO",
       "name": "OKLO",
       "sector": "",
@@ -498,83 +478,6 @@
         }
       ],
       "supply_chain_summary": "Micron Technology sits in the middle of the semiconductor value chain as a vertically integrated memory manufacturer, heavily dependent on a concentrated set of capital equipment suppliers (ASML, Applied Materials, Lam Research) for its multi-billion dollar fab investments in DRAM and 3D NAND. On the demand side, Micron's revenue is driven by a diverse but concentrated customer base spanning hyperscale cloud providers, AI accelerator vendors, and consumer electronics OEMs, with AI-driven HBM demand from NVIDIA increasingly becoming a high-growth and high-criticality revenue stream."
-    },
-    "IREN": {
-      "upstream": [
-        {
-          "ticker": "NVDA",
-          "name": "NVIDIA Corporation",
-          "relationship": "Primary GPU supplier for AI cloud computing and Bitcoin mining hardware (H100/A100 GPUs)",
-          "criticality": "high",
-          "revenue_pct": 35
-        },
-        {
-          "ticker": "ENPH",
-          "name": "Enphase Energy",
-          "relationship": "Power management and electrical infrastructure components supplier",
-          "criticality": "medium",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "CAT",
-          "name": "Caterpillar Inc.",
-          "relationship": "Backup power generation equipment (diesel generators) for data center operations",
-          "criticality": "medium",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "VRT",
-          "name": "Vertiv Holdings",
-          "relationship": "Cooling systems, power distribution units, and data center infrastructure equipment supplier",
-          "criticality": "high",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "EMR",
-          "name": "Emerson Electric Co.",
-          "relationship": "Electrical infrastructure components and power management systems for data centers",
-          "criticality": "medium",
-          "revenue_pct": 5
-        }
-      ],
-      "downstream": [
-        {
-          "ticker": "COIN",
-          "name": "Coinbase Global Inc.",
-          "relationship": "Primary cryptocurrency exchange for Bitcoin liquidation and treasury management",
-          "criticality": "high",
-          "revenue_pct": 30
-        },
-        {
-          "ticker": "MSTR",
-          "name": "MicroStrategy Incorporated",
-          "relationship": "Institutional Bitcoin purchaser and OTC buyer of mined Bitcoin",
-          "criticality": "medium",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "MSFT",
-          "name": "Microsoft Corporation",
-          "relationship": "Potential AI cloud computing services customer leveraging IREN's GPU data center capacity",
-          "criticality": "medium",
-          "revenue_pct": 15
-        },
-        {
-          "ticker": "GOOGL",
-          "name": "Alphabet Inc.",
-          "relationship": "AI/HPC cloud computing customer utilizing IREN's GPU-as-a-service infrastructure",
-          "criticality": "medium",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "CLBT",
-          "name": "Cellebrite DI Ltd.",
-          "relationship": "Enterprise technology customer for high-performance computing workloads hosted in IREN data centers",
-          "criticality": "low",
-          "revenue_pct": 5
-        }
-      ],
-      "supply_chain_summary": "IREN Limited sits at the intersection of Bitcoin mining and AI cloud infrastructure, critically dependent on upstream GPU suppliers (especially NVIDIA) and ASIC mining hardware manufacturers for its capital-intensive operations, as well as reliable low-cost power from regional utilities in Australia and Canada. On the downstream side, IREN monetizes its operations through Bitcoin sales on cryptocurrency exchanges and increasingly through AI/HPC cloud computing services sold to enterprise and hyperscale customers, making its revenue highly sensitive to Bitcoin price volatility and GPU cloud computing demand."
     },
     "OKLO": {
       "upstream": [
