@@ -89,7 +89,7 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
         if not tr.ratings:
             continue
         r = tr.ratings[0]  # most recent
-        rating_color = "#16a34a" if _is_buy(r.rating) else ("#dc2626" if _is_sell(r.rating) else "#d97706")
+        rating_color = "#16864d" if _is_buy(r.rating) else ("#cc1f1f" if _is_sell(r.rating) else "#d97706")
         pt_str = f"${r.price_target:,.0f}" if r.price_target else "—"
         prev_str = f"← ${r.previous_price_target:,.0f}" if r.previous_price_target else ""
         price_str = f"${tr.current_price:,.2f}" if tr.current_price else "—"
@@ -98,14 +98,14 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
         upside_str = ""
         if r.price_target and tr.current_price and tr.current_price > 0:
             upside = (r.price_target - tr.current_price) / tr.current_price * 100
-            upside_color = "#16a34a" if upside >= 0 else "#dc2626"
+            upside_color = "#16864d" if upside >= 0 else "#cc1f1f"
             upside_str = f"<span style='color:{upside_color};font-size:11px;'>{upside:+.1f}%</span>"
 
         ratings_rows += f"""
         <tr>
           <td style='padding:8px 12px;font-weight:700;font-size:13px;'>{tr.symbol}</td>
-          <td style='padding:8px 12px;color:#6b7280;font-size:12px;'>{r.firm}</td>
-          <td style='padding:8px 12px;font-size:12px;color:#6b7280;'>{r.analyst}</td>
+          <td style='padding:8px 12px;color:#566072;font-size:12px;'>{r.firm}</td>
+          <td style='padding:8px 12px;font-size:12px;color:#566072;'>{r.analyst}</td>
           <td style='padding:8px 12px;'>
             <span style='background:{"#f0fdf4" if _is_buy(r.rating) else ("#fef2f2" if _is_sell(r.rating) else "#fffbeb")};
                          color:{rating_color};padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;'>
@@ -124,14 +124,14 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
         source_color = "#92400e" if item.source == "WSJ" else "#5b21b6"
         source_bg = "#fef3c7" if item.source == "WSJ" else "#ede9fe"
         tickers_html = "".join(
-            f"<span style='background:#f3f4f6;color:#6b7280;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;margin-left:3px;'>{t}</span>"
+            f"<span style='background:#f3f4f6;color:#566072;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;margin-left:3px;'>{t}</span>"
             for t in item.relevant_tickers[:3]
         )
         news_rows += f"""
         <tr>
           <td style='padding:8px 12px;border-bottom:1px solid #f3f4f6;'>
             <div style='font-size:12px;font-weight:600;margin-bottom:3px;'>
-              <a href='{item.url}' style='color:#111827;text-decoration:none;'>{item.title}</a>
+              <a href='{item.url}' style='color:#1a2330;text-decoration:none;'>{item.title}</a>
             </div>
             <div>
               <span style='background:{source_bg};color:{source_color};padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;'>{item.source}</span>
@@ -152,7 +152,7 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
         view_button = f"""
         <div style='text-align:center;margin:24px 0 0;'>
           <a href='{report_url}'
-             style='background:#2563eb;color:#fff;padding:10px 24px;border-radius:6px;
+             style='background:#0b5cab;color:#fff;padding:10px 24px;border-radius:6px;
                     font-size:13px;font-weight:600;text-decoration:none;display:inline-block;'>
             View Full Report →
           </a>
@@ -162,15 +162,15 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
     if ctx.geopolitical_themes:
         geo_items = ""
         for theme in ctx.geopolitical_themes[:3]:
-            risk_color = {"High": "#dc2626", "Medium-High": "#ea580c", "Medium": "#d97706", "Low": "#16a34a"}.get(theme.risk_level, "#6b7280")
+            risk_color = {"High": "#cc1f1f", "Medium-High": "#ea580c", "Medium": "#d97706", "Low": "#16864d"}.get(theme.risk_level, "#566072")
             tickers = ", ".join(theme.affected_tickers[:4])
             geo_items += f"""
-            <div style='margin-bottom:10px;padding:10px 12px;background:#f9fafb;border-radius:6px;border-left:3px solid {risk_color};'>
+            <div style='margin-bottom:10px;padding:10px 12px;background:#f4f6f8;border-radius:6px;border-left:3px solid {risk_color};'>
               <div style='display:flex;justify-content:space-between;align-items:flex-start;'>
-                <span style='font-size:12px;font-weight:700;color:#111827;'>{theme.theme}</span>
+                <span style='font-size:12px;font-weight:700;color:#1a2330;'>{theme.theme}</span>
                 <span style='font-size:10px;font-weight:700;color:{risk_color};margin-left:8px;white-space:nowrap;'>{theme.risk_level}</span>
               </div>
-              <div style='font-size:11px;color:#6b7280;margin-top:2px;'>{tickers}</div>
+              <div style='font-size:11px;color:#566072;margin-top:2px;'>{tickers}</div>
             </div>"""
         geo_html = f"""
         <div style='margin-bottom:24px;'>
@@ -181,13 +181,13 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
     return f"""<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style='margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'>
-<div style='max-width:620px;margin:24px auto;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;'>
+<body style='margin:0;padding:0;background:#f4f6f8;font-family:"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;'>
+<div style='max-width:620px;margin:24px auto;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #dfe3e8;'>
 
   <!-- Header -->
-  <div style='background:#111827;padding:20px 24px;'>
-    <div style='font-size:16px;font-weight:800;color:#fff;letter-spacing:-0.3px;'>FinAgent</div>
-    <div style='font-size:12px;color:#9ca3af;margin-top:2px;'>{date_str} · {", ".join(ctx.watchlist_symbols)}</div>
+  <div style='background:#fff;padding:20px 24px;border-bottom:2px solid #0b5cab;'>
+    <div style='font-size:20px;font-weight:900;color:#0b5cab;letter-spacing:-0.5px;'>FinAgent</div>
+    <div style='font-size:12px;color:#566072;margin-top:3px;'>{date_str} · {", ".join(ctx.watchlist_symbols)}</div>
   </div>
 
   <div style='padding:20px 24px;'>
@@ -203,16 +203,16 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
     <!-- Analyst Ratings -->
     <div style='margin-bottom:24px;'>
       <div style='font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#9ca3af;margin-bottom:10px;'>Latest Analyst Ratings</div>
-      <table style='width:100%;border-collapse:collapse;border:1px solid #e5e7eb;border-radius:6px;overflow:hidden;'>
+      <table style='width:100%;border-collapse:collapse;border:1px solid #dfe3e8;border-radius:6px;overflow:hidden;'>
         <thead>
-          <tr style='background:#f9fafb;'>
-            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>Ticker</th>
-            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>Firm</th>
-            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>Analyst</th>
-            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>Rating</th>
-            <th style='padding:7px 12px;text-align:right;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>Price</th>
-            <th style='padding:7px 12px;text-align:right;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>PT</th>
-            <th style='padding:7px 12px;text-align:right;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #e5e7eb;'>Upside</th>
+          <tr style='background:#f4f6f8;'>
+            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>Ticker</th>
+            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>Firm</th>
+            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>Analyst</th>
+            <th style='padding:7px 12px;text-align:left;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>Rating</th>
+            <th style='padding:7px 12px;text-align:right;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>Price</th>
+            <th style='padding:7px 12px;text-align:right;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>PT</th>
+            <th style='padding:7px 12px;text-align:right;font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #dfe3e8;'>Upside</th>
           </tr>
         </thead>
         <tbody>
@@ -224,7 +224,7 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
     <!-- Top News -->
     <div style='margin-bottom:24px;'>
       <div style='font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#9ca3af;margin-bottom:10px;'>Top News</div>
-      <table style='width:100%;border-collapse:collapse;border:1px solid #e5e7eb;border-radius:6px;overflow:hidden;'>
+      <table style='width:100%;border-collapse:collapse;border:1px solid #dfe3e8;border-radius:6px;overflow:hidden;'>
         <tbody>{news_rows}</tbody>
       </table>
     </div>
@@ -238,7 +238,7 @@ def _build_html_email(ctx: ReportContext, bullets: list[str], date_str: str, rep
   </div>
 
   <!-- Footer -->
-  <div style='padding:14px 24px;border-top:1px solid #e5e7eb;background:#f9fafb;'>
+  <div style='padding:14px 24px;border-top:1px solid #dfe3e8;background:#f4f6f8;'>
     <p style='margin:0;font-size:11px;color:#9ca3af;'>For informational purposes only. Not investment advice. Generated {ctx.generated_at}.</p>
   </div>
 
