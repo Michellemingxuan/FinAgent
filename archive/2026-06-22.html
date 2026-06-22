@@ -458,12 +458,6 @@
       <span class="tab-manage" title="Stop tracking permanently" onclick="openRemoveStock(event, 'MU')">&#8942;</span>
     </div>
     
-    <div class="tab " data-tab="stock-OKLO" data-symbol="OKLO" draggable="true">
-      <span>OKLO</span>
-      <span class="tab-close" title="Hide from view (this browser only)" onclick="closeTab(event, 'OKLO')">&#x2715;</span>
-      <span class="tab-manage" title="Stop tracking permanently" onclick="openRemoveStock(event, 'OKLO')">&#8942;</span>
-    </div>
-    
     <div class="tab " data-tab="stock-ARM" data-symbol="ARM" draggable="true">
       <span>ARM</span>
       <span class="tab-close" title="Hide from view (this browser only)" onclick="closeTab(event, 'ARM')">&#x2715;</span>
@@ -1541,7 +1535,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Microsoft Corporation", "relationship": "Hyperscaler purchasing H100/H200/Blackwell GPUs at massive scale for Azure AI cloud infrastructure and OpenAI deployments", "revenue_pct": 15, "ticker": "MSFT"}, {"criticality": "high", "name": "Meta Platforms", "relationship": "Major purchaser of H100/H200 clusters for AI research, Llama model training, and recommendation system inference", "revenue_pct": 13, "ticker": "META"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Hyperscaler customer for GPU-accelerated AI/ML workloads on Google Cloud despite internal TPU development", "revenue_pct": 10, "ticker": "GOOGL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "AWS hyperscaler deploying NVIDIA GPUs for cloud AI services alongside its own Trainium/Inferentia chips", "revenue_pct": 10, "ticker": "AMZN"}, {"criticality": "medium", "name": "Oracle Corporation", "relationship": "Major cloud customer building large GPU clusters for Oracle Cloud Infrastructure AI services", "revenue_pct": 6, "ticker": "ORCL"}, {"criticality": "medium", "name": "Dell Technologies", "relationship": "OEM partner integrating NVIDIA GPUs into PowerEdge AI servers and DGX-branded systems for enterprise customers", "revenue_pct": 7, "ticker": "DELL"}], "supply_chain_summary": "NVIDIA sits at the apex of the AI accelerator value chain, acting as a fabless semiconductor designer that is critically dependent on TSMC\u0027s leading-edge nodes and HBM memory suppliers (SK Hynix, Micron) for its H100/H200/Blackwell GPU production. Its downstream is dominated by hyperscalers (Microsoft, Meta, Google, Amazon) and cloud/enterprise OEMs who are racing to build AI infrastructure, giving NVIDIA extraordinary pricing power but also concentration risk among a handful of mega-cap customers.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary foundry for all NVIDIA GPUs and SoCs (3nm/4nm/5nm processes)", "revenue_pct": 35, "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier to TSMC enabling NVIDIA\u0027s advanced node production (indirect but existential dependency)", "revenue_pct": 5, "ticker": "ASML"}, {"criticality": "medium", "name": "Applied Materials", "relationship": "Wafer fabrication equipment and materials supplier supporting NVIDIA\u0027s manufacturing nodes at TSMC/Samsung", "revenue_pct": 4, "ticker": "AMAT"}, {"criticality": "high", "name": "Micron Technology", "relationship": "HBM3/GDDR6X memory supplier integrated into NVIDIA H100/H200/GB200 GPUs and gaming cards", "revenue_pct": 18, "ticker": "MU"}, {"criticality": "high", "name": "SK Hynix", "relationship": "Primary HBM3e memory supplier for H200 and Blackwell AI accelerators", "revenue_pct": 12, "ticker": "SKHYY"}, {"criticality": "medium", "name": "Flex Ltd.", "relationship": "Contract electronics manufacturing and server board assembly for NVL/DGX systems", "revenue_pct": 6, "ticker": "AAVID"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -2756,7 +2750,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Alphabet Inc.", "relationship": "Pays Apple an estimated $18-20B annually to remain default search engine on iOS/Safari (Services revenue)", "revenue_pct": 5, "ticker": "GOOGL"}, {"criticality": "medium", "name": "Verizon Communications Inc.", "relationship": "Major U.S. carrier reseller and distribution partner for iPhone, offering subsidized device plans", "revenue_pct": 6, "ticker": "VZ"}, {"criticality": "medium", "name": "AT\u0026T Inc.", "relationship": "Major U.S. carrier reseller and distribution partner for iPhone with bundled device financing", "revenue_pct": 5, "ticker": "T"}, {"criticality": "low", "name": "Amazon.com Inc.", "relationship": "Significant retail distribution channel for Apple hardware products via Amazon Marketplace", "revenue_pct": 3, "ticker": "AMZN"}, {"criticality": "low", "name": "Microsoft Corporation", "relationship": "Major enterprise software partner and App Store developer; Microsoft 365 is a top iOS app revenue contributor", "revenue_pct": 2, "ticker": "MSFT"}, {"criticality": "medium", "name": "Meta Platforms Inc.", "relationship": "One of the largest App Store developers and advertising ecosystem participants; pays Apple 30% App Store commission on in-app purchases", "revenue_pct": 3, "ticker": "META"}], "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a \u0027fabless-plus\u0027 designer that outsources semiconductor fabrication to TSMC and physical assembly primarily to Foxconn, while maintaining tight vertical integration over chip architecture (Apple Silicon) and software. On the downstream side, Apple sells predominantly through carriers, its own retail/online stores, and third-party retailers, while its high-margin Services segment creates a secondary revenue layer from platform participants like Google, Meta, and thousands of App Store developers.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Co.", "relationship": "Primary fabrication partner for Apple Silicon (A-series, M-series, S-series chips) on leading-edge nodes", "revenue_pct": 18, "ticker": "TSM"}, {"criticality": "medium", "name": "Qualcomm Inc.", "relationship": "Supplier of 5G modem chips (transitioning to in-house, but still material through ~2025)", "revenue_pct": 5, "ticker": "QCOM"}, {"criticality": "low", "name": "Honeywell International", "relationship": "Supplier of specialty materials, sapphire glass components, and industrial manufacturing inputs", "revenue_pct": 2, "ticker": "HON"}, {"criticality": "high", "name": "Cirrus Logic Inc.", "relationship": "Sole-source supplier of custom audio chips and mixed-signal semiconductors for iPhone and AirPods", "revenue_pct": 4, "ticker": "CRUS"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -3954,7 +3948,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest single customer; TSMC exclusively manufactures Apple\u0027s A-series and M-series SoCs on leading-edge nodes", "revenue_pct": 25, "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Major customer for high-performance GPU and AI accelerator chips on advanced nodes (4nm/3nm)", "revenue_pct": 11, "ticker": "NVDA"}, {"criticality": "high", "name": "Advanced Micro Devices Inc.", "relationship": "Significant customer for CPU, GPU, and datacenter accelerator manufacturing on leading-edge nodes", "revenue_pct": 9, "ticker": "AMD"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Major customer for Snapdragon mobile SoCs and RF chips across multiple process nodes", "revenue_pct": 8, "ticker": "QCOM"}, {"criticality": "medium", "name": "Intel Corporation", "relationship": "Significant outsourcing customer for Intel Foundry Services products on advanced nodes (3nm/18A ramp)", "revenue_pct": 5, "ticker": "INTC"}, {"criticality": "medium", "name": "Marvell Technology Inc.", "relationship": "Growing customer for custom AI/datacenter ASICs and networking chips on advanced nodes", "revenue_pct": 4, "ticker": "MRVL"}], "supply_chain_summary": "TSMC sits at the critical nexus of the global semiconductor supply chain as the world\u0027s dominant pure-play foundry, translating upstream equipment and materials inputs from a handful of highly specialized suppliers into finished wafers for virtually every major fabless chip designer. Its position is uniquely powerful yet concentrated \u2014 extreme customer dependency on Apple and NVIDIA on the demand side is mirrored by an equally critical dependency on ASML\u0027s monopoly EUV equipment on the supply side, making geopolitical and single-source risks the defining vulnerabilities of its supply chain.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Sole supplier of EUV lithography equipment essential for advanced nodes (5nm, 3nm, 2nm)", "revenue_pct": 20, "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Leading supplier of deposition, etch, and inspection equipment across all process nodes", "revenue_pct": 15, "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Critical supplier of etch and deposition equipment for advanced semiconductor fabrication", "revenue_pct": 10, "ticker": "LRCX"}, {"criticality": "high", "name": "Tokyo Electron Limited", "relationship": "Major supplier of wafer processing equipment including coaters, developers, and thermal systems", "revenue_pct": 10, "ticker": "TOELY"}, {"criticality": "medium", "name": "Entegris Inc.", "relationship": "Supplier of specialty chemicals, advanced materials, and process solutions for semiconductor manufacturing", "revenue_pct": 5, "ticker": "ENTG"}, {"criticality": "high", "name": "SUMCO Corporation", "relationship": "Key supplier of high-purity silicon wafers (300mm) used as the base substrate for all chip fabrication", "revenue_pct": 8, "ticker": "SUMCO"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -5274,1064 +5268,7 @@
           var sc = {"downstream": [{"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Major hyperscale cloud customer purchasing DRAM, HBM, and NAND storage for AWS data center buildouts", "revenue_pct": 12, "ticker": "AMZN"}, {"criticality": "high", "name": "Microsoft Corporation", "relationship": "Large cloud and enterprise customer consuming server DRAM and NVMe SSDs for Azure infrastructure", "revenue_pct": 10, "ticker": "MSFT"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Critical customer for High Bandwidth Memory (HBM3/HBM3E) integrated into AI GPU products like H100/H200/B200", "revenue_pct": 14, "ticker": "NVDA"}, {"criticality": "high", "name": "Apple Inc.", "relationship": "Significant customer for LPDDR mobile DRAM and NAND flash used in iPhone, iPad, and Mac products", "revenue_pct": 10, "ticker": "AAPL"}, {"criticality": "medium", "name": "Alphabet Inc.", "relationship": "Hyperscale customer purchasing server DRAM, SSDs, and HBM for Google Cloud and AI accelerator systems", "revenue_pct": 8, "ticker": "GOOGL"}, {"criticality": "medium", "name": "Dell Technologies Inc.", "relationship": "Enterprise OEM customer integrating Micron DRAM modules and SSDs into servers, PCs, and storage systems", "revenue_pct": 6, "ticker": "DELL"}], "supply_chain_summary": "Micron Technology sits in the middle of the semiconductor value chain as a vertically integrated memory manufacturer, heavily dependent on a concentrated set of capital equipment suppliers (ASML, Applied Materials, Lam Research) for its multi-billion dollar fab investments in DRAM and 3D NAND. On the demand side, Micron\u0027s revenue is driven by a diverse but concentrated customer base spanning hyperscale cloud providers, AI accelerator vendors, and consumer electronics OEMs, with AI-driven HBM demand from NVIDIA increasingly becoming a high-growth and high-criticality revenue stream.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Primary supplier of EUV and DUV lithography equipment critical for advanced DRAM and NAND node development", "revenue_pct": 18, "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Key supplier of CVD, PVD, etch, and CMP equipment used across DRAM and NAND fabrication", "revenue_pct": 15, "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Critical supplier of etch and deposition equipment essential for 3D NAND stacking and DRAM patterning", "revenue_pct": 12, "ticker": "LRCX"}, {"criticality": "medium", "name": "Tokyo Electron Limited", "relationship": "Supplier of thermal processing, coater/developer, and etch equipment for memory fabs", "revenue_pct": 8, "ticker": "TOELY"}, {"criticality": "medium", "name": "Entegris Inc.", "relationship": "Supplier of specialty chemicals, CMP slurries, filtration, and materials handling solutions for fab processes", "revenue_pct": 5, "ticker": "ENTG"}, {"criticality": "low", "name": "MKS Instruments Inc.", "relationship": "Supplier of process control instruments, gas delivery, and power systems used in semiconductor manufacturing", "revenue_pct": 3, "ticker": "MKSI"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
-          var svgEl = document.getElementById('sc-svg-' + sym);
-          if (!svgEl) return;
-
-          var NODE_W = 148, NODE_H = 58, NODE_RX = 7;
-          var COL_GAP = 80;
-          var ROW_GAP = 14;
-          var CENTER_W = 110, CENTER_H = 60;
-
-          var criticColor = {
-            'high': {stroke: '#dc2626', fill: '#fef2f2'},
-            'medium': {stroke: '#ea580c', fill: '#fff7ed'},
-            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
-          };
-          var downColor = {
-            'high': {stroke: '#16a34a', fill: '#f0fdf4'},
-            'medium': {stroke: '#0d9488', fill: '#f0fdfa'},
-            'low': {stroke: '#9ca3af', fill: '#f9fafb'}
-          };
-
-          var maxRows = Math.max(upstream.length, downstream.length, 1);
-          var totalH = Math.max(maxRows * (NODE_H + ROW_GAP) - ROW_GAP, CENTER_H) + 40;
-          var totalW = NODE_W + COL_GAP + CENTER_W + COL_GAP + NODE_W + 40;
-
-          svgEl.setAttribute('viewBox', '0 0 ' + totalW + ' ' + totalH);
-          svgEl.setAttribute('height', totalH);
-
-          function svgEl_(tag, attrs) {
-            var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-            for (var k in attrs) el.setAttribute(k, attrs[k]);
-            return el;
-          }
-          function addText(parent, x, y, text, style) {
-            var t = svgEl_('text', {x: x, y: y, style: style || ''});
-            t.textContent = text;
-            parent.appendChild(t);
-          }
-
-          var cx = NODE_W + COL_GAP + 20;
-          var cy = totalH / 2 - CENTER_H / 2;
-
-          // Draw center node
-          var centerG = svgEl_('g', {});
-          centerG.appendChild(svgEl_('rect', {
-            x: cx, y: cy, width: CENTER_W, height: CENTER_H, rx: NODE_RX,
-            fill: '#eff6ff', stroke: '#2563eb', 'stroke-width': 2
-          }));
-          addText(centerG, cx + CENTER_W/2, cy + 22, sym, 'font-size:14px;font-weight:800;fill:#1d4ed8;text-anchor:middle;');
-          svgEl.appendChild(centerG);
-
-          function drawNodes(nodes, isLeft, colorMap) {
-            var colX = isLeft ? 20 : cx + CENTER_W + COL_GAP;
-            var totalNodesH = nodes.length * NODE_H + (nodes.length - 1) * ROW_GAP;
-            var startY = totalH / 2 - totalNodesH / 2;
-            nodes.forEach(function(node, i) {
-              var ny = startY + i * (NODE_H + ROW_GAP);
-              var nc = colorMap[node.criticality] || colorMap['low'];
-              var isWatched = watchlist.indexOf(node.ticker) !== -1;
-              var g = svgEl_('g', isWatched ? {style: 'cursor:pointer;'} : {});
-              if (isWatched) {
-                g.addEventListener('click', function() { switchToTab('stock-' + node.ticker); });
-              }
-              g.appendChild(svgEl_('rect', {
-                x: colX, y: ny, width: NODE_W, height: NODE_H, rx: NODE_RX,
-                fill: isWatched ? '#eff6ff' : nc.fill,
-                stroke: isWatched ? '#2563eb' : nc.stroke,
-                'stroke-width': isWatched ? 2 : 1.5,
-                'stroke-dasharray': isWatched ? 'none' : 'none'
-              }));
-              var revPct = node.revenue_pct ? node.revenue_pct : 0;
-              var pctLabel = revPct > 0 ? revPct + '%' : '';
-              // Ticker + pct on same line
-              var tickerLabel = (node.ticker || '') + (pctLabel ? '  ' + pctLabel : '');
-              addText(g, colX + NODE_W/2, ny + 17, tickerLabel,
-                'font-size:11px;font-weight:700;fill:' + (isWatched ? '#1d4ed8' : '#111827') + ';text-anchor:middle;');
-              var nameText = (node.name || '').substring(0, 22);
-              addText(g, colX + NODE_W/2, ny + 30, nameText,
-                'font-size:9px;fill:#6b7280;text-anchor:middle;');
-              if (isWatched) {
-                addText(g, colX + NODE_W/2, ny + 48, '↗ view report',
-                  'font-size:8px;fill:#2563eb;text-anchor:middle;font-style:italic;');
-              } else {
-                var relText = (node.relationship || '').substring(0, 28);
-                addText(g, colX + NODE_W/2, ny + 44, relText,
-                  'font-size:8px;fill:#9ca3af;text-anchor:middle;');
-                if (pctLabel) {
-                  addText(g, colX + NODE_W/2, ny + 54, '~' + pctLabel + ' of rev/cost',
-                    'font-size:8px;fill:' + nc.stroke + ';text-anchor:middle;font-weight:600;');
-                }
-              }
-              svgEl.appendChild(g);
-
-              // Arrow — thickness scales with revenue_pct
-              var arrowW = revPct > 0 ? Math.max(1, Math.min(4, revPct / 8)) : 1.2;
-              var nodeRightX = colX + NODE_W;
-              var nodeMidY = ny + NODE_H / 2;
-              var centerMidY = cy + CENTER_H / 2;
-              var p1x, p1y, p2x, p2y, cp1x, cp1y, cp2x, cp2y;
-              if (isLeft) {
-                p1x = nodeRightX; p1y = nodeMidY;
-                p2x = cx; p2y = centerMidY;
-              } else {
-                p1x = cx + CENTER_W; p1y = centerMidY;
-                p2x = colX; p2y = nodeMidY;
-              }
-              cp1x = p1x + (p2x - p1x) * 0.45; cp1y = p1y;
-              cp2x = p1x + (p2x - p1x) * 0.55; cp2y = p2y;
-              var path = svgEl_('path', {
-                d: 'M' + p1x + ',' + p1y + ' C' + cp1x + ',' + cp1y + ' ' + cp2x + ',' + cp2y + ' ' + p2x + ',' + p2y,
-                fill: 'none', stroke: nc.stroke, 'stroke-width': arrowW,
-                'marker-end': isLeft ? 'url(#arrow-in)' : 'url(#arrow-out)',
-                opacity: 0.6
-              });
-              svgEl.insertBefore(path, svgEl.firstChild);
-            });
-          }
-
-          // Arrowhead markers
-          var defs = svgEl_('defs', {});
-          ['arrow-in', 'arrow-out'].forEach(function(id) {
-            var marker = svgEl_('marker', {id: id, markerWidth: 6, markerHeight: 6,
-              refX: 5, refY: 3, orient: 'auto'});
-            var poly = svgEl_('polygon', {points: '0 0, 6 3, 0 6', fill: '#9ca3af'});
-            marker.appendChild(poly);
-            defs.appendChild(marker);
-          });
-          svgEl.insertBefore(defs, svgEl.firstChild);
-
-          drawNodes(upstream, true, criticColor);
-          drawNodes(downstream, false, downColor);
-        })();
-        </script>
-        
-      </div>
-    </div>
-
-      </div>
-    </div>
-
-  </div>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  <div class="tab-content " id="tab-stock-OKLO">
-
-    <!-- Ticker hero bar -->
-    <div class="card" style="margin-bottom:20px;">
-      <div class="ticker-hero">
-        <div>
-          <div class="ticker-symbol">OKLO</div>
-          <div class="ticker-name">OKLO</div>
-        </div>
-        
-        <div style="margin-left:auto; text-align:right;">
-          <div class="ticker-price">$61.17</div>
-          <div class="ticker-price-sub">Current price</div>
-        </div>
-        
-        <div class="spark-wrap">
-          <canvas id="spark-OKLO" class="sparkline" width="160" height="48"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-layout">
-      <!-- ── Right-side sticky TOC ── -->
-      <nav class="tab-toc" id="toc-OKLO" aria-label="On this page">
-        <div class="toc-label">On this page</div>
-        <ul class="toc-list">
-          <li><a href="#sec-analyst-OKLO">Analyst Ratings</a></li>
-          <li><a href="#sec-earnings-OKLO">Upcoming Earnings</a></li>
-          <li><a href="#sec-news-OKLO">News</a></li>
-          <li><a href="#sec-financials-OKLO">Financials</a></li>
-          <li><a href="#sec-product-OKLO">Product &amp; Momentum</a></li>
-          <li><a href="#sec-insider-OKLO">Insider Transactions</a></li>
-          
-          <li><a href="#sec-geo-OKLO">Geopolitical Exposure</a></li>
-          
-          <li><a href="#sec-sc-OKLO">Supply Chain Map</a></li>
-        </ul>
-      </nav>
-
-      <!-- ── Main content ── -->
-      <div class="tab-main">
-
-    <!-- ── SECTION: ANALYST RATINGS ── -->
-    <div class="section" id="sec-analyst-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="analyst_ratings">Analyst Ratings</span>
-      </div>
-      <div class="card">
-        
-        <table class="ratings-table">
-          <thead>
-            <tr>
-              <th>Firm &amp; Analyst</th>
-              <th>Action</th>
-              <th>Rating</th>
-              <th>Price Target</th>
-              <th>PT Upside</th>
-              <th>Analyst Perf.</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            
-            
-            <tr>
-              <td>
-                <div class="firm-name">Craig-Hallum</div>
-                <div class="analyst-name">Eric Stine</div>
-              </td>
-              <td style="color:var(--text-secondary)">Reiterates</td>
-              <td>
-                
-                <span class="pill pill-hold">
-                  Hold
-                </span>
-                
-                
-              </td>
-              <td>
-                —
-              </td>
-              <td>
-                —
-              </td>
-              <td>
-                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
-              </td>
-              <td style="color:var(--text-muted)">2026-06-12</td>
-            </tr>
-            
-            
-            
-              
-            
-            <tr>
-              <td>
-                <div class="firm-name">B. Riley Securities</div>
-                <div class="analyst-name">Ryan Pfingst</div>
-              </td>
-              <td style="color:var(--text-secondary)">Initiates</td>
-              <td>
-                
-                <span class="pill pill-buy">
-                  Buy
-                </span>
-                
-                
-              </td>
-              <td>
-                
-                $92.00
-                
-                
-              </td>
-              <td>
-                
-                <span class="upside-positive">
-                  +50.4%
-                </span>
-                
-              </td>
-              <td>
-                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
-              </td>
-              <td style="color:var(--text-muted)">2026-06-11</td>
-            </tr>
-            
-            
-            
-              
-            
-            <tr>
-              <td>
-                <div class="firm-name">UBS</div>
-                <div class="analyst-name">Jon Windham</div>
-              </td>
-              <td style="color:var(--text-secondary)">Maintains</td>
-              <td>
-                
-                <span class="pill pill-hold">
-                  Hold
-                </span>
-                
-                
-              </td>
-              <td>
-                
-                $55.00
-                
-                <span style="font-size:10px;color:var(--text-muted);margin-left:3px;">← $60.00</span>
-                
-                
-              </td>
-              <td>
-                
-                <span class="upside-negative">
-                  -10.1%
-                </span>
-                
-              </td>
-              <td>
-                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
-              </td>
-              <td style="color:var(--text-muted)">2026-06-11</td>
-            </tr>
-            
-            
-            
-            <tr>
-              <td>
-                <div class="firm-name">William Blair</div>
-                <div class="analyst-name">Jed Dorsheimer</div>
-              </td>
-              <td style="color:var(--text-secondary)">Maintains</td>
-              <td>
-                
-                <span class="pill pill-buy">
-                  Buy
-                </span>
-                
-                
-              </td>
-              <td>
-                —
-              </td>
-              <td>
-                —
-              </td>
-              <td>
-                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
-              </td>
-              <td style="color:var(--text-muted)">2026-06-04</td>
-            </tr>
-            
-            
-            
-              
-            
-            <tr>
-              <td>
-                <div class="firm-name">Canaccord Genuity</div>
-                <div class="analyst-name">George Gianarikas</div>
-              </td>
-              <td style="color:var(--text-secondary)">Maintains</td>
-              <td>
-                
-                <span class="pill pill-buy">
-                  Buy
-                </span>
-                
-                
-              </td>
-              <td>
-                
-                $125.00
-                
-                
-              </td>
-              <td>
-                
-                <span class="upside-positive">
-                  +104.3%
-                </span>
-                
-              </td>
-              <td>
-                <span class="perf-stars" title="Analyst performance data requires FMP premium">—</span>
-              </td>
-              <td style="color:var(--text-muted)">2026-05-28</td>
-            </tr>
-            
-          </tbody>
-        </table>
-        
-        <div class="ai-block">
-          <div class="ai-label">AI Consensus Summary</div>
-          <div class="ai-text">## OKLO (OKLO) — Analyst Sentiment Summary
-
-**Current Price: $61.17 | Consensus PT: $88.63 (~+44.9% implied upside)**
-
----
-
-• **Consensus leans bullish but with meaningful skepticism:** The mean recommendation score of ~1.96/5 reflects an overall Buy-leaning consensus across 19 analysts, though recent actions show a split between Buy and Hold ratings, suggesting the market is divided on near-term valuation versus long-term potential.
-
-• **Recent initiations and reiterations signal sustained institutional interest:** B. Riley Securities&#39; fresh Buy initiation (June 2026) alongside maintained Buys from William Blair and Canaccord Genuity indicates conviction among growth-oriented firms that OKLO&#39;s nuclear microreactor thesis remains intact, likely anchored to long-dated revenue potential and AI/data center power demand tailwinds.
-
-• **Hold ratings from UBS and Craig-Hallum flag near-term valuation concerns:** With OKLO trading at $61.17 — already well above pre-commercialization fundamentals — the more cautious firms appear to view the current price as adequately reflecting speculative upside, warranting a wait-and-see posture pending regulatory or operational milestones.
-
-• **Extreme price target dispersion reflects deep uncertainty:** The gap between the $14.00 low and $140.00 high target is enormous, underscoring that OKLO is a highly binary story where valuation is largely dependent on assumptions around NRC licensing timelines, commercial deployment, and the broader advanced nuclear regulatory environment.
-
-• **Implied upside of ~45% to consensus PT is attractive but unevenly distributed:** The mean PT of ~$88.63 offers meaningful upside from current levels; however, the wide dispersion and pre-revenue stage of the business suggest that price target credibility varies significantly across analysts, and risk-reward remains highly asymmetric.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SECTION: UPCOMING EARNINGS ── -->
-    
-    
-    <div class="section" id="sec-earnings-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="upcoming_earnings">Upcoming Earnings</span>
-      </div>
-      <div class="card" style="padding:14px 16px;">
-        <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
-          <div>
-            <div class="kpi-label">Earnings Date</div>
-            <div class="kpi-value" style="font-size:14px;">2026-08-10</div>
-          </div>
-          
-          <div>
-            <div class="kpi-label">Days Until</div>
-            <div class="kpi-value earnings-far" style="font-size:14px;">
-              in 49 days
-              
-            </div>
-          </div>
-          
-          
-          
-        </div>
-      </div>
-    </div>
-    
-
-    <!-- ── SECTION: NEWS ── -->
-    <div class="section" id="sec-news-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="news">News</span>
-      </div>
-      <div class="card">
-        
-        
-        
-
-        
-          
-          <div class="subsec-title">Direct Coverage</div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://www.portsmouth-dailytimes.com/news/oklo-centrus-sign-fuel-agreement-in-piketon-positioning-southern-ohio-as-an-advanced-nuclear-energy/article_d5603d8c-368e-4579-97c1-c733e756d383.html?.tsrc=rss" target="_blank" rel="noopener">OKLO, Centrus sign fuel agreement in Piketon, positioning southern Ohio as an advanced nuclear energy hub</a>
-                
-              </div>
-              <div class="news-summary">State, federal and industry leaders gathered Thursday morning at the Centrus Energy facility in Piketon to celebrate a milestone for Southern Ohio and the future of American energy production. At appr</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-06-19 18:48 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://finance.yahoo.com/energy/articles/oklo-locks-domestic-nuclear-fuel-181031886.html?.tsrc=rss" target="_blank" rel="noopener">Oklo Locks In Domestic Nuclear Fuel Supply for Its Ohio Gigawatt Campus</a>
-                
-              </div>
-              <div class="news-summary">Centrus will supply HALEU for up to five Aurora powerhouses from its Pike County plant</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-06-19 18:10 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://finance.yahoo.com/energy/articles/oklo-centrus-forge-nuclear-fuel-142000391.html?.tsrc=rss" target="_blank" rel="noopener">Oklo and Centrus Forge Nuclear Fuel Deal for Ohio Campus</a>
-                
-              </div>
-              <div class="news-summary">OKLO and Centrus partner on a landmark HALEU supply agreement to power Aurora reactors, boosting U.S. nuclear energy growth and jobs.</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-yahoofinance">Yahoo Finance</span>
-                <span class="news-date">2026-06-19 14:20 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxQOUNVUW93bU9aQ2c5cWVMU0ZHMWRaZHltWHBrbjRQYWFuYXlwUWlLYUpnMWl5Q0xzM29tMi1pOFpTNUJLLVg0WjNsa1V0TFk2dFZJQmhkekJ0cXFHTFIwd3U4aGRxbkk0T1dLRlJ0LURIaEk5a2hSVEw4QlJIMVpkVmp6ZU5vdDBMZ2lxT0V2ZC1PMGlHRFBsNzB4UlFTTy02LUlCZzFodVBETGowMlUtWkJTdl9kWVU?oc=5" target="_blank" rel="noopener">Uranium Deal Powers Up Nuclear Fission Firm Oklo</a>
-                
-              </div>
-              <div class="news-summary">Uranium Deal Powers Up Nuclear Fission Firm Oklo The Daily Upside</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-thedailyupside">The Daily Upside</span>
-                <span class="news-date">2026-06-22 04:01 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="news-item">
-            <div class="news-item-body">
-              <div class="news-title">
-                <a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxOUkxBU21OdDNweVdLUm9JdnVnNUYwb0k2TVdGdVVPQkR1RkdTbTJGT2VQRE9mY2E3WnkzRmZEME1hbldDQm9zbVRCelVNMTFMc21LTzlscnI3VV9KSms5akxlNDQxem9qcEZOaHpoY25rcS02VTRzWGctdm9hN3Zzd1FyOG04MkVQMmd3amd0QUVKYzBXbFJwNlBpVHBTWVROSS01blF6bW9Pc2hRcm8ta05FR0JvclVRMFhmVjI1N1FPMWQyaVHSAcsBQVVfeXFMTS1tcUNXY0g3RVBFemxYSFZHbVNCREg1LUlXS2oybVlmcHF1d1JiQVk0Ql9DNFRGcTRCTUZwY1B2LV94NnNUd3hGd1UyS2NlMDRTdEt4S3hUanAwU3M5WEdQTzcydDJCMGZhU0VlT0FzR0ZwUEl3TGl1cVdoZjkzQmpzcFo4b2hGZVdMOFZuZnhhQThyZXM3QjRmM2Zoamt5aVNFaXJwVDBtX3lMYWVuWmlqMVlmQ21XUTB0UmtRejV1UUlWUlB5LUY2YkE?oc=5" target="_blank" rel="noopener">Centrus Energy (LEU) Stock Could Be 42% Below Fair Value After Oklo HALEU Deal</a>
-                
-              </div>
-              <div class="news-summary">Centrus Energy (LEU) Stock Could Be 42% Below Fair Value After Oklo HALEU Deal simplywall.st</div>
-              <div class="news-meta-row">
-                <span class="source-tag source-simplywallst">Simplywall.St</span>
-                <span class="news-date">2026-06-21 03:38 UTC</span>
-              </div>
-            </div>
-          </div>
-          
-          
-
-          
-
-        
-      </div>
-    </div>
-
-    <!-- ── SECTION: FINANCIALS ── -->
-    
-    <div class="section" id="sec-financials-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="financials">Financial Statements</span>
-      </div>
-      <div class="card">
-        <!-- KPI strip -->
-        <div class="kpi-grid">
-          <div class="kpi-cell">
-            <div class="kpi-label">Market Cap</div>
-            <div class="kpi-value">$10.64B</div>
-          </div>
-          <div class="kpi-cell">
-            <div class="kpi-label">Trailing P/E</div>
-            <div class="kpi-value">—</div>
-          </div>
-          <div class="kpi-cell">
-            <div class="kpi-label">Forward P/E</div>
-            <div class="kpi-value">-73.4×</div>
-          </div>
-          <div class="kpi-cell">
-            <div class="kpi-label">EV / EBITDA</div>
-            <div class="kpi-value">-49.0×</div>
-          </div>
-          <div class="kpi-cell">
-            <div class="kpi-label">Debt / Equity</div>
-            <div class="kpi-value">0.10</div>
-          </div>
-          <div class="kpi-cell">
-            <div class="kpi-label">FCF Yield</div>
-            <div class="kpi-value">-1.1%</div>
-          </div>
-          
-          <div class="kpi-cell">
-            <div class="kpi-label">Short Float %</div>
-            
-            
-            <div class="kpi-value short-high">
-              18.0%
-            </div>
-            
-          </div>
-          
-        </div>
-
-        <!-- Multi-year table -->
-        
-        <table class="fin-table">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>2025</th><th>2024</th><th>2023</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Revenue</td><td>$0</td><td>$0</td><td>$0</td></tr>
-            <tr><td>Gross Margin</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
-            <tr><td>Operating Margin</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
-            <tr><td>Net Margin</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
-            <tr><td>Net Income</td><td>$-105.7M</td><td>$-73.6M</td><td>$-32.2M</td></tr>
-            <tr><td>Free Cash Flow</td><td>$-115.4M</td><td>$-38.7M</td><td>$-16.1M</td></tr>
-            <tr><td>Total Debt</td><td>$1.4M</td><td>$1.0M</td><td>$250,000</td></tr>
-            <tr><td>Cash &amp; Equiv.</td><td>$788.4M</td><td>$97.1M</td><td>$9.9M</td></tr>
-          </tbody>
-        </table>
-        
-
-        <div class="ai-block">
-          <div class="ai-label">AI Analysis</div>
-          <div class="ai-text">## OKLO (OKLO) – Financial Analysis
-
-- **Revenue &amp; Margins — Pre-Revenue Stage:** OKLO has generated **$0 in revenue across all three years (2023–2025)**, with no gross, operating, or net margins calculable. The company is a pre-commercial nuclear microreactor developer with no commercial operations, making traditional profitability metrics entirely inapplicable at this stage.
-
-- **Cash Burn Acceleration:** Free cash flow losses have escalated sharply — from **-$0.02B in 2023** to **-$0.04B in 2024** and **-$0.12B in 2025** — representing a **6x increase in cash consumption** over two years, reflecting ramp-up in R&amp;D, regulatory, and administrative spending ahead of any projected commercial deployment.
-
-- **Balance Sheet Health — Debt-Free but Runway Dependent:** Total debt is effectively **$0.00B** across all three years (debt-to-equity of just 0.099), which is a structural positive. However, the cash position of **$0.79B in 2025** (vs. $0.01B in 2023) reflects recent capital raises rather than organic generation, and at the current burn rate, runway sustainability will require continued equity financing.
-
-- **Valuation Disconnect Is Extreme:** With a **$10.64B market cap**, zero revenue, a **forward P/E of -73.4x**, and **EV/EBITDA of -49.0x**, the entire valuation is speculative and predicated on future regulatory approvals, successful reactor deployment, and long-dated energy contracts — none of which are yet secured.
-
-- **Red Flag — Cash Burn vs. Milestones:** The sharp jump in 2025 cash burn (-$0.12B) without any corresponding revenue milestone signals increasing operational expenditure with **no near-term commercial inflection point visible in the financials**, making future capital raises a near-certainty to sustain operations.</div>
-        </div>
-      </div>
-    </div>
-    
-
-    <!-- ── SECTION: PRODUCT ANALYSIS ── -->
-    
-    <div class="section" id="sec-product-OKLO">
-      <div class="section-header">
-        <span class="section-title">Product &amp; Business Momentum</span>
-        <span style="font-size:11px;color:var(--text-muted);">Utilities &middot; Utilities - Independent Power Producers</span>
-      </div>
-      <div class="card">
-
-        <!-- Key metrics strip -->
-        <div class="product-grid">
-          <!-- Revenue growth -->
-          <div class="product-metric-card">
-            <div class="product-metric-label">TTM Revenue Growth</div>
-            <div class="product-metric-value">N/A</div>
-            <div class="product-metric-sub">Year-over-year</div>
-          </div>
-          <!-- Earnings growth -->
-          <div class="product-metric-card">
-            <div class="product-metric-label">TTM Earnings Growth</div>
-            <div class="product-metric-value">N/A</div>
-            <div class="product-metric-sub">Year-over-year</div>
-          </div>
-          <!-- Gross margin -->
-          <div class="product-metric-card">
-            <div class="product-metric-label">Gross Margin</div>
-            
-            <div class="product-metric-value">0.0%</div>
-            
-            
-            <div class="product-metric-sub">Op. margin: 0.0%</div>
-            
-          </div>
-          <!-- Return on equity -->
-          <div class="product-metric-card">
-            <div class="product-metric-label">Return on Equity</div>
-            
-            <div class="product-metric-value upside-negative">
-              -8.9%
-            </div>
-            
-            
-          </div>
-          <!-- Forward EPS -->
-          <div class="product-metric-card">
-            <div class="product-metric-label">Forward EPS</div>
-            
-            <div class="product-metric-value">$-0.83</div>
-            
-            
-          </div>
-          <!-- Consensus target -->
-          <div class="product-metric-card">
-            <div class="product-metric-label">Consensus Target</div>
-            
-            <div class="product-metric-value">$88.63</div>
-            
-            
-            <div class="product-metric-sub upside-positive">
-              +44.9% vs current
-            </div>
-            
-            
-          </div>
-        </div>
-
-        <!-- Segment / Product revenue breakdown -->
-        
-        
-        
-        
-        <div class="seg-list">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px;">Revenue Breakdown by Segment</div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Aurora Powerhouse Power Sales (Pipeline/Future Revenue)</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:70%;background:#2563eb;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">70%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Core business of designing, deploying, and selling electricity from small modular fission reactors (15-75 MWe); currently pre-revenue but underpins the entire investment thesis with a large LOI/customer pipeline.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Nuclear Fuel Recycling &amp; Fabrication</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:20%;background:#16a34a;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">20%</div>
-              
-              <span class="seg-trend seg-trend-growing">growing</span>
-              
-            </div>
-            
-            <div class="seg-desc">Technology to convert used nuclear fuel into usable fuel for Aurora reactors, reducing fuel costs and addressing waste; a strategic differentiator that could become a standalone revenue stream.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Government &amp; Defense Contracts / Grants</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:8%;background:#d97706;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">8%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">DOE and DARPA-related funding and contracts supporting reactor development and demonstration; provides near-term cash inflows while commercial plants are being licensed and built.</div>
-            
-          </div>
-          
-          
-          <div>
-            <div class="seg-row">
-              <div class="seg-name">Other / Corporate &amp; Licensing</div>
-              <div class="seg-bar-track">
-                <div class="seg-bar-fill" style="width:2%;background:#7c3aed;opacity:0.8;"></div>
-              </div>
-              <div class="seg-pct">2%</div>
-              
-              <span class="seg-trend seg-trend-stable">stable</span>
-              
-            </div>
-            
-            <div class="seg-desc">Miscellaneous licensing arrangements, advisory activities, and early-stage partnership revenues that are currently minimal but support the regulatory and commercialization pathway.</div>
-            
-          </div>
-          
-        </div>
-        
-        <div class="value-driver-note">⚡ <strong>Key value driver:</strong> The Aurora Powerhouse deployment pipeline is the overwhelmingly dominant stock price driver, as investors are pricing in the probability and timing of first commercial operation and NRC licensing approval; any positive regulatory milestones or new customer LOIs (particularly from data center and AI infrastructure operators) act as the primary catalysts for share price movement.</div>
-        
-        
-
-        <!-- Quarterly revenue bar chart -->
-        
-        <div class="qrev-chart" style="border-top:1px solid var(--border);">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.4px;">Quarterly Revenue Trend</div>
-          
-          
-        </div>
-        
-
-        <!-- Earnings beat / miss -->
-        
-        <div style="border-top:1px solid var(--border);padding:14px 16px 0;">
-          <div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.4px;">EPS Estimate vs Actual</div>
-        </div>
-        <table class="beat-table">
-          <thead>
-            <tr>
-              <th>Quarter</th>
-              <th>Estimate</th>
-              <th>Actual</th>
-              <th>Surprise</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <tr>
-              <td>2025-06</td>
-              <td>$-0.11</td>
-              <td>$-0.18</td>
-              <td>
-                
-                
-                <span class="beat-pill beat-neg">-63.6%</span>
-                
-                
-              </td>
-            </tr>
-            
-            <tr>
-              <td>2025-09</td>
-              <td>$-0.12</td>
-              <td>$-0.20</td>
-              <td>
-                
-                
-                <span class="beat-pill beat-neg">-60.9%</span>
-                
-                
-              </td>
-            </tr>
-            
-            <tr>
-              <td>2025-12</td>
-              <td>$-0.16</td>
-              <td>$-0.27</td>
-              <td>
-                
-                
-                <span class="beat-pill beat-neg">-65.1%</span>
-                
-                
-              </td>
-            </tr>
-            
-            <tr>
-              <td>2026-03</td>
-              <td>$-0.18</td>
-              <td>—</td>
-              <td>
-                —
-              </td>
-            </tr>
-            
-          </tbody>
-        </table>
-        
-
-        <!-- AI product analysis -->
-        <div class="ai-block">
-          <div class="ai-label" style="display:flex;align-items:center;justify-content:space-between;">
-            <span>AI Product &amp; Catalyst Analysis</span>
-            
-            <span class="revision-badge revision-up">
-              BUY
-            </span>
-            
-          </div>
-          <div class="ai-text"># OKLO (OKLO) — Product &amp; Business Momentum Analysis
-
----
-
-• **Revenue Momentum — No Commercial Revenue; Pure Pre-Revenue Development Stage.**
-OKLO has reported $0.00B in revenue across every reported quarter through Q1 2026, with YoY growth metrics entirely non-calculable. This is by design — the company is a pre-commercial advanced fission power developer with no operating reactors. The meaningful &#34;momentum&#34; signal is the *acceleration of cash burn*: operating losses have widened sequentially from -$20M (Q1 2025) to -$60M (Q4 2025) before a modest step-down to -$50M in Q1 2026, reflecting ramping R&amp;D, licensing, and G&amp;A spend ahead of first plant deployment.
-
----
-
-• **Earnings Quality — Consistent, Material Miss Streak Signals Persistent Underestimation of Burn Rate.**
-OKLO has missed EPS consensus by a striking magnitude in every reported quarter: -63.6% in Q2 2025 (actual -$0.18 vs. -$0.11 estimate), -60.9% in Q3 2025 (actual -$0.20 vs. -$0.1243), and -65.1% in Q4 2025 (actual -$0.27 vs. -$0.164). There is zero evidence of sandbagging — the street is consistently and significantly undermodeling operating expenditure ramp. The Q1 2026 consensus sits at -$0.184; given the pattern, actual losses could approach -$0.28 to -$0.30, implying continued downside to near-term EPS prints.
-
----
-
-• **Margin Trajectory — Structurally Zero/Negative; Operating Loss Rate Is the Relevant Metric.**
-Gross margin and operating margin are reported at 0.0% given the absence of revenue, making traditional margin analysis inapplicable. The operative metric is the operating loss rate per quarter, which has deteriorated from -$20M to a peak of -$60M over four quarters — a ~3x increase in annualized cash consumption. The Q1 2026 step-down to -$50M may reflect timing of project expenses rather than structural improvement. Until first power purchase agreements convert to recognized revenue (earliest realistic scenario: 2027–2028), margins will remain meaningfully negative.
-
----
-
-• **Key Product Catalysts — NRC License Decision and Anchor Customer LOI Conversion Are the Market&#39;s Two Binary Events.**
-*(1)* **NRC Combined License Application (COLA) progression** for the Aurora microreactor at Idaho National Laboratory is the single most important de-risking event — any formal acceptance, schedule update, or approval milestone would be a material positive re-rating trigger for the stock. *(2)* **Conversion of signed LOIs/MOUs (representing &gt;1 GW of announced capacity interest, including agreements with data center operators and the U.S. government) into binding power purchase agreements (PPAs)** would validate commercial demand and provide the first foundation for revenue forecasting. The market is currently pricing optionality, not cash flows.
-
----
-
-• **Estimate Revision Trend — Cautiously Upward; Net Positive But Limited Conviction.**
-Over the last 30 days, analyst EPS revisions for the current quarter show 4 upward revisions vs. 2 downward revisions (net +2), with the same 4-up/2-down split holding over the trailing 7 days. With 19 analysts covering the name at a consensus **Buy**, the directional bias on estimates is **Upward**, though the revisions likely reflect updated timeline assumptions and share count adjustments rather than fundamental revenue model changes. The persistent beat-by-60%+ miss pattern on losses suggests upward EPS revisions (toward less negative numbers) may still prove optimistic.
-
-**Estimate Revision Direction: ▲ Upward (Weak Conviction)**</div>
-        </div>
-
-      </div>
-    </div>
-    
-
-    <!-- ── SECTION: INSIDER TRANSACTIONS ── -->
-    
-    <div class="section" id="sec-insider-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="insider_txns">Insider Transactions</span>
-      </div>
-      <div class="card">
-        <table class="insider-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Shares</th>
-              <th>Price</th>
-              <th>Total Value</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            
-            
-            <tr>
-              <td>BEALMEAR RICHARD CRAIG</td>
-              <td>
-                <span class="pill pill-insider-sell">
-                  Sell
-                </span>
-              </td>
-              <td style="text-align:right;">122,096</td>
-              <td style="text-align:right;">$3.18</td>
-              <td style="text-align:right;">$388,265</td>
-              <td style="text-align:right;color:var(--text-muted);">2026-06-02</td>
-            </tr>
-            
-            
-            
-            <tr>
-              <td>BEALMEAR RICHARD CRAIG</td>
-              <td>
-                <span class="pill pill-insider-sell">
-                  Sell
-                </span>
-              </td>
-              <td style="text-align:right;">2,100</td>
-              <td style="text-align:right;">—</td>
-              <td style="text-align:right;">—</td>
-              <td style="text-align:right;color:var(--text-muted);">2026-06-01</td>
-            </tr>
-            
-            
-            
-            <tr>
-              <td>BEALMEAR RICHARD CRAIG</td>
-              <td>
-                <span class="pill pill-insider-sell">
-                  Sell
-                </span>
-              </td>
-              <td style="text-align:right;">73,081</td>
-              <td style="text-align:right;">$68.42</td>
-              <td style="text-align:right;">$5.0M</td>
-              <td style="text-align:right;color:var(--text-muted);">2026-06-01</td>
-            </tr>
-            
-            
-            
-            <tr>
-              <td>DEWITTE JACOB</td>
-              <td>
-                <span class="pill pill-insider-sell">
-                  Sell
-                </span>
-              </td>
-              <td style="text-align:right;">200,000</td>
-              <td style="text-align:right;">$68.29</td>
-              <td style="text-align:right;">$13.7M</td>
-              <td style="text-align:right;color:var(--text-muted);">2026-06-01</td>
-            </tr>
-            
-            
-            
-            <tr>
-              <td>COCHRAN CAROLINE</td>
-              <td>
-                <span class="pill pill-insider-sell">
-                  Sell
-                </span>
-              </td>
-              <td style="text-align:right;">200,000</td>
-              <td style="text-align:right;">$68.29</td>
-              <td style="text-align:right;">$13.7M</td>
-              <td style="text-align:right;color:var(--text-muted);">2026-06-01</td>
-            </tr>
-            
-          </tbody>
-        </table>
-        
-        
-        <div class="insider-summary">0 buys / 10 sells in the last 30 days</div>
-      </div>
-    </div>
-    
-
-    <!-- ── SECTION: GEOPOLITICAL (filtered to this ticker) ── -->
-    
-    
-    <div class="section" id="sec-geo-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="geo_exposure">Geopolitical Exposure</span>
-      </div>
-      <div class="card">
-        
-        <div class="geo-theme">
-          <div class="geo-header">
-            <span class="geo-name">OKLO Domestic HALEU Nuclear Fuel Supply Secured — US Energy Independence Signal — Jun 2026</span>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              
-              <span style="font-size:10px;color:var(--text-muted);font-weight:500;">2026-06-22</span>
-              
-              <span class="pill risk-pill risk-medium">
-                Medium
-              </span>
-            </div>
-          </div>
-          <div class="geo-tickers">
-            
-            <span class="ticker-tag">OKLO</span>
-            
-          </div>
-          <div class="geo-analysis ai-text">• Jun 19, 2026 — Oklo signs a landmark HALEU fuel supply agreement with Centrus Energy at its Piketon, Ohio facility, securing domestic nuclear fuel for its Aurora powerhouses and reducing dependence on foreign uranium supply chains — a direct geopolitical supply-chain risk mitigation.
-• Jun 22, 2026 — The deal is framed by state, federal, and industry leaders as positioning southern Ohio as a US advanced nuclear energy hub, indicating strong regulatory and policy tailwinds at both state and federal levels for OKLO&#39;s commercial buildout.
-• Jun 19, 2026 — Domestic HALEU sourcing insulates OKLO from uranium supply disruptions that could arise from the ongoing Middle East escalation and any secondary sanctions or commodity market dislocations stemming from the Iran crisis.</div>
-          
-          <div class="geo-headlines">
-            
-            <div class="geo-headline">OKLO, Centrus sign fuel agreement in Piketon, positioning southern Ohio as an advanced nuclear energy hub</div>
-            
-            <div class="geo-headline">Oklo Locks In Domestic Nuclear Fuel Supply for Its Ohio Gigawatt Campus</div>
-            
-            <div class="geo-headline">Oklo and Centrus Forge Nuclear Fuel Deal for Ohio Campus</div>
-            
-            <div class="geo-headline">Uranium Deal Powers Up Nuclear Fission Firm Oklo</div>
-            
-          </div>
-          
-        </div>
-        
-      </div>
-    </div>
-    
-
-    <!-- ── SECTION: PORTFOLIO THEMES ── -->
-    
-
-    <!-- ── SECTION: SUPPLY CHAIN MAP ── -->
-    
-    <div class="section" id="sec-sc-OKLO">
-      <div class="section-header">
-        <span class="section-title" data-i18n="supply_chain_map">Supply Chain Map</span>
-      </div>
-      <div class="card">
-        
-        <div class="sc-diagram-wrap">
-          <svg class="sc-svg" id="sc-svg-OKLO" height="1" xmlns="http://www.w3.org/2000/svg"></svg>
-        </div>
-        
-        <div class="sc-summary">Oklo sits at the early-commercialization stage of the advanced fission power value chain, sourcing enriched uranium fuel, specialized nuclear components, and EPC construction services upstream while targeting power-hungry hyperscale data center operators and industrial customers downstream as offtakers for its compact Aurora Powerhouse units. As a pre-revenue company still awaiting NRC licensing approval, its supply chain relationships are largely contractual/LOI-stage, making upstream fuel supply security and downstream anchor customer commitments the most critical near-term risks.</div>
-        
-        <script>
-        (function() {
-          var sym = "OKLO";
-          var sc = {"downstream": [{"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Signed LOI for clean energy supply to AWS data centers via Aurora Powerhouse units", "revenue_pct": 25, "ticker": "AMZN"}, {"criticality": "medium", "name": "Microsoft Corporation", "relationship": "Potential hyperscale data center clean power offtake customer", "revenue_pct": 10, "ticker": "MSFT"}, {"criticality": "medium", "name": "Equinix Inc.", "relationship": "Data center operator seeking firm 24/7 carbon-free power, prospective customer", "revenue_pct": 10, "ticker": "EQIX"}, {"criticality": "low", "name": "Digital Realty Trust", "relationship": "Data center REIT with clean energy procurement needs, prospective Aurora customer", "revenue_pct": 5, "ticker": "DLR"}, {"criticality": "medium", "name": "Constellation Energy Corp.", "relationship": "Potential grid integration partner and power offtake collaborator for distributed nuclear", "revenue_pct": 10, "ticker": "DOE"}, {"criticality": "medium", "name": "Constellation Energy Group", "relationship": "Nuclear industry partner and potential used fuel supply source for Oklo\u0027s fuel recycling program", "revenue_pct": 15, "ticker": "CEG"}], "supply_chain_summary": "Oklo sits at the early-commercialization stage of the advanced fission power value chain, sourcing enriched uranium fuel, specialized nuclear components, and EPC construction services upstream while targeting power-hungry hyperscale data center operators and industrial customers downstream as offtakers for its compact Aurora Powerhouse units. As a pre-revenue company still awaiting NRC licensing approval, its supply chain relationships are largely contractual/LOI-stage, making upstream fuel supply security and downstream anchor customer commitments the most critical near-term risks.", "upstream": [{"criticality": "high", "name": "Centrus Energy Corp.", "relationship": "Domestic enriched uranium fuel supplier for advanced reactor fuel fabrication", "revenue_pct": 30, "ticker": "LEU"}, {"criticality": "high", "name": "BWX Technologies", "relationship": "Nuclear components manufacturer and fuel fabrication services provider", "revenue_pct": 20, "ticker": "BWXT"}, {"criticality": "medium", "name": "GE Vernova / General Electric", "relationship": "Turbine and power generation equipment supplier for powerhouse systems", "revenue_pct": 15, "ticker": "GE"}, {"criticality": "high", "name": "Quanta Services", "relationship": "Engineering, procurement, and construction (EPC) services for plant deployment", "revenue_pct": 25, "ticker": "PWR"}, {"criticality": "low", "name": "MDU Resources Group", "relationship": "Construction and materials services for plant site development", "revenue_pct": 5, "ticker": "MDU"}]};
-          var upstream = sc.upstream || [];
-          var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -7491,7 +6428,7 @@ Over the last 30 days, analyst EPS revisions for the current quarter show 4 upwa
           var sc = {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest licensee; uses Arm architecture for all Apple Silicon SoCs (iPhone, Mac, iPad)", "revenue_pct": 25, "ticker": "AAPL"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Major licensee for Snapdragon mobile, automotive, and IoT SoCs", "revenue_pct": 10, "ticker": "QCOM"}, {"criticality": "medium", "name": "NVIDIA Corporation", "relationship": "Arm-based CPU IP licensee for Grace CPU and embedded/automotive platforms", "revenue_pct": 7, "ticker": "NVDA"}, {"criticality": "medium", "name": "Marvell Technology", "relationship": "Arm CPU IP licensee for cloud, networking, and custom ASIC designs", "revenue_pct": 5, "ticker": "MRVL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Arm architecture licensee for Graviton cloud processors and Inferentia AI chips", "revenue_pct": 8, "ticker": "AMZN"}], "supply_chain_summary": "Arm Holdings sits at a uniquely central position in the semiconductor ecosystem as a pure-play IP licensor, designing and licensing CPU/GPU architectures rather than manufacturing chips itself, making it an upstream intellectual property provider to virtually the entire global chip industry. Its business model is asset-light on the upstream side (primarily dependent on EDA tools and engineering talent) but generates royalty and licensing revenue from a vast downstream network spanning mobile, cloud, automotive, and IoT \u2014 meaning disruption to key licensees like Apple, Qualcomm, or Amazon would have outsized revenue impact.", "upstream": [{"criticality": "high", "name": "Cadence Design Systems", "relationship": "EDA software tools for IP design and verification", "revenue_pct": 8, "ticker": "CDNS"}, {"criticality": "high", "name": "Synopsys Inc.", "relationship": "EDA tools and silicon IP for chip design workflows", "revenue_pct": 7, "ticker": "SNPS"}, {"criticality": "medium", "name": "Microsoft Corporation", "relationship": "Cloud infrastructure and enterprise software for R\u0026D operations", "revenue_pct": 3, "ticker": "MSFT"}, {"criticality": "medium", "name": "Alphabet Inc.", "relationship": "Cloud computing services for simulation and development environments", "revenue_pct": 2, "ticker": "GOOGL"}, {"criticality": "low", "name": "Applied Materials", "relationship": "Process technology research partnerships supporting IP development for leading-edge nodes", "revenue_pct": 1, "ticker": "AMAT"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -8672,7 +7609,7 @@ Over the last 30 days, analyst EPS revisions for the current quarter show 4 upwa
           var sc = {"downstream": [{"criticality": "high", "name": "Amazon.com (AWS)", "relationship": "Major hyperscaler customer for custom AI/ML silicon (Trainium, Inferentia-adjacent) and data center networking chips", "revenue_pct": 20, "ticker": "AMZN"}, {"criticality": "high", "name": "Alphabet (Google Cloud)", "relationship": "Large hyperscaler customer for custom TPU-related silicon and Ethernet switching/networking ICs", "revenue_pct": 15, "ticker": "GOOGL"}, {"criticality": "high", "name": "Meta Platforms", "relationship": "Hyperscaler customer for custom AI inference chips and data center networking solutions", "revenue_pct": 12, "ticker": "META"}, {"criticality": "medium", "name": "Microsoft (Azure)", "relationship": "Cloud infrastructure customer for Ethernet networking and custom silicon engagements", "revenue_pct": 8, "ticker": "MSFT"}, {"criticality": "medium", "name": "Cisco Systems", "relationship": "Networking equipment OEM customer for Ethernet PHYs, switches, and controllers", "revenue_pct": 7, "ticker": "CSCO"}, {"criticality": "medium", "name": "Western Digital", "relationship": "Storage OEM customer for Marvell\u0027s HDD/SSD controllers and storage SoCs", "revenue_pct": 6, "ticker": "WDC"}], "supply_chain_summary": "Marvell Technology is a fabless semiconductor company sitting at the critical intersection of cloud AI infrastructure and data networking, relying heavily on TSMC\u0027s advanced nodes for chip fabrication while serving hyperscalers (AWS, Google, Meta) and networking OEMs with custom and merchant silicon. Its strategic pivot toward custom AI accelerators (XPUs) and high-speed Ethernet solutions for data centers makes its downstream relationships with cloud giants increasingly dominant, representing the majority of its revenue growth trajectory.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary foundry partner for advanced node (5nm/3nm) chip fabrication", "revenue_pct": 35, "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier to TSMC/Samsung for Marvell chip production", "revenue_pct": 10, "ticker": "ASML"}, {"criticality": "medium", "name": "Amkor Technology", "relationship": "Advanced packaging and assembly/test services for Marvell chips", "revenue_pct": 8, "ticker": "AMKR"}, {"criticality": "low", "name": "Onto Innovation", "relationship": "Metrology and process control equipment used in chip inspection", "revenue_pct": 3, "ticker": "ONTO"}, {"criticality": "high", "name": "Cadence Design Systems", "relationship": "EDA software tools critical for chip design and verification", "revenue_pct": 5, "ticker": "CDNS"}, {"criticality": "medium", "name": "Arm Holdings", "relationship": "CPU/processor IP licensing for Marvell\u0027s SoC architectures", "revenue_pct": 4, "ticker": "ARM"}]};
           var upstream = sc.upstream || [];
           var downstream = sc.downstream || [];
-          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var watchlist = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-svg-' + sym);
           if (!svgEl) return;
 
@@ -8950,28 +7887,6 @@ Over the last 30 days, analyst EPS revisions for the current quarter show 4 upwa
             </tr>
             
             <tr>
-              <td>OKLO</td>
-              <td>$61.17</td>
-              <td>$10.64B</td>
-              <td>—</td>
-              <td>-73.4×</td>
-              <td>-49.0×</td>
-              <td>N/A</td>
-              <td>
-                —
-              </td>
-              <td>0.10</td>
-              <td>-1.1%</td>
-              <td>
-                
-                <span class="short-high">
-                  18.0%
-                </span>
-                
-              </td>
-            </tr>
-            
-            <tr>
               <td>ARM</td>
               <td>$439.46</td>
               <td>$469.38B</td>
@@ -9162,8 +8077,8 @@ Over the last 30 days, analyst EPS revisions for the current quarter show 4 upwa
         </div>
         <script>
         (function() {
-          var scDetail = {"AAPL": {"downstream": [{"criticality": "high", "name": "Alphabet Inc.", "relationship": "Pays Apple an estimated $18-20B annually to remain default search engine on iOS/Safari (Services revenue)", "revenue_pct": 5, "ticker": "GOOGL"}, {"criticality": "medium", "name": "Verizon Communications Inc.", "relationship": "Major U.S. carrier reseller and distribution partner for iPhone, offering subsidized device plans", "revenue_pct": 6, "ticker": "VZ"}, {"criticality": "medium", "name": "AT\u0026T Inc.", "relationship": "Major U.S. carrier reseller and distribution partner for iPhone with bundled device financing", "revenue_pct": 5, "ticker": "T"}, {"criticality": "low", "name": "Amazon.com Inc.", "relationship": "Significant retail distribution channel for Apple hardware products via Amazon Marketplace", "revenue_pct": 3, "ticker": "AMZN"}, {"criticality": "low", "name": "Microsoft Corporation", "relationship": "Major enterprise software partner and App Store developer; Microsoft 365 is a top iOS app revenue contributor", "revenue_pct": 2, "ticker": "MSFT"}, {"criticality": "medium", "name": "Meta Platforms Inc.", "relationship": "One of the largest App Store developers and advertising ecosystem participants; pays Apple 30% App Store commission on in-app purchases", "revenue_pct": 3, "ticker": "META"}], "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a \u0027fabless-plus\u0027 designer that outsources semiconductor fabrication to TSMC and physical assembly primarily to Foxconn, while maintaining tight vertical integration over chip architecture (Apple Silicon) and software. On the downstream side, Apple sells predominantly through carriers, its own retail/online stores, and third-party retailers, while its high-margin Services segment creates a secondary revenue layer from platform participants like Google, Meta, and thousands of App Store developers.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Co.", "relationship": "Primary fabrication partner for Apple Silicon (A-series, M-series, S-series chips) on leading-edge nodes", "revenue_pct": 18, "ticker": "TSM"}, {"criticality": "medium", "name": "Qualcomm Inc.", "relationship": "Supplier of 5G modem chips (transitioning to in-house, but still material through ~2025)", "revenue_pct": 5, "ticker": "QCOM"}, {"criticality": "low", "name": "Honeywell International", "relationship": "Supplier of specialty materials, sapphire glass components, and industrial manufacturing inputs", "revenue_pct": 2, "ticker": "HON"}, {"criticality": "high", "name": "Cirrus Logic Inc.", "relationship": "Sole-source supplier of custom audio chips and mixed-signal semiconductors for iPhone and AirPods", "revenue_pct": 4, "ticker": "CRUS"}]}, "ARM": {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest licensee; uses Arm architecture for all Apple Silicon SoCs (iPhone, Mac, iPad)", "revenue_pct": 25, "ticker": "AAPL"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Major licensee for Snapdragon mobile, automotive, and IoT SoCs", "revenue_pct": 10, "ticker": "QCOM"}, {"criticality": "medium", "name": "NVIDIA Corporation", "relationship": "Arm-based CPU IP licensee for Grace CPU and embedded/automotive platforms", "revenue_pct": 7, "ticker": "NVDA"}, {"criticality": "medium", "name": "Marvell Technology", "relationship": "Arm CPU IP licensee for cloud, networking, and custom ASIC designs", "revenue_pct": 5, "ticker": "MRVL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Arm architecture licensee for Graviton cloud processors and Inferentia AI chips", "revenue_pct": 8, "ticker": "AMZN"}], "supply_chain_summary": "Arm Holdings sits at a uniquely central position in the semiconductor ecosystem as a pure-play IP licensor, designing and licensing CPU/GPU architectures rather than manufacturing chips itself, making it an upstream intellectual property provider to virtually the entire global chip industry. Its business model is asset-light on the upstream side (primarily dependent on EDA tools and engineering talent) but generates royalty and licensing revenue from a vast downstream network spanning mobile, cloud, automotive, and IoT \u2014 meaning disruption to key licensees like Apple, Qualcomm, or Amazon would have outsized revenue impact.", "upstream": [{"criticality": "high", "name": "Cadence Design Systems", "relationship": "EDA software tools for IP design and verification", "revenue_pct": 8, "ticker": "CDNS"}, {"criticality": "high", "name": "Synopsys Inc.", "relationship": "EDA tools and silicon IP for chip design workflows", "revenue_pct": 7, "ticker": "SNPS"}, {"criticality": "medium", "name": "Microsoft Corporation", "relationship": "Cloud infrastructure and enterprise software for R\u0026D operations", "revenue_pct": 3, "ticker": "MSFT"}, {"criticality": "medium", "name": "Alphabet Inc.", "relationship": "Cloud computing services for simulation and development environments", "revenue_pct": 2, "ticker": "GOOGL"}, {"criticality": "low", "name": "Applied Materials", "relationship": "Process technology research partnerships supporting IP development for leading-edge nodes", "revenue_pct": 1, "ticker": "AMAT"}]}, "MRVL": {"downstream": [{"criticality": "high", "name": "Amazon.com (AWS)", "relationship": "Major hyperscaler customer for custom AI/ML silicon (Trainium, Inferentia-adjacent) and data center networking chips", "revenue_pct": 20, "ticker": "AMZN"}, {"criticality": "high", "name": "Alphabet (Google Cloud)", "relationship": "Large hyperscaler customer for custom TPU-related silicon and Ethernet switching/networking ICs", "revenue_pct": 15, "ticker": "GOOGL"}, {"criticality": "high", "name": "Meta Platforms", "relationship": "Hyperscaler customer for custom AI inference chips and data center networking solutions", "revenue_pct": 12, "ticker": "META"}, {"criticality": "medium", "name": "Microsoft (Azure)", "relationship": "Cloud infrastructure customer for Ethernet networking and custom silicon engagements", "revenue_pct": 8, "ticker": "MSFT"}, {"criticality": "medium", "name": "Cisco Systems", "relationship": "Networking equipment OEM customer for Ethernet PHYs, switches, and controllers", "revenue_pct": 7, "ticker": "CSCO"}, {"criticality": "medium", "name": "Western Digital", "relationship": "Storage OEM customer for Marvell\u0027s HDD/SSD controllers and storage SoCs", "revenue_pct": 6, "ticker": "WDC"}], "supply_chain_summary": "Marvell Technology is a fabless semiconductor company sitting at the critical intersection of cloud AI infrastructure and data networking, relying heavily on TSMC\u0027s advanced nodes for chip fabrication while serving hyperscalers (AWS, Google, Meta) and networking OEMs with custom and merchant silicon. Its strategic pivot toward custom AI accelerators (XPUs) and high-speed Ethernet solutions for data centers makes its downstream relationships with cloud giants increasingly dominant, representing the majority of its revenue growth trajectory.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary foundry partner for advanced node (5nm/3nm) chip fabrication", "revenue_pct": 35, "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier to TSMC/Samsung for Marvell chip production", "revenue_pct": 10, "ticker": "ASML"}, {"criticality": "medium", "name": "Amkor Technology", "relationship": "Advanced packaging and assembly/test services for Marvell chips", "revenue_pct": 8, "ticker": "AMKR"}, {"criticality": "low", "name": "Onto Innovation", "relationship": "Metrology and process control equipment used in chip inspection", "revenue_pct": 3, "ticker": "ONTO"}, {"criticality": "high", "name": "Cadence Design Systems", "relationship": "EDA software tools critical for chip design and verification", "revenue_pct": 5, "ticker": "CDNS"}, {"criticality": "medium", "name": "Arm Holdings", "relationship": "CPU/processor IP licensing for Marvell\u0027s SoC architectures", "revenue_pct": 4, "ticker": "ARM"}]}, "MU": {"downstream": [{"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Major hyperscale cloud customer purchasing DRAM, HBM, and NAND storage for AWS data center buildouts", "revenue_pct": 12, "ticker": "AMZN"}, {"criticality": "high", "name": "Microsoft Corporation", "relationship": "Large cloud and enterprise customer consuming server DRAM and NVMe SSDs for Azure infrastructure", "revenue_pct": 10, "ticker": "MSFT"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Critical customer for High Bandwidth Memory (HBM3/HBM3E) integrated into AI GPU products like H100/H200/B200", "revenue_pct": 14, "ticker": "NVDA"}, {"criticality": "high", "name": "Apple Inc.", "relationship": "Significant customer for LPDDR mobile DRAM and NAND flash used in iPhone, iPad, and Mac products", "revenue_pct": 10, "ticker": "AAPL"}, {"criticality": "medium", "name": "Alphabet Inc.", "relationship": "Hyperscale customer purchasing server DRAM, SSDs, and HBM for Google Cloud and AI accelerator systems", "revenue_pct": 8, "ticker": "GOOGL"}, {"criticality": "medium", "name": "Dell Technologies Inc.", "relationship": "Enterprise OEM customer integrating Micron DRAM modules and SSDs into servers, PCs, and storage systems", "revenue_pct": 6, "ticker": "DELL"}], "supply_chain_summary": "Micron Technology sits in the middle of the semiconductor value chain as a vertically integrated memory manufacturer, heavily dependent on a concentrated set of capital equipment suppliers (ASML, Applied Materials, Lam Research) for its multi-billion dollar fab investments in DRAM and 3D NAND. On the demand side, Micron\u0027s revenue is driven by a diverse but concentrated customer base spanning hyperscale cloud providers, AI accelerator vendors, and consumer electronics OEMs, with AI-driven HBM demand from NVIDIA increasingly becoming a high-growth and high-criticality revenue stream.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Primary supplier of EUV and DUV lithography equipment critical for advanced DRAM and NAND node development", "revenue_pct": 18, "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Key supplier of CVD, PVD, etch, and CMP equipment used across DRAM and NAND fabrication", "revenue_pct": 15, "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Critical supplier of etch and deposition equipment essential for 3D NAND stacking and DRAM patterning", "revenue_pct": 12, "ticker": "LRCX"}, {"criticality": "medium", "name": "Tokyo Electron Limited", "relationship": "Supplier of thermal processing, coater/developer, and etch equipment for memory fabs", "revenue_pct": 8, "ticker": "TOELY"}, {"criticality": "medium", "name": "Entegris Inc.", "relationship": "Supplier of specialty chemicals, CMP slurries, filtration, and materials handling solutions for fab processes", "revenue_pct": 5, "ticker": "ENTG"}, {"criticality": "low", "name": "MKS Instruments Inc.", "relationship": "Supplier of process control instruments, gas delivery, and power systems used in semiconductor manufacturing", "revenue_pct": 3, "ticker": "MKSI"}]}, "NVDA": {"downstream": [{"criticality": "high", "name": "Microsoft Corporation", "relationship": "Hyperscaler purchasing H100/H200/Blackwell GPUs at massive scale for Azure AI cloud infrastructure and OpenAI deployments", "revenue_pct": 15, "ticker": "MSFT"}, {"criticality": "high", "name": "Meta Platforms", "relationship": "Major purchaser of H100/H200 clusters for AI research, Llama model training, and recommendation system inference", "revenue_pct": 13, "ticker": "META"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Hyperscaler customer for GPU-accelerated AI/ML workloads on Google Cloud despite internal TPU development", "revenue_pct": 10, "ticker": "GOOGL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "AWS hyperscaler deploying NVIDIA GPUs for cloud AI services alongside its own Trainium/Inferentia chips", "revenue_pct": 10, "ticker": "AMZN"}, {"criticality": "medium", "name": "Oracle Corporation", "relationship": "Major cloud customer building large GPU clusters for Oracle Cloud Infrastructure AI services", "revenue_pct": 6, "ticker": "ORCL"}, {"criticality": "medium", "name": "Dell Technologies", "relationship": "OEM partner integrating NVIDIA GPUs into PowerEdge AI servers and DGX-branded systems for enterprise customers", "revenue_pct": 7, "ticker": "DELL"}], "supply_chain_summary": "NVIDIA sits at the apex of the AI accelerator value chain, acting as a fabless semiconductor designer that is critically dependent on TSMC\u0027s leading-edge nodes and HBM memory suppliers (SK Hynix, Micron) for its H100/H200/Blackwell GPU production. Its downstream is dominated by hyperscalers (Microsoft, Meta, Google, Amazon) and cloud/enterprise OEMs who are racing to build AI infrastructure, giving NVIDIA extraordinary pricing power but also concentration risk among a handful of mega-cap customers.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary foundry for all NVIDIA GPUs and SoCs (3nm/4nm/5nm processes)", "revenue_pct": 35, "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier to TSMC enabling NVIDIA\u0027s advanced node production (indirect but existential dependency)", "revenue_pct": 5, "ticker": "ASML"}, {"criticality": "medium", "name": "Applied Materials", "relationship": "Wafer fabrication equipment and materials supplier supporting NVIDIA\u0027s manufacturing nodes at TSMC/Samsung", "revenue_pct": 4, "ticker": "AMAT"}, {"criticality": "high", "name": "Micron Technology", "relationship": "HBM3/GDDR6X memory supplier integrated into NVIDIA H100/H200/GB200 GPUs and gaming cards", "revenue_pct": 18, "ticker": "MU"}, {"criticality": "high", "name": "SK Hynix", "relationship": "Primary HBM3e memory supplier for H200 and Blackwell AI accelerators", "revenue_pct": 12, "ticker": "SKHYY"}, {"criticality": "medium", "name": "Flex Ltd.", "relationship": "Contract electronics manufacturing and server board assembly for NVL/DGX systems", "revenue_pct": 6, "ticker": "AAVID"}]}, "OKLO": {"downstream": [{"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Signed LOI for clean energy supply to AWS data centers via Aurora Powerhouse units", "revenue_pct": 25, "ticker": "AMZN"}, {"criticality": "medium", "name": "Microsoft Corporation", "relationship": "Potential hyperscale data center clean power offtake customer", "revenue_pct": 10, "ticker": "MSFT"}, {"criticality": "medium", "name": "Equinix Inc.", "relationship": "Data center operator seeking firm 24/7 carbon-free power, prospective customer", "revenue_pct": 10, "ticker": "EQIX"}, {"criticality": "low", "name": "Digital Realty Trust", "relationship": "Data center REIT with clean energy procurement needs, prospective Aurora customer", "revenue_pct": 5, "ticker": "DLR"}, {"criticality": "medium", "name": "Constellation Energy Corp.", "relationship": "Potential grid integration partner and power offtake collaborator for distributed nuclear", "revenue_pct": 10, "ticker": "DOE"}, {"criticality": "medium", "name": "Constellation Energy Group", "relationship": "Nuclear industry partner and potential used fuel supply source for Oklo\u0027s fuel recycling program", "revenue_pct": 15, "ticker": "CEG"}], "supply_chain_summary": "Oklo sits at the early-commercialization stage of the advanced fission power value chain, sourcing enriched uranium fuel, specialized nuclear components, and EPC construction services upstream while targeting power-hungry hyperscale data center operators and industrial customers downstream as offtakers for its compact Aurora Powerhouse units. As a pre-revenue company still awaiting NRC licensing approval, its supply chain relationships are largely contractual/LOI-stage, making upstream fuel supply security and downstream anchor customer commitments the most critical near-term risks.", "upstream": [{"criticality": "high", "name": "Centrus Energy Corp.", "relationship": "Domestic enriched uranium fuel supplier for advanced reactor fuel fabrication", "revenue_pct": 30, "ticker": "LEU"}, {"criticality": "high", "name": "BWX Technologies", "relationship": "Nuclear components manufacturer and fuel fabrication services provider", "revenue_pct": 20, "ticker": "BWXT"}, {"criticality": "medium", "name": "GE Vernova / General Electric", "relationship": "Turbine and power generation equipment supplier for powerhouse systems", "revenue_pct": 15, "ticker": "GE"}, {"criticality": "high", "name": "Quanta Services", "relationship": "Engineering, procurement, and construction (EPC) services for plant deployment", "revenue_pct": 25, "ticker": "PWR"}, {"criticality": "low", "name": "MDU Resources Group", "relationship": "Construction and materials services for plant site development", "revenue_pct": 5, "ticker": "MDU"}]}, "TSM": {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest single customer; TSMC exclusively manufactures Apple\u0027s A-series and M-series SoCs on leading-edge nodes", "revenue_pct": 25, "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Major customer for high-performance GPU and AI accelerator chips on advanced nodes (4nm/3nm)", "revenue_pct": 11, "ticker": "NVDA"}, {"criticality": "high", "name": "Advanced Micro Devices Inc.", "relationship": "Significant customer for CPU, GPU, and datacenter accelerator manufacturing on leading-edge nodes", "revenue_pct": 9, "ticker": "AMD"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Major customer for Snapdragon mobile SoCs and RF chips across multiple process nodes", "revenue_pct": 8, "ticker": "QCOM"}, {"criticality": "medium", "name": "Intel Corporation", "relationship": "Significant outsourcing customer for Intel Foundry Services products on advanced nodes (3nm/18A ramp)", "revenue_pct": 5, "ticker": "INTC"}, {"criticality": "medium", "name": "Marvell Technology Inc.", "relationship": "Growing customer for custom AI/datacenter ASICs and networking chips on advanced nodes", "revenue_pct": 4, "ticker": "MRVL"}], "supply_chain_summary": "TSMC sits at the critical nexus of the global semiconductor supply chain as the world\u0027s dominant pure-play foundry, translating upstream equipment and materials inputs from a handful of highly specialized suppliers into finished wafers for virtually every major fabless chip designer. Its position is uniquely powerful yet concentrated \u2014 extreme customer dependency on Apple and NVIDIA on the demand side is mirrored by an equally critical dependency on ASML\u0027s monopoly EUV equipment on the supply side, making geopolitical and single-source risks the defining vulnerabilities of its supply chain.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Sole supplier of EUV lithography equipment essential for advanced nodes (5nm, 3nm, 2nm)", "revenue_pct": 20, "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Leading supplier of deposition, etch, and inspection equipment across all process nodes", "revenue_pct": 15, "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Critical supplier of etch and deposition equipment for advanced semiconductor fabrication", "revenue_pct": 10, "ticker": "LRCX"}, {"criticality": "high", "name": "Tokyo Electron Limited", "relationship": "Major supplier of wafer processing equipment including coaters, developers, and thermal systems", "revenue_pct": 10, "ticker": "TOELY"}, {"criticality": "medium", "name": "Entegris Inc.", "relationship": "Supplier of specialty chemicals, advanced materials, and process solutions for semiconductor manufacturing", "revenue_pct": 5, "ticker": "ENTG"}, {"criticality": "high", "name": "SUMCO Corporation", "relationship": "Key supplier of high-purity silicon wafers (300mm) used as the base substrate for all chip fabrication", "revenue_pct": 8, "ticker": "SUMCO"}]}};
-          var symbols = ["NVDA", "AAPL", "TSM", "MU", "OKLO", "ARM", "MRVL"];
+          var scDetail = {"AAPL": {"downstream": [{"criticality": "high", "name": "Alphabet Inc.", "relationship": "Pays Apple an estimated $18-20B annually to remain default search engine on iOS/Safari (Services revenue)", "revenue_pct": 5, "ticker": "GOOGL"}, {"criticality": "medium", "name": "Verizon Communications Inc.", "relationship": "Major U.S. carrier reseller and distribution partner for iPhone, offering subsidized device plans", "revenue_pct": 6, "ticker": "VZ"}, {"criticality": "medium", "name": "AT\u0026T Inc.", "relationship": "Major U.S. carrier reseller and distribution partner for iPhone with bundled device financing", "revenue_pct": 5, "ticker": "T"}, {"criticality": "low", "name": "Amazon.com Inc.", "relationship": "Significant retail distribution channel for Apple hardware products via Amazon Marketplace", "revenue_pct": 3, "ticker": "AMZN"}, {"criticality": "low", "name": "Microsoft Corporation", "relationship": "Major enterprise software partner and App Store developer; Microsoft 365 is a top iOS app revenue contributor", "revenue_pct": 2, "ticker": "MSFT"}, {"criticality": "medium", "name": "Meta Platforms Inc.", "relationship": "One of the largest App Store developers and advertising ecosystem participants; pays Apple 30% App Store commission on in-app purchases", "revenue_pct": 3, "ticker": "META"}], "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a \u0027fabless-plus\u0027 designer that outsources semiconductor fabrication to TSMC and physical assembly primarily to Foxconn, while maintaining tight vertical integration over chip architecture (Apple Silicon) and software. On the downstream side, Apple sells predominantly through carriers, its own retail/online stores, and third-party retailers, while its high-margin Services segment creates a secondary revenue layer from platform participants like Google, Meta, and thousands of App Store developers.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Co.", "relationship": "Primary fabrication partner for Apple Silicon (A-series, M-series, S-series chips) on leading-edge nodes", "revenue_pct": 18, "ticker": "TSM"}, {"criticality": "medium", "name": "Qualcomm Inc.", "relationship": "Supplier of 5G modem chips (transitioning to in-house, but still material through ~2025)", "revenue_pct": 5, "ticker": "QCOM"}, {"criticality": "low", "name": "Honeywell International", "relationship": "Supplier of specialty materials, sapphire glass components, and industrial manufacturing inputs", "revenue_pct": 2, "ticker": "HON"}, {"criticality": "high", "name": "Cirrus Logic Inc.", "relationship": "Sole-source supplier of custom audio chips and mixed-signal semiconductors for iPhone and AirPods", "revenue_pct": 4, "ticker": "CRUS"}]}, "ARM": {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest licensee; uses Arm architecture for all Apple Silicon SoCs (iPhone, Mac, iPad)", "revenue_pct": 25, "ticker": "AAPL"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Major licensee for Snapdragon mobile, automotive, and IoT SoCs", "revenue_pct": 10, "ticker": "QCOM"}, {"criticality": "medium", "name": "NVIDIA Corporation", "relationship": "Arm-based CPU IP licensee for Grace CPU and embedded/automotive platforms", "revenue_pct": 7, "ticker": "NVDA"}, {"criticality": "medium", "name": "Marvell Technology", "relationship": "Arm CPU IP licensee for cloud, networking, and custom ASIC designs", "revenue_pct": 5, "ticker": "MRVL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Arm architecture licensee for Graviton cloud processors and Inferentia AI chips", "revenue_pct": 8, "ticker": "AMZN"}], "supply_chain_summary": "Arm Holdings sits at a uniquely central position in the semiconductor ecosystem as a pure-play IP licensor, designing and licensing CPU/GPU architectures rather than manufacturing chips itself, making it an upstream intellectual property provider to virtually the entire global chip industry. Its business model is asset-light on the upstream side (primarily dependent on EDA tools and engineering talent) but generates royalty and licensing revenue from a vast downstream network spanning mobile, cloud, automotive, and IoT \u2014 meaning disruption to key licensees like Apple, Qualcomm, or Amazon would have outsized revenue impact.", "upstream": [{"criticality": "high", "name": "Cadence Design Systems", "relationship": "EDA software tools for IP design and verification", "revenue_pct": 8, "ticker": "CDNS"}, {"criticality": "high", "name": "Synopsys Inc.", "relationship": "EDA tools and silicon IP for chip design workflows", "revenue_pct": 7, "ticker": "SNPS"}, {"criticality": "medium", "name": "Microsoft Corporation", "relationship": "Cloud infrastructure and enterprise software for R\u0026D operations", "revenue_pct": 3, "ticker": "MSFT"}, {"criticality": "medium", "name": "Alphabet Inc.", "relationship": "Cloud computing services for simulation and development environments", "revenue_pct": 2, "ticker": "GOOGL"}, {"criticality": "low", "name": "Applied Materials", "relationship": "Process technology research partnerships supporting IP development for leading-edge nodes", "revenue_pct": 1, "ticker": "AMAT"}]}, "MRVL": {"downstream": [{"criticality": "high", "name": "Amazon.com (AWS)", "relationship": "Major hyperscaler customer for custom AI/ML silicon (Trainium, Inferentia-adjacent) and data center networking chips", "revenue_pct": 20, "ticker": "AMZN"}, {"criticality": "high", "name": "Alphabet (Google Cloud)", "relationship": "Large hyperscaler customer for custom TPU-related silicon and Ethernet switching/networking ICs", "revenue_pct": 15, "ticker": "GOOGL"}, {"criticality": "high", "name": "Meta Platforms", "relationship": "Hyperscaler customer for custom AI inference chips and data center networking solutions", "revenue_pct": 12, "ticker": "META"}, {"criticality": "medium", "name": "Microsoft (Azure)", "relationship": "Cloud infrastructure customer for Ethernet networking and custom silicon engagements", "revenue_pct": 8, "ticker": "MSFT"}, {"criticality": "medium", "name": "Cisco Systems", "relationship": "Networking equipment OEM customer for Ethernet PHYs, switches, and controllers", "revenue_pct": 7, "ticker": "CSCO"}, {"criticality": "medium", "name": "Western Digital", "relationship": "Storage OEM customer for Marvell\u0027s HDD/SSD controllers and storage SoCs", "revenue_pct": 6, "ticker": "WDC"}], "supply_chain_summary": "Marvell Technology is a fabless semiconductor company sitting at the critical intersection of cloud AI infrastructure and data networking, relying heavily on TSMC\u0027s advanced nodes for chip fabrication while serving hyperscalers (AWS, Google, Meta) and networking OEMs with custom and merchant silicon. Its strategic pivot toward custom AI accelerators (XPUs) and high-speed Ethernet solutions for data centers makes its downstream relationships with cloud giants increasingly dominant, representing the majority of its revenue growth trajectory.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary foundry partner for advanced node (5nm/3nm) chip fabrication", "revenue_pct": 35, "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier to TSMC/Samsung for Marvell chip production", "revenue_pct": 10, "ticker": "ASML"}, {"criticality": "medium", "name": "Amkor Technology", "relationship": "Advanced packaging and assembly/test services for Marvell chips", "revenue_pct": 8, "ticker": "AMKR"}, {"criticality": "low", "name": "Onto Innovation", "relationship": "Metrology and process control equipment used in chip inspection", "revenue_pct": 3, "ticker": "ONTO"}, {"criticality": "high", "name": "Cadence Design Systems", "relationship": "EDA software tools critical for chip design and verification", "revenue_pct": 5, "ticker": "CDNS"}, {"criticality": "medium", "name": "Arm Holdings", "relationship": "CPU/processor IP licensing for Marvell\u0027s SoC architectures", "revenue_pct": 4, "ticker": "ARM"}]}, "MU": {"downstream": [{"criticality": "high", "name": "Amazon.com Inc.", "relationship": "Major hyperscale cloud customer purchasing DRAM, HBM, and NAND storage for AWS data center buildouts", "revenue_pct": 12, "ticker": "AMZN"}, {"criticality": "high", "name": "Microsoft Corporation", "relationship": "Large cloud and enterprise customer consuming server DRAM and NVMe SSDs for Azure infrastructure", "revenue_pct": 10, "ticker": "MSFT"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Critical customer for High Bandwidth Memory (HBM3/HBM3E) integrated into AI GPU products like H100/H200/B200", "revenue_pct": 14, "ticker": "NVDA"}, {"criticality": "high", "name": "Apple Inc.", "relationship": "Significant customer for LPDDR mobile DRAM and NAND flash used in iPhone, iPad, and Mac products", "revenue_pct": 10, "ticker": "AAPL"}, {"criticality": "medium", "name": "Alphabet Inc.", "relationship": "Hyperscale customer purchasing server DRAM, SSDs, and HBM for Google Cloud and AI accelerator systems", "revenue_pct": 8, "ticker": "GOOGL"}, {"criticality": "medium", "name": "Dell Technologies Inc.", "relationship": "Enterprise OEM customer integrating Micron DRAM modules and SSDs into servers, PCs, and storage systems", "revenue_pct": 6, "ticker": "DELL"}], "supply_chain_summary": "Micron Technology sits in the middle of the semiconductor value chain as a vertically integrated memory manufacturer, heavily dependent on a concentrated set of capital equipment suppliers (ASML, Applied Materials, Lam Research) for its multi-billion dollar fab investments in DRAM and 3D NAND. On the demand side, Micron\u0027s revenue is driven by a diverse but concentrated customer base spanning hyperscale cloud providers, AI accelerator vendors, and consumer electronics OEMs, with AI-driven HBM demand from NVIDIA increasingly becoming a high-growth and high-criticality revenue stream.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Primary supplier of EUV and DUV lithography equipment critical for advanced DRAM and NAND node development", "revenue_pct": 18, "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Key supplier of CVD, PVD, etch, and CMP equipment used across DRAM and NAND fabrication", "revenue_pct": 15, "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Critical supplier of etch and deposition equipment essential for 3D NAND stacking and DRAM patterning", "revenue_pct": 12, "ticker": "LRCX"}, {"criticality": "medium", "name": "Tokyo Electron Limited", "relationship": "Supplier of thermal processing, coater/developer, and etch equipment for memory fabs", "revenue_pct": 8, "ticker": "TOELY"}, {"criticality": "medium", "name": "Entegris Inc.", "relationship": "Supplier of specialty chemicals, CMP slurries, filtration, and materials handling solutions for fab processes", "revenue_pct": 5, "ticker": "ENTG"}, {"criticality": "low", "name": "MKS Instruments Inc.", "relationship": "Supplier of process control instruments, gas delivery, and power systems used in semiconductor manufacturing", "revenue_pct": 3, "ticker": "MKSI"}]}, "NVDA": {"downstream": [{"criticality": "high", "name": "Microsoft Corporation", "relationship": "Hyperscaler purchasing H100/H200/Blackwell GPUs at massive scale for Azure AI cloud infrastructure and OpenAI deployments", "revenue_pct": 15, "ticker": "MSFT"}, {"criticality": "high", "name": "Meta Platforms", "relationship": "Major purchaser of H100/H200 clusters for AI research, Llama model training, and recommendation system inference", "revenue_pct": 13, "ticker": "META"}, {"criticality": "high", "name": "Alphabet Inc.", "relationship": "Hyperscaler customer for GPU-accelerated AI/ML workloads on Google Cloud despite internal TPU development", "revenue_pct": 10, "ticker": "GOOGL"}, {"criticality": "high", "name": "Amazon.com Inc.", "relationship": "AWS hyperscaler deploying NVIDIA GPUs for cloud AI services alongside its own Trainium/Inferentia chips", "revenue_pct": 10, "ticker": "AMZN"}, {"criticality": "medium", "name": "Oracle Corporation", "relationship": "Major cloud customer building large GPU clusters for Oracle Cloud Infrastructure AI services", "revenue_pct": 6, "ticker": "ORCL"}, {"criticality": "medium", "name": "Dell Technologies", "relationship": "OEM partner integrating NVIDIA GPUs into PowerEdge AI servers and DGX-branded systems for enterprise customers", "revenue_pct": 7, "ticker": "DELL"}], "supply_chain_summary": "NVIDIA sits at the apex of the AI accelerator value chain, acting as a fabless semiconductor designer that is critically dependent on TSMC\u0027s leading-edge nodes and HBM memory suppliers (SK Hynix, Micron) for its H100/H200/Blackwell GPU production. Its downstream is dominated by hyperscalers (Microsoft, Meta, Google, Amazon) and cloud/enterprise OEMs who are racing to build AI infrastructure, giving NVIDIA extraordinary pricing power but also concentration risk among a handful of mega-cap customers.", "upstream": [{"criticality": "high", "name": "Taiwan Semiconductor Manufacturing Company", "relationship": "Primary foundry for all NVIDIA GPUs and SoCs (3nm/4nm/5nm processes)", "revenue_pct": 35, "ticker": "TSM"}, {"criticality": "high", "name": "ASML Holding", "relationship": "EUV lithography equipment supplier to TSMC enabling NVIDIA\u0027s advanced node production (indirect but existential dependency)", "revenue_pct": 5, "ticker": "ASML"}, {"criticality": "medium", "name": "Applied Materials", "relationship": "Wafer fabrication equipment and materials supplier supporting NVIDIA\u0027s manufacturing nodes at TSMC/Samsung", "revenue_pct": 4, "ticker": "AMAT"}, {"criticality": "high", "name": "Micron Technology", "relationship": "HBM3/GDDR6X memory supplier integrated into NVIDIA H100/H200/GB200 GPUs and gaming cards", "revenue_pct": 18, "ticker": "MU"}, {"criticality": "high", "name": "SK Hynix", "relationship": "Primary HBM3e memory supplier for H200 and Blackwell AI accelerators", "revenue_pct": 12, "ticker": "SKHYY"}, {"criticality": "medium", "name": "Flex Ltd.", "relationship": "Contract electronics manufacturing and server board assembly for NVL/DGX systems", "revenue_pct": 6, "ticker": "AAVID"}]}, "TSM": {"downstream": [{"criticality": "high", "name": "Apple Inc.", "relationship": "Largest single customer; TSMC exclusively manufactures Apple\u0027s A-series and M-series SoCs on leading-edge nodes", "revenue_pct": 25, "ticker": "AAPL"}, {"criticality": "high", "name": "NVIDIA Corporation", "relationship": "Major customer for high-performance GPU and AI accelerator chips on advanced nodes (4nm/3nm)", "revenue_pct": 11, "ticker": "NVDA"}, {"criticality": "high", "name": "Advanced Micro Devices Inc.", "relationship": "Significant customer for CPU, GPU, and datacenter accelerator manufacturing on leading-edge nodes", "revenue_pct": 9, "ticker": "AMD"}, {"criticality": "high", "name": "Qualcomm Inc.", "relationship": "Major customer for Snapdragon mobile SoCs and RF chips across multiple process nodes", "revenue_pct": 8, "ticker": "QCOM"}, {"criticality": "medium", "name": "Intel Corporation", "relationship": "Significant outsourcing customer for Intel Foundry Services products on advanced nodes (3nm/18A ramp)", "revenue_pct": 5, "ticker": "INTC"}, {"criticality": "medium", "name": "Marvell Technology Inc.", "relationship": "Growing customer for custom AI/datacenter ASICs and networking chips on advanced nodes", "revenue_pct": 4, "ticker": "MRVL"}], "supply_chain_summary": "TSMC sits at the critical nexus of the global semiconductor supply chain as the world\u0027s dominant pure-play foundry, translating upstream equipment and materials inputs from a handful of highly specialized suppliers into finished wafers for virtually every major fabless chip designer. Its position is uniquely powerful yet concentrated \u2014 extreme customer dependency on Apple and NVIDIA on the demand side is mirrored by an equally critical dependency on ASML\u0027s monopoly EUV equipment on the supply side, making geopolitical and single-source risks the defining vulnerabilities of its supply chain.", "upstream": [{"criticality": "high", "name": "ASML Holding N.V.", "relationship": "Sole supplier of EUV lithography equipment essential for advanced nodes (5nm, 3nm, 2nm)", "revenue_pct": 20, "ticker": "ASML"}, {"criticality": "high", "name": "Applied Materials Inc.", "relationship": "Leading supplier of deposition, etch, and inspection equipment across all process nodes", "revenue_pct": 15, "ticker": "AMAT"}, {"criticality": "high", "name": "Lam Research Corporation", "relationship": "Critical supplier of etch and deposition equipment for advanced semiconductor fabrication", "revenue_pct": 10, "ticker": "LRCX"}, {"criticality": "high", "name": "Tokyo Electron Limited", "relationship": "Major supplier of wafer processing equipment including coaters, developers, and thermal systems", "revenue_pct": 10, "ticker": "TOELY"}, {"criticality": "medium", "name": "Entegris Inc.", "relationship": "Supplier of specialty chemicals, advanced materials, and process solutions for semiconductor manufacturing", "revenue_pct": 5, "ticker": "ENTG"}, {"criticality": "high", "name": "SUMCO Corporation", "relationship": "Key supplier of high-purity silicon wafers (300mm) used as the base substrate for all chip fabrication", "revenue_pct": 8, "ticker": "SUMCO"}]}};
+          var symbols = ["NVDA", "AAPL", "TSM", "MU", "ARM", "MRVL"];
           var svgEl = document.getElementById('sc-network-svg');
           if (!svgEl || !symbols.length) return;
 
@@ -9435,8 +8350,6 @@ Over the last 30 days, analyst EPS revisions for the current quarter show 4 upwa
 <script>
 const priceHistory = {
   
-  "OKLO": [54.689998626708984, 53.970001220703125, 56.2599983215332, 54.959999084472656, 55.27000045776367, 51.810001373291016, 50.22999954223633, 45.58000183105469, 49.59000015258789, 48.06999969482422, 48.130001068115234, 48.7599983215332, 46.59000015258789, 50.209999084472656, 47.75, 50.25, 53.939998626708984, 58.58000183105469, 63.349998474121094, 64.20999908447266, 66.80999755859375, 68.12999725341797, 62.61000061035156, 72.41000366210938, 76.45999908447266, 71.0, 75.93000030517578, 69.08999633789062, 64.9800033569336, 72.5, 70.4000015258789, 68.5999984741211, 68.37999725341797, 79.62000274658203, 71.83000183105469, 72.51000213623047, 78.12999725341797, 73.62999725341797, 69.66000366210938, 67.20999908447266, 62.25, 58.560001373291016, 55.880001068115234, 62.58000183105469, 65.08999633789062, 65.87999725341797, 68.69999694824219, 67.81999969482422, 68.08999633789062, 66.87999725341797, 66.88999938964844, 73.47000122070312, 65.20999908447266, 65.38999938964844, 58.09000015258789, 58.939998626708984, 56.47999954223633, 54.02000045776367, 57.86000061035156, 57.4900016784668, 60.7400016784668, 57.45000076293945, 58.81999969482422, 61.16999816894531],
-  
   "AAPL": [248.73085021972656, 247.76173400878906, 251.25851440429688, 251.4083709716797, 252.38746643066406, 252.6572265625, 248.57098388671875, 246.40298461914062, 253.55638122558594, 255.3946990966797, 255.68443298339844, 258.6217041015625, 253.26666259765625, 258.66168212890625, 260.2502136230469, 260.240234375, 258.96142578125, 258.59173583984375, 266.18475341796875, 263.15753173828125, 269.98126220703125, 272.79864501953125, 265.9250183105469, 272.9185791015625, 273.1783142089844, 270.81048583984375, 267.3636474609375, 270.4608154296875, 269.92132568359375, 271.1002502441406, 279.88214111328125, 276.5751647949219, 283.9184265136719, 287.245361328125, 287.1754150390625, 293.0500183105469, 292.67999267578125, 294.79998779296875, 298.8699951171875, 298.2099914550781, 300.2300109863281, 297.8399963378906, 298.9700012207031, 302.25, 304.989990234375, 308.82000732421875, 308.3299865722656, 310.8500061035156, 312.510009765625, 312.05999755859375, 306.30999755859375, 315.20001220703125, 310.260009765625, 311.2300109863281, 307.3399963378906, 301.5400085449219, 290.54998779296875, 291.5799865722656, 295.6300048828125, 291.1300048828125, 296.4200134277344, 299.239990234375, 295.95001220703125, 298.010009765625],
   
   "MU": [444.08343505859375, 422.722412109375, 404.1802062988281, 395.3639221191406, 381.9295654296875, 355.31072998046875, 357.07000732421875, 321.79998779296875, 337.8399963378906, 367.8500061035156, 366.239990234375, 377.760009765625, 377.5799865722656, 406.7300109863281, 421.510009765625, 420.5899963378906, 426.55999755859375, 465.6600036621094, 456.2300109863281, 457.2300109863281, 455.07000732421875, 448.4200134277344, 449.3800048828125, 487.4800109863281, 481.7200012207031, 496.7200012207031, 524.5599975585938, 504.2900085449219, 518.4600219726562, 517.1599731445312, 542.2100219726562, 576.4500122070312, 640.2000122070312, 666.5900268554688, 646.6300048828125, 746.8099975585938, 795.3300170898438, 766.5800170898438, 803.6300048828125, 776.010009765625, 724.6599731445312, 681.5399780273438, 698.739990234375, 731.989990234375, 762.0999755859375, 751.0, 895.8800048828125, 928.4099731445312, 923.52001953125, 971.0, 1035.5, 1064.0999755859375, 1079.5699462890625, 996.0, 864.010009765625, 949.280029296875, 935.8900146484375, 891.8800048828125, 995.8699951171875, 981.6099853515625, 1087.989990234375, 1020.760009765625, 1043.18994140625, 1133.989990234375],
@@ -9501,13 +8414,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const first = pts[0], last = pts[pts.length - 1];
     const color = last >= first ? '#16a34a' : '#dc2626';
     drawSparkline('spark-MU', pts, color);
-  }
-  
-  if (priceHistory["OKLO"]) {
-    const pts = priceHistory["OKLO"];
-    const first = pts[0], last = pts[pts.length - 1];
-    const color = last >= first ? '#16a34a' : '#dc2626';
-    drawSparkline('spark-OKLO', pts, color);
   }
   
   if (priceHistory["ARM"]) {
@@ -9597,6 +8503,7 @@ const I18N = {
     admin_need_token: '请输入你的 GitHub 个人访问令牌。',
     admin_bad_token: '令牌无效。',
     admin_no_access: '该令牌没有此仓库的写入权限。',
+    admin_no_workflow: '该令牌缺少 “workflow” 权限范围。请创建一个勾选了 workflow 范围的 classic 令牌。',
   },
   en: {
     updated: 'Updated 2026-06-22 06:26 UTC',
@@ -9641,6 +8548,7 @@ const I18N = {
     admin_need_token: 'Please enter your GitHub Personal Access Token.',
     admin_bad_token: 'Invalid token.',
     admin_no_access: 'That token does not have write access to this repo.',
+    admin_no_workflow: "This token is missing the 'workflow' scope. Create a classic token with the workflow scope checked.",
   }
 };
 
@@ -10026,6 +8934,14 @@ async function _doUnlock(repo, pat, btn) {
       if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
       return;
     }
+    // Classic tokens report their scopes; require 'workflow' (needed to dispatch
+    // the report workflow). Fine-grained tokens omit this header — skip the check.
+    const scopes = resp.headers.get('x-oauth-scopes');
+    if (scopes !== null && !scopes.split(',').map(s => s.trim()).includes('workflow')) {
+      showAddStatus('error', _i18n('admin_no_workflow'));
+      if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
+      return;
+    }
     // Verified owner — persist and reveal controls
     localStorage.setItem(ADD_STOCK_PAT_KEY, pat);
     localStorage.setItem(ADMIN_KEY, '1');
@@ -10154,8 +9070,6 @@ function showAddStatus(type, msg) {
   setupTOCForTab("TSM");
   
   setupTOCForTab("MU");
-  
-  setupTOCForTab("OKLO");
   
   setupTOCForTab("ARM");
   
