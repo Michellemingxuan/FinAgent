@@ -1,8 +1,9 @@
 # Credentials — never commit
 .env
 
-# Cached report context (contains live market data, not for version control)
-output/.last_context.pkl
+# Note: output/.last_context.pkl IS committed so removal runs can re-render the
+# page from cached data without a full report run. It holds the same market data
+# already published in the HTML report.
 
 # Python
 __pycache__/

@@ -85,6 +85,8 @@
     .btn:hover { background: var(--bg); text-decoration: none; }
     .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn-primary:hover { background: #1d4ed8; }
+    .btn-danger { background: var(--red); color: #fff; border-color: var(--red); }
+    .btn-danger:hover { background: #b91c1c; }
 
     /* ── Tab bar ── */
     .tab-bar { display: flex; gap: 0; overflow-x: auto; padding-bottom: 0; }
@@ -95,6 +97,9 @@
     .tab.drag-over { border-left: 2px solid var(--accent); background: var(--accent-light); }
     .tab-close { display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 11px; line-height: 1; color: var(--text-muted); transition: background 0.1s, color 0.1s; flex-shrink: 0; }
     .tab-close:hover { background: var(--red-bg); color: var(--red); }
+    .tab-manage { display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 3px; font-size: 13px; line-height: 1; color: var(--text-muted); opacity: 0; transition: background 0.1s, color 0.1s, opacity 0.1s; flex-shrink: 0; }
+    .tab:hover .tab-manage { opacity: 1; }
+    .tab-manage:hover { background: var(--red-bg); color: var(--red); }
     .tab-restore { padding: 6px 10px; font-size: 11px; color: var(--text-muted); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; display: none; align-items: center; gap: 3px; }
     .tab-restore.has-hidden { display: flex; }
     .tab-restore:hover { color: var(--accent); }
@@ -401,7 +406,7 @@
       </select>
       {% endif %}
       {% if github_repo %}
-      <button class="btn" id="addStockBtn" onclick="document.getElementById('addStockModal').classList.add('visible')">
+      <button class="btn" id="addStockBtn" onclick="openAddStock()">
         &#x2b;&nbsp; <span data-i18n="add_stock">Add Stock</span>
       </button>
       <a class="btn btn-primary"
@@ -418,7 +423,8 @@
     {% for tr in ctx.ratings %}
     <div class="tab {% if loop.first %}active{% endif %}" data-tab="stock-{{ tr.symbol }}" data-symbol="{{ tr.symbol }}" draggable="true">
       <span>{{ tr.symbol }}</span>
-      <span class="tab-close" title="Remove from view" onclick="closeTab(event, '{{ tr.symbol }}')">&#x2715;</span>
+      <span class="tab-close" title="Hide from view (this browser only)" onclick="closeTab(event, '{{ tr.symbol }}')">&#x2715;</span>
+      {% if github_repo %}<span class="tab-manage" title="Stop tracking permanently" onclick="openRemoveStock(event, '{{ tr.symbol }}')">&#8942;</span>{% endif %}
     </div>
     {% endfor %}
     <div class="tab" data-tab="macro" data-i18n="macro_geo">Macro &amp; Geo</div>
@@ -430,12 +436,14 @@
 {% if github_repo %}
 <div class="modal-overlay" id="addStockModal" onclick="if(event.target===this)closeAddStockModal()">
   <div class="modal">
-    <h3 data-i18n="add_stock_title">Add a Stock</h3>
-    <p data-i18n="add_stock_desc">Enter the ticker symbol. A new report will be generated automatically.</p>
+    <h3 id="stockModalTitle" data-i18n="add_stock_title">Add a Stock</h3>
+    <p id="stockModalDesc" data-i18n="add_stock_desc">Enter the ticker symbol. A new report will be generated automatically.</p>
 
-    <label for="newTicker" data-i18n="ticker_label">Ticker Symbol</label>
-    <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;"
-           onkeydown="if(event.key==='Enter')submitAddStock()" />
+    <div id="tickerInputRow">
+      <label for="newTicker" data-i18n="ticker_label">Ticker Symbol</label>
+      <input type="text" id="newTicker" placeholder="e.g. MSFT" style="text-transform:uppercase;"
+             onkeydown="if(event.key==='Enter')submitAddStock()" />
+    </div>
 
     <!-- Token section: shows saved-token badge OR input -->
     <div id="tokenSavedRow" class="token-saved-row" style="display:none;">
@@ -1718,6 +1726,9 @@ const I18N = {
     remember: '在此浏览器中记住',
     cancel: '取消',
     add_generate: '添加并生成',
+    remove_stock_title: '停止追踪 {sym}？',
+    remove_stock_desc: '{sym} 将从所有未来的报告和页面中移除。系统会在不重新获取数据的情况下重建报告——只需几秒钟。',
+    remove_rebuild: '移除并重建',
   },
   en: {
     updated: 'Updated {{ ctx.generated_at }}',
@@ -1749,6 +1760,9 @@ const I18N = {
     remember: 'Remember in this browser',
     cancel: 'Cancel',
     add_generate: 'Add & Generate',
+    remove_stock_title: 'Stop tracking {sym}?',
+    remove_stock_desc: '{sym} will be removed from all future reports and from the page. This rebuilds the report without re-fetching data — it takes a few seconds.',
+    remove_rebuild: 'Remove & Rebuild',
   }
 };
 
@@ -1899,9 +1913,45 @@ function updateRestoreButton() {
   }
 }
 
-// ── Add Stock ─────────────────────────────────────────────────────
+// ── Add / Remove Stock ────────────────────────────────────────────
 const ADD_STOCK_PAT_KEY = 'finagent_add_stock_pat';
 let _pollTimer = null;
+let _modalMode = 'add';   // 'add' | 'remove'
+let _removeSym = '';
+
+function _i18n(key) {
+  const s = I18N[currentLang] || I18N.en || {};
+  return (s[key] !== undefined ? s[key] : (I18N.en[key] || key));
+}
+
+function _submitLabel() {
+  return _modalMode === 'remove' ? _i18n('remove_rebuild') : _i18n('add_generate');
+}
+
+function openAddStock() {
+  _modalMode = 'add';
+  _removeSym = '';
+  document.getElementById('stockModalTitle').innerHTML = _i18n('add_stock_title');
+  document.getElementById('stockModalDesc').innerHTML = _i18n('add_stock_desc');
+  document.getElementById('tickerInputRow').style.display = '';
+  const btn = document.getElementById('addStockSubmit');
+  if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); btn.classList.remove('btn-danger'); }
+  document.getElementById('addStockModal').classList.add('visible');
+  initAddStock();
+}
+
+function openRemoveStock(event, sym) {
+  if (event) { event.stopPropagation(); event.preventDefault(); }
+  _modalMode = 'remove';
+  _removeSym = sym;
+  document.getElementById('stockModalTitle').innerHTML = _i18n('remove_stock_title').replaceAll('{sym}', sym);
+  document.getElementById('stockModalDesc').innerHTML = _i18n('remove_stock_desc').replaceAll('{sym}', sym);
+  document.getElementById('tickerInputRow').style.display = 'none';
+  const btn = document.getElementById('addStockSubmit');
+  if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); btn.classList.add('btn-danger'); }
+  document.getElementById('addStockModal').classList.add('visible');
+  initAddStock();
+}
 
 function initAddStock() {
   const saved = localStorage.getItem(ADD_STOCK_PAT_KEY);
@@ -1923,7 +1973,7 @@ function closeAddStockModal() {
   document.getElementById('addStockModal').classList.remove('visible');
   // Reset to initial state
   const btn = document.getElementById('addStockSubmit');
-  if (btn) { btn.disabled = false; btn.textContent = 'Add & Generate'; }
+  if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
   document.getElementById('addStockActions').style.display = 'flex';
   document.getElementById('progressTrack').classList.remove('visible');
   showAddStatus('', '');
@@ -1943,13 +1993,14 @@ function setProgressStep(step, state) {
 async function submitAddStock() {
   const REPO = "{{ github_repo }}";
   const WORKFLOW = "generate_report.yml";
-  const ticker = (document.getElementById('newTicker').value || '').trim().toUpperCase();
+  const isRemove = _modalMode === 'remove';
+  const ticker = isRemove ? _removeSym : (document.getElementById('newTicker').value || '').trim().toUpperCase();
   const savedPat = localStorage.getItem(ADD_STOCK_PAT_KEY) || '';
   const inputEl = document.getElementById('addStockPat');
   const pat = (inputEl && inputEl.offsetParent !== null ? inputEl.value.trim() : '') || savedPat;
   const btn = document.getElementById('addStockSubmit');
 
-  if (!ticker) { showAddStatus('error', 'Please enter a ticker symbol.'); return; }
+  if (!ticker) { showAddStatus('error', isRemove ? 'No ticker selected.' : 'Please enter a ticker symbol.'); return; }
   if (!pat) {
     showPatInput();
     showAddStatus('error', 'Please enter your GitHub Personal Access Token.');
@@ -1983,21 +2034,21 @@ async function submitAddStock() {
           'X-GitHub-Api-Version': '2022-11-28',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ref: 'main', inputs: { section: 'all', new_ticker: ticker } }),
+        body: JSON.stringify({ ref: 'main', inputs: isRemove ? { remove_ticker: ticker } : { section: 'all', new_ticker: ticker } }),
       }
     );
 
     if (resp.status === 401) {
       setProgressStep('trigger', 'failed');
       showAddStatus('error', 'Invalid token or missing workflow scope.');
-      btn.disabled = false; btn.textContent = 'Add & Generate';
+      btn.disabled = false; btn.textContent = _submitLabel();
       return;
     }
     if (resp.status !== 204) {
       const body = await resp.text();
       setProgressStep('trigger', 'failed');
       showAddStatus('error', `GitHub error ${resp.status}: ${body.slice(0, 100)}`);
-      btn.disabled = false; btn.textContent = 'Add & Generate';
+      btn.disabled = false; btn.textContent = _submitLabel();
       return;
     }
 
@@ -2011,7 +2062,7 @@ async function submitAddStock() {
   } catch (err) {
     setProgressStep('trigger', 'failed');
     showAddStatus('error', `Network error: ${err.message}`);
-    btn.disabled = false; btn.textContent = 'Add & Generate';
+    btn.disabled = false; btn.textContent = _submitLabel();
   }
 }
 
@@ -2048,7 +2099,7 @@ async function _pollForRun(repo, pat, ticker, triggerTime) {
           setProgressStep('queue', 'done');
           setProgressStep('run', 'active');
           const elapsed = document.getElementById('pstep-run-label');
-          if (elapsed) elapsed.textContent = `Running: ${ticker} report generation…`;
+          if (elapsed) elapsed.textContent = `Running: ${ticker} ${_modalMode === 'remove' ? 'removal' : 'report generation'}…`;
         }
         return;
       }
@@ -2061,7 +2112,7 @@ async function _pollForRun(repo, pat, ticker, triggerTime) {
       // Update elapsed time label
       const elapsed = Math.round((Date.now() - triggerTime) / 1000);
       const runLabel = document.getElementById('pstep-run-label');
-      if (runLabel) runLabel.textContent = `Running: ${ticker} report generation… (${elapsed}s)`;
+      if (runLabel) runLabel.textContent = `Running: ${ticker} ${_modalMode === 'remove' ? 'removal' : 'report generation'}… (${elapsed}s)`;
 
       if (run.status === 'completed') {
         clearInterval(_pollTimer);
@@ -2075,7 +2126,7 @@ async function _pollForRun(repo, pat, ticker, triggerTime) {
           setProgressStep('run', 'failed');
           showAddStatus('error', `Workflow finished with status: ${run.conclusion}. Check GitHub Actions for details.`);
           const btn = document.getElementById('addStockSubmit');
-          if (btn) { btn.disabled = false; btn.textContent = 'Add & Generate'; }
+          if (btn) { btn.disabled = false; btn.textContent = _submitLabel(); }
         }
       }
     } catch (_) {}

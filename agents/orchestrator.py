@@ -184,8 +184,8 @@ class Orchestrator:
             product_analysis=product_results,
         )
 
+    @staticmethod
     def render_html(
-        self,
         context: ReportContext,
         template_dir: str,
         output_path: str,
@@ -213,7 +213,8 @@ class Orchestrator:
         logger.info("Report written to %s", output_path)
         return html
 
-    def save_archive(self, html_content: str, output_dir: str, date_str: str) -> list[str]:
+    @staticmethod
+    def save_archive(html_content: str, output_dir: str, date_str: str) -> list[str]:
         archive_dir = Path(output_dir) / "archive"
         archive_dir.mkdir(parents=True, exist_ok=True)
         archive_path = archive_dir / f"{date_str}.html"

@@ -18,6 +18,10 @@ on:
         description: "Ticker symbol to add to the watchlist (optional)"
         required: false
         default: ""
+      remove_ticker:
+        description: "Ticker symbol to remove from the watchlist (optional, lightweight rebuild)"
+        required: false
+        default: ""
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -87,21 +91,33 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
         run: |
-          CMD="python main.py --section ${{ github.event.inputs.section || 'all' }}"
-          if [ -n "${{ github.event.inputs.new_ticker }}" ]; then
-            CMD="$CMD --add-ticker ${{ github.event.inputs.new_ticker }}"
+          if [ -n "${{ github.event.inputs.remove_ticker }}" ]; then
+            # Lightweight rebuild — drop the ticker and re-render from cache, no API calls
+            python main.py --remove-ticker ${{ github.event.inputs.remove_ticker }}
+          else
+            CMD="python main.py --section ${{ github.event.inputs.section || 'all' }}"
+            if [ -n "${{ github.event.inputs.new_ticker }}" ]; then
+              CMD="$CMD --add-ticker ${{ github.event.inputs.new_ticker }}"
+            fi
+            $CMD
           fi
-          $CMD
 
-      - name: Commit updated config (if ticker added)
+      - name: Commit updated config and cache
         run: |
           git config user.name  "FinAgent Bot"
           git config user.email "finagent-bot@users.noreply.github.com"
-          git add config/stocks.json
+          git add config/stocks.json output/.last_context.pkl
           if git diff --cached --quiet; then
             echo "No config changes."
           else
-            git commit -m "chore: add ticker ${{ github.event.inputs.new_ticker }} [skip ci]"
+            if [ -n "${{ github.event.inputs.remove_ticker }}" ]; then
+              MSG="chore: remove ticker ${{ github.event.inputs.remove_ticker }} [skip ci]"
+            elif [ -n "${{ github.event.inputs.new_ticker }}" ]; then
+              MSG="chore: add ticker ${{ github.event.inputs.new_ticker }} [skip ci]"
+            else
+              MSG="chore: refresh report cache [skip ci]"
+            fi
+            git commit -m "$MSG"
             git push
           fi
 

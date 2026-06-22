@@ -92,7 +92,19 @@ def main() -> None:
         default="",
         help="Add a new ticker to config/stocks.json and run a full report",
     )
+    parser.add_argument(
+        "--remove-ticker",
+        type=str,
+        default="",
+        help="Remove a ticker from config/stocks.json and rebuild the page (no API calls)",
+    )
     args = parser.parse_args()
+
+    # ── Remove a ticker (lightweight rebuild, no API calls) ─────────────
+    if args.remove_ticker:
+        github_repo = os.environ.get("GITHUB_REPO", "").strip() or None
+        _remove_ticker(Path(args.config), args.remove_ticker, args.output, github_repo)
+        return
 
     config = _load_config(Path(args.config))
 
@@ -279,6 +291,94 @@ def _refresh_supply_chain(config_path: Path, anthropic_key: str) -> None:
         json.dump(config, f, indent=2)
 
     logger.info("Supply chain updated for %d tickers", len(ticker_configs))
+
+
+def _filter_context(context, symbol: str):
+    """
+    Remove a single ticker symbol from a cached ReportContext, in place.
+
+    Strips the symbol from every per-ticker collection so the report can be
+    re-rendered without it. Cross-cutting sections (news, geopolitical themes,
+    config themes) are intentionally left untouched.
+    """
+    sym = symbol.strip().upper()
+
+    context.watchlist_symbols = [s for s in context.watchlist_symbols if s != sym]
+    context.ratings = [r for r in context.ratings if r.symbol != sym]
+    context.financials = [f for f in context.financials if f.symbol != sym]
+    context.earnings_events = [e for e in context.earnings_events if e.symbol != sym]
+    context.peer_table = [p for p in context.peer_table if p.symbol != sym]
+    context.product_analysis = [p for p in context.product_analysis if p.symbol != sym]
+
+    context.insider_transactions = {k: v for k, v in context.insider_transactions.items() if k != sym}
+    context.short_data = {k: v for k, v in context.short_data.items() if k != sym}
+    context.price_history = {k: v for k, v in context.price_history.items() if k != sym}
+    context.supply_chain_detail = {k: v for k, v in context.supply_chain_detail.items() if k != sym}
+
+    return context
+
+
+def _remove_ticker(config_path: Path, symbol: str, output_path: str, github_repo) -> None:
+    """
+    Remove a ticker from config and rebuild the report page from the last cached
+    context — no Anthropic/data API calls. Idempotent: removing a ticker that is
+    not tracked is a no-op.
+    """
+    sym = symbol.strip().upper()
+    config = _load_config(config_path)
+    tickers: list[dict] = config.get("tickers", [])
+
+    if sym not in {t["symbol"] for t in tickers}:
+        logger.info("Ticker %s not in config — nothing to remove", sym)
+        return
+
+    config["tickers"] = [t for t in tickers if t["symbol"] != sym]
+    config.get("supply_chain_detail", {}).pop(sym, None)
+
+    with config_path.open("w") as f:
+        json.dump(config, f, indent=2)
+    logger.info("Removed %s from config", sym)
+
+    # Lightweight re-render from the last cached context (no API calls)
+    if not _CONTEXT_CACHE.exists():
+        logger.warning(
+            "No cached context (%s) — config updated but page not re-rendered; "
+            "it will refresh on the next full run.",
+            _CONTEXT_CACHE,
+        )
+        return
+
+    with _CONTEXT_CACHE.open("rb") as f:
+        context = pickle.load(f)
+    _filter_context(context, sym)
+
+    from agents.orchestrator import Orchestrator
+
+    output_dir = str(Path(output_path).parent)
+    date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    initial_html = Orchestrator.render_html(
+        context=context,
+        template_dir="templates",
+        output_path=output_path,
+        github_repo=github_repo,
+        archive_dates=[],
+    )
+    archive_dates = Orchestrator.save_archive(initial_html, output_dir, date_str)
+    html = Orchestrator.render_html(
+        context=context,
+        template_dir="templates",
+        output_path=output_path,
+        github_repo=github_repo,
+        archive_dates=archive_dates,
+    )
+    Orchestrator.save_archive(html, output_dir, date_str)
+
+    # Keep the cache consistent with the rebuilt page
+    with _CONTEXT_CACHE.open("wb") as f:
+        pickle.dump(context, f)
+
+    logger.info("Rebuilt report without %s: %s", sym, output_path)
 
 
 def _render_trigger_page(output_dir: str, github_repo: str) -> None:
