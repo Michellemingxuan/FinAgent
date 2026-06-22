@@ -126,6 +126,26 @@
         "DOE",
         "CEG"
       ]
+    },
+    {
+      "symbol": "ARM",
+      "name": "ARM",
+      "sector": "",
+      "market": "",
+      "upstream": [
+        "CDNS",
+        "SNPS",
+        "MSFT",
+        "GOOGL",
+        "AMAT"
+      ],
+      "downstream": [
+        "AAPL",
+        "QCOM",
+        "NVDA",
+        "MRVL",
+        "AMZN"
+      ]
     }
   ],
   "supply_chain_detail": {
@@ -639,6 +659,83 @@
         }
       ],
       "supply_chain_summary": "Oklo sits at the early-commercialization stage of the advanced fission power value chain, sourcing enriched uranium fuel, specialized nuclear components, and EPC construction services upstream while targeting power-hungry hyperscale data center operators and industrial customers downstream as offtakers for its compact Aurora Powerhouse units. As a pre-revenue company still awaiting NRC licensing approval, its supply chain relationships are largely contractual/LOI-stage, making upstream fuel supply security and downstream anchor customer commitments the most critical near-term risks."
+    },
+    "ARM": {
+      "upstream": [
+        {
+          "ticker": "CDNS",
+          "name": "Cadence Design Systems",
+          "relationship": "EDA software tools for IP design and verification",
+          "criticality": "high",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "SNPS",
+          "name": "Synopsys Inc.",
+          "relationship": "EDA tools and silicon IP for chip design workflows",
+          "criticality": "high",
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Cloud infrastructure and enterprise software for R&D operations",
+          "criticality": "medium",
+          "revenue_pct": 3
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Cloud computing services for simulation and development environments",
+          "criticality": "medium",
+          "revenue_pct": 2
+        },
+        {
+          "ticker": "AMAT",
+          "name": "Applied Materials",
+          "relationship": "Process technology research partnerships supporting IP development for leading-edge nodes",
+          "criticality": "low",
+          "revenue_pct": 1
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "relationship": "Largest licensee; uses Arm architecture for all Apple Silicon SoCs (iPhone, Mac, iPad)",
+          "criticality": "high",
+          "revenue_pct": 25
+        },
+        {
+          "ticker": "QCOM",
+          "name": "Qualcomm Inc.",
+          "relationship": "Major licensee for Snapdragon mobile, automotive, and IoT SoCs",
+          "criticality": "high",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "Arm-based CPU IP licensee for Grace CPU and embedded/automotive platforms",
+          "criticality": "medium",
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "MRVL",
+          "name": "Marvell Technology",
+          "relationship": "Arm CPU IP licensee for cloud, networking, and custom ASIC designs",
+          "criticality": "medium",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Arm architecture licensee for Graviton cloud processors and Inferentia AI chips",
+          "criticality": "high",
+          "revenue_pct": 8
+        }
+      ],
+      "supply_chain_summary": "Arm Holdings sits at a uniquely central position in the semiconductor ecosystem as a pure-play IP licensor, designing and licensing CPU/GPU architectures rather than manufacturing chips itself, making it an upstream intellectual property provider to virtually the entire global chip industry. Its business model is asset-light on the upstream side (primarily dependent on EDA tools and engineering talent) but generates royalty and licensing revenue from a vast downstream network spanning mobile, cloud, automotive, and IoT \u2014 meaning disruption to key licensees like Apple, Qualcomm, or Amazon would have outsized revenue impact."
     }
   },
   "supply_chain_last_updated": "2026-06-21",
