@@ -114,3 +114,25 @@ top utility strip.
 
 Single-file, presentation-only change. Revert the commit to fully restore the
 prior theme.
+
+## Addendum (2026-06-22) — Barchart layout components
+
+Follow-up: adopt Barchart's story-page *structure/components* while keeping the
+tabbed dashboard (user chose "keep tabs + Barchart chrome" + all components).
+All in `templates/report.html.j2`:
+
+- **Announcement bar** — thin full-width disclaimer strip at the very top.
+- **Nav bar** — brand + nav links (Watchlist / News / Macro & Geo) + ticker
+  **search box** + admin actions + **Log In** (the relocated admin key). Search
+  jumps to a tracked tab or opens Add-Stock prefilled; nav links scroll/switch.
+- **Article hero + byline** — per ticker: eyebrow symbol, large company-name
+  headline, byline row ("FinAgent Research · Updated <date> · Auto-generated").
+- **Inline quote box** — symbol, price, latest-session change % (computed
+  client-side from `priceHistory`), sparkline.
+- **News story cards** — source-initial thumbnail tiles + hover, Barchart
+  "Most Popular" feel. (No image thumbnails — no asset source; initials used.)
+- **Multi-column footer** — brand blurb / Data Sources / Resources + a bottom
+  disclaimer & generated-date bar, full-width outside `.page`.
+
+New strings are static English (no new i18n keys) to avoid breaking the language
+toggle. Verified by full mock render + light/dark screenshots.

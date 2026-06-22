@@ -396,12 +396,69 @@
     .ai-text code { background: var(--border-light); border-radius: 3px; padding: 1px 4px; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace; }
     .ai-text h1, .ai-text h2, .ai-text h3 { font-size: 13px; font-weight: 700; margin: 8px 0 4px; color: var(--text); }
     .ai-text blockquote { border-left: 3px solid var(--accent-border); margin: 6px 0; padding: 2px 10px; color: var(--text-secondary); }
+
+    /* ══ Barchart-style chrome & components ══ */
+    /* Announcement bar */
+    .announce-bar { background: var(--accent-light); color: var(--accent); border-bottom: 1px solid var(--accent-border); font-size: 11px; font-weight: 600; text-align: center; padding: 5px 16px; letter-spacing: 0.2px; }
+    .announce-bar a { color: var(--accent); text-decoration: underline; }
+
+    /* Nav bar */
+    .navbar { display: flex; align-items: center; gap: 18px; padding: 12px 0; flex-wrap: wrap; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { font-size: 13px; font-weight: 600; color: var(--text-secondary); padding: 6px 10px; border-radius: 6px; cursor: pointer; background: none; border: none; font-family: inherit; }
+    .nav-link:hover { color: var(--accent); background: var(--bg); }
+    .nav-search { position: relative; margin-left: auto; }
+    .nav-search input { width: 180px; padding: 7px 10px 7px 28px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: inherit; color: var(--text); background: var(--bg); outline: none; text-transform: uppercase; }
+    .nav-search input::placeholder { text-transform: none; color: var(--text-muted); }
+    .nav-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(11 92 171 / 0.12); }
+    .nav-search::before { content: "\1F50D "; position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 11px; opacity: 0.55; pointer-events: none; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .nav-login { display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); transition: color 0.15s, border-color 0.15s; }
+    .nav-login:hover { border-color: var(--accent); color: var(--accent); }
+    @media (max-width: 760px) { .nav-links { display: none; } .nav-search input { width: 130px; } }
+
+    /* Article hero + byline */
+    .hero-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; padding: 20px 22px; flex-wrap: wrap; }
+    .article-hero { flex: 1; min-width: 240px; }
+    .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .hero-headline { font-family: 'Roboto', sans-serif; font-size: 28px; font-weight: 900; line-height: 1.15; letter-spacing: -0.8px; color: var(--text); margin: 0 0 10px; }
+    .byline { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); }
+    .byline-avatar { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 0.3px; flex-shrink: 0; }
+
+    /* Inline quote box */
+    .quote-box { flex-shrink: 0; min-width: 168px; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; background: var(--bg); }
+    .quote-sym { font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.4px; }
+    .quote-price { font-size: 24px; font-weight: 900; letter-spacing: -0.6px; color: var(--text); margin: 2px 0; font-family: 'Roboto', sans-serif; }
+    .quote-change { font-size: 12px; font-weight: 700; margin-bottom: 8px; min-height: 15px; color: var(--text-muted); }
+    .quote-change.up { color: var(--green); }
+    .quote-change.down { color: var(--red); }
+    .quote-box canvas.sparkline { display: block; width: 100%; height: 44px; }
+
+    /* News story cards */
+    .news-item:hover { background: var(--bg); }
+    .news-thumb { flex-shrink: 0; width: 42px; height: 42px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; letter-spacing: 0.3px; background: var(--accent-light); color: var(--accent); }
+
+    /* Site footer */
+    .site-footer { background: var(--surface); border-top: 1px solid var(--border); margin-top: 40px; }
+    .footer-cols { max-width: 1100px; margin: 0 auto; padding: 28px 32px 18px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 28px; }
+    @media (max-width: 700px) { .footer-cols { grid-template-columns: 1fr; gap: 18px; } }
+    .footer-brand { font-family: 'Roboto', sans-serif; font-size: 18px; font-weight: 900; color: var(--accent); letter-spacing: -0.4px; margin-bottom: 8px; }
+    .footer-blurb { font-size: 12px; color: var(--text-secondary); line-height: 1.6; max-width: 380px; }
+    .footer-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-muted); margin-bottom: 10px; }
+    .footer-col ul { list-style: none; margin: 0; padding: 0; }
+    .footer-col li { font-size: 12px; color: var(--text-secondary); padding: 3px 0; }
+    .footer-col a { color: var(--text-secondary); }
+    .footer-col a:hover { color: var(--accent); }
+    .footer-bottom { max-width: 1100px; margin: 0 auto; border-top: 1px solid var(--border-light); padding: 12px 32px; font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
 <!-- ═══ HEADER ═══ -->
+
+<!-- Announcement bar -->
+<div class="announce-bar">For informational purposes only — not investment advice. Automated multi-source equity research.</div>
 
 <!-- Top utility strip -->
 <div class="topbar">
@@ -417,23 +474,31 @@
       {% endfor %}
     </select>
     {% endif %}
-    {% if github_repo %}
-    <button class="toggle-btn" id="adminToggle" onclick="toggleAdmin()" title="Owner sign-in">&#128273;</button>
-    {% endif %}
   </div>
 </div>
 
 <div class="header">
-  <div class="header-top">
+  <!-- Nav bar -->
+  <div class="navbar">
     <div class="header-title">FinAgent</div>
+    <div class="nav-links">
+      <button class="nav-link" onclick="window.scrollTo({top:0,behavior:'smooth'})">Watchlist</button>
+      <button class="nav-link" onclick="navJump('news')" data-i18n="news">News</button>
+      <button class="nav-link" onclick="switchToTab('macro')" data-i18n="macro_geo">Macro &amp; Geo</button>
+    </div>
+    <div class="nav-search">
+      <input type="text" id="navSearch" placeholder="Search ticker" autocomplete="off"
+             onkeydown="if(event.key==='Enter')navSearchGo()" />
+    </div>
     {% if github_repo %}
-    <div class="header-actions">
+    <div class="nav-actions">
       <button class="btn admin-only" id="addStockBtn" onclick="openAddStock()">
         &#x2b;&nbsp; <span data-i18n="add_stock">Add Stock</span>
       </button>
       <button class="btn btn-primary admin-only" id="refreshReportBtn" onclick="openRefreshReport()">
         &#x21bb;&nbsp; <span data-i18n="refresh_report">Refresh Report</span>
       </button>
+      <button class="nav-login" id="adminToggle" onclick="toggleAdmin()" title="Owner sign-in">&#128273; Log In</button>
     </div>
     {% endif %}
   </div>
@@ -522,22 +587,21 @@
 
   <div class="tab-content {% if loop.first %}active{% endif %}" id="tab-stock-{{ tr.symbol }}">
 
-    <!-- Ticker hero bar -->
-    <div class="card" style="margin-bottom:20px;">
-      <div class="ticker-hero">
-        <div>
-          <div class="ticker-symbol">{{ tr.symbol }}</div>
-          <div class="ticker-name">{{ tr.name }}</div>
+    <!-- Article hero + inline quote box -->
+    <div class="card hero-card" style="margin-bottom:20px;">
+      <div class="article-hero">
+        <div class="hero-eyebrow">{{ tr.symbol }}</div>
+        <h1 class="hero-headline">{{ tr.name }}</h1>
+        <div class="byline">
+          <span class="byline-avatar">FA</span>
+          <span>FinAgent Research &middot; <span data-i18n="updated">Updated {{ ctx.generated_at }}</span> &middot; Auto-generated</span>
         </div>
-        {% if tr.current_price %}
-        <div style="margin-left:auto; text-align:right;">
-          <div class="ticker-price">{{ fmt_price(tr.current_price) }}</div>
-          <div class="ticker-price-sub">Current price</div>
-        </div>
-        {% endif %}
-        <div class="spark-wrap">
-          <canvas id="spark-{{ tr.symbol }}" class="sparkline" width="160" height="48"></canvas>
-        </div>
+      </div>
+      <div class="quote-box">
+        <div class="quote-sym">{{ tr.symbol }}</div>
+        {% if tr.current_price %}<div class="quote-price">{{ fmt_price(tr.current_price) }}</div>{% endif %}
+        <div class="quote-change" id="qchg-{{ tr.symbol }}"></div>
+        <canvas id="spark-{{ tr.symbol }}" class="sparkline" width="160" height="44"></canvas>
       </div>
     </div>
 
@@ -696,6 +760,7 @@
           <div class="subsec-title">Direct Coverage</div>
           {% for item in direct %}
           <div class="news-item">
+            <div class="news-thumb source-{{ item.source.lower().replace(' ','').replace('.','') }}">{{ item.source[:2]|upper }}</div>
             <div class="news-item-body">
               <div class="news-title">
                 <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
@@ -715,6 +780,7 @@
           <div class="subsec-title">Supply Chain &amp; Adjacent</div>
           {% for item in related %}
           <div class="news-item">
+            <div class="news-thumb source-{{ item.source.lower().replace(' ','').replace('.','') }}">{{ item.source[:2]|upper }}</div>
             <div class="news-item-body">
               <div class="news-title">
                 <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
@@ -1615,13 +1681,39 @@
 
   </div>{# end macro tab #}
 
-  <!-- Footer -->
-  <div style="margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-muted);font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-    <span>Data: Yahoo Finance &bull; Google News &bull; CNBC &bull; MarketWatch &bull; Reuters &bull; Wall Street Journal &bull; StockAnalysis.com</span>
-    <span>For informational purposes only. Not investment advice.</span>
-  </div>
-
 </div><!-- end .page -->
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="footer-cols">
+    <div>
+      <div class="footer-brand">FinAgent</div>
+      <div class="footer-blurb">Automated multi-source equity research — analyst ratings, earnings, financials, news, insider activity, and macro &amp; geopolitical context for your watchlist.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Data Sources</h4>
+      <ul>
+        <li>Yahoo Finance</li>
+        <li>Google News &middot; CNBC</li>
+        <li>MarketWatch &middot; Reuters</li>
+        <li>Wall Street Journal</li>
+        <li>StockAnalysis.com</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer;">Back to top &uarr;</a></li>
+        <li><a onclick="switchToTab('macro')" style="cursor:pointer;">Macro &amp; Geo</a></li>
+        {% if github_repo %}<li><a href="https://github.com/{{ github_repo }}/actions" target="_blank" rel="noopener">Actions log &#8599;</a></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>For informational purposes only. Not investment advice.</span>
+    <span>&copy; FinAgent &middot; Generated {{ ctx.generated_at }}</span>
+  </div>
+</footer>
 
 <script>
   // Global helper — must be defined before any inline SVG script uses it
@@ -1647,6 +1739,32 @@
     if (!tab || e.target.closest('.tab-close')) return;
     switchToTab(tab.dataset.tab);
   });
+
+  // Nav-bar links: jump to a section within the active ticker tab
+  function navJump(section) {
+    const active = document.querySelector('.tab-content.active');
+    if (!active) return;
+    const el = active.querySelector('[id^="sec-' + section + '-"]');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Nav-bar search: jump to a tracked ticker, else offer to add it
+  function navSearchGo() {
+    const inp = document.getElementById('navSearch');
+    if (!inp) return;
+    const sym = inp.value.trim().toUpperCase();
+    if (!sym) return;
+    const tab = document.querySelector('.tab[data-symbol="' + sym + '"]');
+    if (tab) { switchToTab('stock-' + sym); inp.value = ''; inp.blur(); return; }
+    if (typeof openAddStock === 'function') {
+      openAddStock();
+      const nt = document.getElementById('newTicker');
+      if (nt) nt.value = sym;
+      return;
+    }
+    inp.style.borderColor = 'var(--red)';
+    setTimeout(() => { inp.style.borderColor = ''; }, 1200);
+  }
 </script>
 
 <script>
@@ -1670,11 +1788,11 @@ function drawSparkline(canvasId, data, color) {
     const y = h - ((v - min) / range) * h * 0.85 - h * 0.075;
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
-  ctx.strokeStyle = color || '#2563eb';
+  ctx.strokeStyle = color || '#0b5cab';
   ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
-  ctx.fillStyle = color ? color + '20' : '#2563eb20';
+  ctx.fillStyle = color ? color + '20' : '#0b5cab20';
   ctx.fill();
 }
 
@@ -1683,8 +1801,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (priceHistory["{{ sym }}"]) {
     const pts = priceHistory["{{ sym }}"];
     const first = pts[0], last = pts[pts.length - 1];
-    const color = last >= first ? '#16a34a' : '#dc2626';
+    const color = last >= first ? '#16864d' : '#cc1f1f';
     drawSparkline('spark-{{ sym }}', pts, color);
+    const chgEl = document.getElementById('qchg-{{ sym }}');
+    if (chgEl && pts.length > 1) {
+      const prev = pts[pts.length - 2];
+      const pct = prev ? ((last - prev) / prev) * 100 : 0;
+      const up = last >= prev;
+      chgEl.className = 'quote-change ' + (up ? 'up' : 'down');
+      chgEl.textContent = (up ? '▲ +' : '▼ ') + pct.toFixed(2) + '% (latest session)';
+    }
   }
   {% endfor %}
 
