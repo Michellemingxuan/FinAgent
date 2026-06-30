@@ -4,38 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FinAgent — Trigger Update</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f8f9fb; --surface: #fff; --border: #e5e7eb;
-      --text: #111827; --muted: #6b7280; --accent: #2563eb;
-      --green: #16a34a; --red: #dc2626;
+      --bg: #f4f6f8; --surface: #fff; --border: #dfe3e8;
+      --text: #1a2330; --muted: #566072; --accent: #0b5cab;
+      --green: #16864d; --red: #cc1f1f;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    body { background: var(--bg); font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
            font-size: 14px; color: var(--text); min-height: 100vh;
            display: flex; align-items: center; justify-content: center; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
             padding: 32px; max-width: 420px; width: 90%; box-shadow: 0 4px 16px rgb(0 0 0 / 0.06); }
-    .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .logo { font-family: 'Roboto', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: -0.6px; color: var(--accent); margin-bottom: 6px; }
     .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
     label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.5px; color: var(--muted); margin-bottom: 5px; }
     input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px;
             font-size: 13px; font-family: monospace; color: var(--text);
             background: var(--bg); margin-bottom: 16px; outline: none; }
-    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1); }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(11 92 171 / 0.15); }
     .hint { font-size: 11px; color: var(--muted); margin-top: -12px; margin-bottom: 16px; }
     .hint a { color: var(--accent); }
     .btn { width: 100%; padding: 11px; background: var(--accent); color: #fff; border: none;
            border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer;
            transition: background 0.15s; }
-    .btn:hover { background: #1d4ed8; }
+    .btn:hover { background: #08487f; }
     .btn:disabled { background: var(--muted); cursor: not-allowed; }
     .status { margin-top: 16px; padding: 10px 14px; border-radius: 6px; font-size: 13px;
               display: none; }
     .status.success { background: #f0fdf4; color: var(--green); border: 1px solid #bbf7d0; }
     .status.error   { background: #fef2f2; color: var(--red);   border: 1px solid #fecaca; }
-    .status.running { background: #eff6ff; color: var(--accent); border: 1px solid #bfdbfe; }
+    .status.running { background: #eef4fb; color: var(--accent); border: 1px solid #bcd6ef; }
     .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
     .links { display: flex; justify-content: space-between; }
     .links a { font-size: 12px; color: var(--accent); }
