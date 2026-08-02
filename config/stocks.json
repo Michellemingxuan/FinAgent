@@ -9,16 +9,16 @@
         "TSM",
         "ASML",
         "AMAT",
+        "AVGO",
         "MU",
-        "SKHY",
-        "AEHR"
+        "SKHY"
       ],
       "downstream": [
         "MSFT",
         "META",
         "GOOGL",
         "AMZN",
-        "TSLA",
+        "ORCL",
         "DELL"
       ]
     },
@@ -29,18 +29,19 @@
       "market": "US Consumer Tech",
       "upstream": [
         "TSM",
+        "SAMSY",
         "QCOM",
-        "HON",
-        "SONY",
-        "MU"
+        "AVGO",
+        "CRUS",
+        "HON"
       ],
       "downstream": [
-        "AMZN",
-        "T",
-        "VZ",
-        "TMUS",
         "GOOGL",
-        "WMT"
+        "VZ",
+        "T",
+        "AMZN",
+        "META",
+        "MSFT"
       ]
     },
     {
@@ -54,15 +55,15 @@
         "LRCX",
         "ENTG",
         "KLAC",
-        "ACMR"
+        "SUMCO"
       ],
       "downstream": [
         "AMZN",
+        "MSFT",
         "NVDA",
         "AAPL",
-        "MSFT",
-        "GOOGL",
-        "QCOM"
+        "DELL",
+        "GOOGL"
       ]
     },
     {
@@ -75,15 +76,15 @@
         "SNPS",
         "MSFT",
         "GOOGL",
-        "INTC"
+        "CRM"
       ],
       "downstream": [
         "QCOM",
-        "AAPL",
         "NVDA",
+        "AAPL",
         "AMZN",
         "MRVL",
-        "MU"
+        "TSM"
       ]
     },
     {
@@ -94,10 +95,10 @@
       "upstream": [
         "TSM",
         "ASML",
-        "ARMH",
-        "ONTO",
-        "COHU",
-        "AMAT"
+        "CDNS",
+        "SNPS",
+        "AMAT",
+        "ASX"
       ],
       "downstream": [
         "AMZN",
@@ -115,392 +116,224 @@
         {
           "ticker": "TSM",
           "name": "Taiwan Semiconductor Manufacturing Company",
-          "relationship": "Primary foundry for fabricating all major NVIDIA GPUs and SoCs (5nm, 4nm, 3nm nodes)",
+          "relationship": "Primary foundry for all NVIDIA GPUs and SoCs (4nm/5nm advanced nodes)",
           "criticality": "high",
           "revenue_pct": 30
         },
         {
           "ticker": "ASML",
           "name": "ASML Holding",
-          "relationship": "Sole supplier of EUV lithography equipment to TSMC for advanced node NVIDIA chip production; indirect but existential dependency",
+          "relationship": "EUV lithography equipment supplier to TSMC enabling cutting-edge GPU fabrication",
           "criticality": "high",
           "revenue_pct": 5
         },
         {
           "ticker": "AMAT",
           "name": "Applied Materials",
-          "relationship": "Deposition, etch, and inspection equipment used in NVIDIA chip fabrication at foundry partners",
+          "relationship": "Wafer fabrication equipment and materials supplier to NVIDIA's foundry partners",
           "criticality": "medium",
           "revenue_pct": 4
         },
         {
+          "ticker": "AVGO",
+          "name": "Broadcom Inc.",
+          "relationship": "Custom networking ASICs and PCIe switch silicon used in NVIDIA server platforms",
+          "criticality": "medium",
+          "revenue_pct": 6
+        },
+        {
           "ticker": "MU",
           "name": "Micron Technology",
-          "relationship": "Supplier of HBM3/GDDR6X memory integrated into NVIDIA GPUs including H100 and GeForce RTX series",
+          "relationship": "HBM3/GDDR6X memory supplier for AI accelerators and gaming GPUs",
           "criticality": "high",
           "revenue_pct": 12
         },
         {
           "ticker": "SKHY",
           "name": "SK Hynix",
-          "relationship": "Key supplier of HBM3e memory for H100/H200 AI accelerators; critical for data center GPU competitiveness",
+          "relationship": "Leading HBM3e memory supplier for H100/H200/B200 AI GPU modules",
           "criticality": "high",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "AEHR",
-          "name": "Aehr Test Systems",
-          "relationship": "Wafer-level burn-in and test equipment used in advanced packaging and validation of NVIDIA chips",
-          "criticality": "low",
-          "revenue_pct": 2
+          "revenue_pct": 15
         }
       ],
       "downstream": [
         {
           "ticker": "MSFT",
           "name": "Microsoft Corporation",
-          "relationship": "Largest hyperscaler customer; massive purchaser of H100/H200/Blackwell GPUs for Azure AI cloud infrastructure",
+          "relationship": "Largest cloud hyperscaler customer; massive H100/H200/B200 GPU cluster procurement for Azure AI",
           "criticality": "high",
           "revenue_pct": 15
         },
         {
           "ticker": "META",
-          "name": "Meta Platforms",
-          "relationship": "Major buyer of NVIDIA H100/H200 GPU clusters for AI training (LLaMA models) and recommendation systems",
+          "name": "Meta Platforms Inc.",
+          "relationship": "Major hyperscaler deploying hundreds of thousands of H100/H200 GPUs for AI training and inference",
           "criticality": "high",
-          "revenue_pct": 13
+          "revenue_pct": 10
         },
         {
           "ticker": "GOOGL",
           "name": "Alphabet Inc.",
-          "relationship": "Significant purchaser of NVIDIA data center GPUs for Google Cloud AI services despite in-house TPU development",
+          "relationship": "Google Cloud procures NVIDIA H100/A100 GPUs; competes with own TPUs but remains key customer",
           "criticality": "high",
-          "revenue_pct": 10
+          "revenue_pct": 8
         },
         {
           "ticker": "AMZN",
           "name": "Amazon.com Inc.",
-          "relationship": "AWS deploys NVIDIA GPUs extensively for EC2 GPU instances and AI/ML cloud services",
+          "relationship": "AWS deploys NVIDIA GPUs in EC2 compute instances for cloud AI workloads",
           "criticality": "high",
-          "revenue_pct": 10
+          "revenue_pct": 8
         },
         {
-          "ticker": "TSLA",
-          "name": "Tesla Inc.",
-          "relationship": "Customer for NVIDIA AI training GPUs (Dojo alternative) and historically for automotive compute platforms",
+          "ticker": "ORCL",
+          "name": "Oracle Corporation",
+          "relationship": "OCI supercluster deployments using tens of thousands of H100 GPUs; rapidly growing NVIDIA customer",
           "criticality": "medium",
-          "revenue_pct": 4
+          "revenue_pct": 5
         },
         {
           "ticker": "DELL",
           "name": "Dell Technologies",
-          "relationship": "Major OEM partner building NVIDIA-powered AI servers and workstations (PowerEdge AI systems) for enterprise customers",
+          "relationship": "Key OEM/ODM partner; integrates NVIDIA GPUs into PowerEdge AI servers and workstations for enterprise",
           "criticality": "medium",
           "revenue_pct": 6
         }
       ],
-      "supply_chain_summary": "NVIDIA sits at the pinnacle of the AI computing value chain as a fabless semiconductor company, designing cutting-edge GPUs and networking chips that are manufactured almost exclusively by TSMC using advanced nodes, with critical memory inputs from Micron and SK Hynix. Its downstream is dominated by hyperscalers (Microsoft, Meta, Google, Amazon) and enterprise OEMs who are in an unprecedented arms race to procure NVIDIA's AI accelerators, giving NVIDIA extraordinary pricing power and making it a chokepoint in global AI infrastructure buildout."
+      "supply_chain_summary": "NVIDIA sits at the epicenter of the AI infrastructure value chain, designing cutting-edge GPU and networking silicon that is exclusively manufactured by TSMC on advanced nodes and paired with HBM memory from SK Hynix and Micron. Its downstream is dominated by the world's largest hyperscalers and cloud providers\u2014Microsoft, Meta, Google, and Amazon\u2014who are engaged in an unprecedented GPU procurement race to build AI training and inference infrastructure, making NVIDIA both highly powerful and concentrated in its customer exposure."
     },
     "AAPL": {
       "upstream": [
         {
           "ticker": "TSM",
           "name": "Taiwan Semiconductor Manufacturing Co.",
-          "relationship": "Primary fab for Apple Silicon (A-series, M-series chips) on advanced nodes",
+          "relationship": "Primary fab for Apple Silicon (A-series, M-series, S-series chips) on leading-edge nodes",
           "criticality": "high",
-          "revenue_pct": 18
+          "revenue_pct": 20
+        },
+        {
+          "ticker": "SAMSY",
+          "name": "Samsung Electronics",
+          "relationship": "Supplier of OLED displays for iPhone and NAND flash/DRAM memory components",
+          "criticality": "high",
+          "revenue_pct": 10
         },
         {
           "ticker": "QCOM",
           "name": "Qualcomm Inc.",
-          "relationship": "Supplier of 5G modem chipsets for iPhone lineup",
+          "relationship": "Supplier of 5G modem chips (transitioning to in-house, but still material through 2025)",
+          "criticality": "medium",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "AVGO",
+          "name": "Broadcom Inc.",
+          "relationship": "Supplier of Wi-Fi/Bluetooth combo chips and RF front-end components for iPhone and Mac",
           "criticality": "high",
-          "revenue_pct": 8
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "CRUS",
+          "name": "Cirrus Logic Inc.",
+          "relationship": "Sole-source supplier of audio chips and mixed-signal ICs for iPhone and AirPods; Apple accounts for ~80% of Cirrus revenue",
+          "criticality": "high",
+          "revenue_pct": 4
         },
         {
           "ticker": "HON",
           "name": "Honeywell International",
-          "relationship": "Supplier of specialty materials and sensors used in Apple device manufacturing",
+          "relationship": "Supplier of specialty materials and sensors used in manufacturing and device components",
           "criticality": "low",
           "revenue_pct": 2
-        },
-        {
-          "ticker": "SONY",
-          "name": "Sony Group Corporation",
-          "relationship": "Primary supplier of CMOS image sensors for iPhone camera systems",
-          "criticality": "high",
-          "revenue_pct": 6
-        },
-        {
-          "ticker": "MU",
-          "name": "Micron Technology",
-          "relationship": "Supplier of NAND flash and DRAM memory components for iPhone, Mac, and iPad",
-          "criticality": "medium",
-          "revenue_pct": 5
         }
       ],
       "downstream": [
         {
-          "ticker": "AMZN",
-          "name": "Amazon.com Inc.",
-          "relationship": "Major retail distribution channel for Apple hardware and accessories via Amazon marketplace",
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Pays Apple an estimated $15\u201320B+ annually as default search engine partner on Safari/iOS (Services revenue)",
+          "criticality": "high",
+          "revenue_pct": 9
+        },
+        {
+          "ticker": "VZ",
+          "name": "Verizon Communications",
+          "relationship": "Major U.S. carrier customer reselling iPhones with subsidy/financing programs; significant iPhone distribution partner",
           "criticality": "medium",
           "revenue_pct": 7
         },
         {
           "ticker": "T",
           "name": "AT&T Inc.",
-          "relationship": "Major U.S. carrier partner distributing and subsidizing iPhone through wireless contracts",
-          "criticality": "high",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "VZ",
-          "name": "Verizon Communications",
-          "relationship": "Major U.S. carrier partner distributing and subsidizing iPhone through wireless contracts",
-          "criticality": "high",
-          "revenue_pct": 9
-        },
-        {
-          "ticker": "TMUS",
-          "name": "T-Mobile US Inc.",
-          "relationship": "Major U.S. carrier partner distributing iPhone with promotional subsidies and device financing",
+          "relationship": "Major U.S. carrier distributing and subsidizing iPhones; original exclusive iPhone carrier partner",
           "criticality": "medium",
           "revenue_pct": 6
         },
         {
-          "ticker": "GOOGL",
-          "name": "Alphabet Inc.",
-          "relationship": "Pays Apple estimated $18-20B/year as default search engine on Safari (Services revenue)",
-          "criticality": "high",
-          "revenue_pct": 5
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Retail distribution partner selling Apple products on Amazon marketplace and via Alexa/Echo integrations",
+          "criticality": "medium",
+          "revenue_pct": 4
         },
         {
-          "ticker": "WMT",
-          "name": "Walmart Inc.",
-          "relationship": "Retail distribution partner selling Apple devices and accessories in stores and online",
-          "criticality": "low",
+          "ticker": "META",
+          "name": "Meta Platforms Inc.",
+          "relationship": "Major App Store revenue contributor via Facebook, Instagram, and WhatsApp apps; pays Apple 15-30% commission on in-app purchases",
+          "criticality": "medium",
           "revenue_pct": 3
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Enterprise software partner and App Store participant; Microsoft 365 and cloud services deeply integrated into Apple ecosystem",
+          "criticality": "low",
+          "revenue_pct": 2
         }
       ],
-      "supply_chain_summary": "Apple sits at the apex of a highly complex global supply chain, acting as a 'fabless' designer that outsources manufacturing to a concentrated network of Asian suppliers \u2014 most critically TSMC for chips and Samsung/Sony for displays and sensors \u2014 while distributing finished products through telecom carriers, major retailers, and its own direct channels worldwide. Its downstream relationships are uniquely powerful, as Apple captures extraordinary margin and also generates significant Services revenue (App Store, licensing) from the installed base of devices sold through those channels."
+      "supply_chain_summary": "Apple sits at the apex of a highly sophisticated consumer electronics supply chain, acting as a 'fabless' designer that outsources chip fabrication to TSMC and component manufacturing to a global network of suppliers across Asia, while distributing finished products through carriers, retailers, and its own direct channels worldwide. Its downstream relationships are uniquely characterized by a dual role \u2014 generating revenue both from end consumers and from platform partners (Google, app developers) who pay significant fees to access Apple's massive installed base of over 2 billion active devices."
     },
     "MU": {
       "upstream": [
         {
           "ticker": "ASML",
-          "name": "ASML Holding",
-          "relationship": "Critical supplier of EUV and DUV lithography equipment essential for advanced DRAM and NAND manufacturing",
+          "name": "ASML Holding N.V.",
+          "relationship": "Primary supplier of EUV and DUV lithography equipment critical for DRAM and NAND fab production",
           "criticality": "high",
           "revenue_pct": 18
         },
         {
           "ticker": "AMAT",
-          "name": "Applied Materials",
-          "relationship": "Major supplier of deposition, etch, and chemical mechanical planarization (CMP) equipment for fab operations",
+          "name": "Applied Materials Inc.",
+          "relationship": "Supplier of CVD, PVD, etch, and CMP equipment used across memory fabrication processes",
           "criticality": "high",
           "revenue_pct": 12
         },
         {
           "ticker": "LRCX",
-          "name": "Lam Research",
-          "relationship": "Key supplier of etch and deposition equipment critical for 3D NAND stacking and DRAM patterning",
+          "name": "Lam Research Corporation",
+          "relationship": "Key supplier of etch and deposition equipment essential for 3D NAND stacking and DRAM scaling",
           "criticality": "high",
           "revenue_pct": 10
         },
         {
           "ticker": "ENTG",
-          "name": "Entegris",
-          "relationship": "Supplier of specialty chemicals, filtration systems, and advanced materials used in semiconductor fabrication",
+          "name": "Entegris Inc.",
+          "relationship": "Supplier of specialty chemicals, filtration systems, and advanced materials used in memory manufacturing",
           "criticality": "medium",
           "revenue_pct": 5
         },
         {
           "ticker": "KLAC",
           "name": "KLA Corporation",
-          "relationship": "Supplier of process control and yield management equipment for defect inspection and metrology in memory fabs",
+          "relationship": "Supplier of process control, inspection, and metrology equipment for yield management in memory fabs",
           "criticality": "medium",
           "revenue_pct": 6
         },
         {
-          "ticker": "ACMR",
-          "name": "ACM Research",
-          "relationship": "Supplier of wafer cleaning and surface preparation equipment used in memory chip manufacturing processes",
-          "criticality": "low",
-          "revenue_pct": 2
-        }
-      ],
-      "downstream": [
-        {
-          "ticker": "AMZN",
-          "name": "Amazon.com (AWS)",
-          "relationship": "Major hyperscale cloud customer purchasing DRAM, HBM, and NAND for data center servers and storage infrastructure",
-          "criticality": "high",
-          "revenue_pct": 12
-        },
-        {
-          "ticker": "NVDA",
-          "name": "NVIDIA Corporation",
-          "relationship": "Critical customer for High Bandwidth Memory (HBM3E) used in AI GPUs including H100 and Blackwell platforms",
-          "criticality": "high",
-          "revenue_pct": 15
-        },
-        {
-          "ticker": "AAPL",
-          "name": "Apple Inc.",
-          "relationship": "Significant customer for LPDDR5 mobile DRAM and NAND flash used in iPhones, iPads, and Macs",
-          "criticality": "high",
-          "revenue_pct": 10
-        },
-        {
-          "ticker": "MSFT",
-          "name": "Microsoft Corporation",
-          "relationship": "Large hyperscale customer purchasing server DRAM and SSDs for Azure cloud infrastructure and AI workloads",
-          "criticality": "medium",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "GOOGL",
-          "name": "Alphabet Inc.",
-          "relationship": "Hyperscale customer for data center DRAM and NAND deployed in Google Cloud and TPU-based AI infrastructure",
-          "criticality": "medium",
-          "revenue_pct": 7
-        },
-        {
-          "ticker": "QCOM",
-          "name": "Qualcomm",
-          "relationship": "Customer for LPDDR5 mobile DRAM packaged with Snapdragon SoCs for smartphones and edge computing devices",
-          "criticality": "medium",
-          "revenue_pct": 5
-        }
-      ],
-      "supply_chain_summary": "Micron Technology sits in the middle of the semiconductor value chain, heavily dependent on a concentrated group of capital equipment suppliers (ASML, Applied Materials, Lam Research) for its vertically integrated DRAM and NAND manufacturing operations. On the demand side, Micron is increasingly tied to AI-driven workloads, with hyperscalers and NVIDIA representing growing revenue concentration as HBM and high-capacity server DRAM displace commodity memory in its mix."
-    },
-    "ARM": {
-      "upstream": [
-        {
-          "ticker": "CDNS",
-          "name": "Cadence Design Systems",
-          "relationship": "EDA software tools for chip IP design and verification",
-          "criticality": "high",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "SNPS",
-          "name": "Synopsys Inc.",
-          "relationship": "EDA tools and silicon lifecycle management software for IP development",
-          "criticality": "high",
-          "revenue_pct": 7
-        },
-        {
-          "ticker": "MSFT",
-          "name": "Microsoft Corporation",
-          "relationship": "Cloud infrastructure and enterprise software for R&D operations",
-          "criticality": "medium",
-          "revenue_pct": 3
-        },
-        {
-          "ticker": "GOOGL",
-          "name": "Alphabet Inc.",
-          "relationship": "Cloud computing services supporting design and simulation workloads",
-          "criticality": "low",
-          "revenue_pct": 2
-        },
-        {
-          "ticker": "INTC",
-          "name": "Intel Corporation",
-          "relationship": "Foundry and server hardware for internal compute and design infrastructure",
-          "criticality": "low",
-          "revenue_pct": 2
-        }
-      ],
-      "downstream": [
-        {
-          "ticker": "QCOM",
-          "name": "Qualcomm Inc.",
-          "relationship": "Major ARM architecture licensee for mobile SoCs and IoT chips",
-          "criticality": "high",
-          "revenue_pct": 11
-        },
-        {
-          "ticker": "AAPL",
-          "name": "Apple Inc.",
-          "relationship": "Architectural licensee designing custom ARM-based chips (A-series, M-series) for iPhone, Mac, iPad",
-          "criticality": "high",
-          "revenue_pct": 25
-        },
-        {
-          "ticker": "NVDA",
-          "name": "NVIDIA Corporation",
-          "relationship": "ARM IP licensee for Grace CPU and data center/edge computing products; also attempted acquirer",
-          "criticality": "high",
-          "revenue_pct": 7
-        },
-        {
-          "ticker": "AMZN",
-          "name": "Amazon.com Inc.",
-          "relationship": "ARM architectural licensee for custom Graviton/Trainium chips used in AWS cloud infrastructure",
-          "criticality": "high",
-          "revenue_pct": 6
-        },
-        {
-          "ticker": "MRVL",
-          "name": "Marvell Technology Inc.",
-          "relationship": "ARM IP licensee for data center, networking, and custom silicon solutions",
-          "criticality": "medium",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "MU",
-          "name": "Micron Technology Inc.",
-          "relationship": "Uses ARM-based controllers in memory products; partner in ARM ecosystem for embedded solutions",
-          "criticality": "low",
-          "revenue_pct": 3
-        }
-      ],
-      "supply_chain_summary": "ARM sits at a unique and central position in the global semiconductor supply chain as a pure-play IP licensor, dependent primarily on EDA software vendors upstream to develop and verify its CPU/GPU IP cores, while its downstream licensees span virtually every major semiconductor company and hyperscaler that designs chips for mobile, cloud, automotive, and IoT applications. Because ARM licenses its architecture rather than manufacturing silicon, its upstream cost base is relatively lean (R&D tooling focused), while its downstream revenue is broadly diversified across royalties and licensing fees from hundreds of companies building on its instruction set architecture."
-    },
-    "MRVL": {
-      "upstream": [
-        {
-          "ticker": "TSM",
-          "name": "Taiwan Semiconductor Manufacturing Company",
-          "relationship": "Primary foundry partner for advanced node chip manufacturing (5nm, 4nm, 3nm)",
-          "criticality": "high",
-          "revenue_pct": 35
-        },
-        {
-          "ticker": "ASML",
-          "name": "ASML Holding",
-          "relationship": "EUV lithography equipment supplier to TSMC used in Marvell chip production (indirect dependency)",
-          "criticality": "high",
-          "revenue_pct": 5
-        },
-        {
-          "ticker": "ARMH",
-          "name": "Arm Holdings",
-          "relationship": "ARM architecture IP licensor for Marvell's processor and SoC designs",
-          "criticality": "high",
-          "revenue_pct": 8
-        },
-        {
-          "ticker": "ONTO",
-          "name": "Onto Innovation",
-          "relationship": "Wafer inspection and metrology equipment supplier supporting advanced packaging and process control",
-          "criticality": "medium",
-          "revenue_pct": 3
-        },
-        {
-          "ticker": "COHU",
-          "name": "Cohu Inc.",
-          "relationship": "Semiconductor test and handling equipment supplier for chip validation and production testing",
-          "criticality": "medium",
-          "revenue_pct": 3
-        },
-        {
-          "ticker": "AMAT",
-          "name": "Applied Materials",
-          "relationship": "Semiconductor deposition and etch equipment supplier used in Marvell chip fabrication processes",
+          "ticker": "SUMCO",
+          "name": "SUMCO Corporation",
+          "relationship": "Major supplier of high-purity silicon wafers used as substrates for DRAM and NAND production",
           "criticality": "medium",
           "revenue_pct": 4
         }
@@ -509,50 +342,225 @@
         {
           "ticker": "AMZN",
           "name": "Amazon.com Inc.",
-          "relationship": "Major hyperscale data center customer for custom AI/ML silicon (Trainium, Inferentia programs) and networking ASICs",
-          "criticality": "high",
-          "revenue_pct": 20
-        },
-        {
-          "ticker": "GOOGL",
-          "name": "Alphabet Inc.",
-          "relationship": "Key hyperscale customer for custom data center networking and AI inference silicon solutions",
+          "relationship": "Large hyperscaler customer purchasing HBM, DDR5 server DRAM, and NAND SSDs for AWS data center buildout",
           "criticality": "high",
           "revenue_pct": 12
         },
         {
           "ticker": "MSFT",
           "name": "Microsoft Corporation",
-          "relationship": "Cloud data center customer for networking and custom AI accelerator chip solutions",
+          "relationship": "Major cloud customer consuming high-capacity DRAM and enterprise SSDs for Azure infrastructure and AI workloads",
+          "criticality": "high",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "Critical customer for High Bandwidth Memory (HBM3E) integrated into AI GPUs (H100, H200, Blackwell series)",
+          "criticality": "high",
+          "revenue_pct": 14
+        },
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "relationship": "Major customer for LPDDR5 mobile DRAM and NAND flash used in iPhone, iPad, and Mac product lines",
+          "criticality": "high",
+          "revenue_pct": 9
+        },
+        {
+          "ticker": "DELL",
+          "name": "Dell Technologies Inc.",
+          "relationship": "OEM customer purchasing server DRAM modules and enterprise SSDs for PowerEdge server and storage systems",
+          "criticality": "medium",
+          "revenue_pct": 6
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Hyperscaler customer procuring HBM and DDR5 DRAM for Google Cloud TPU and data center expansion",
+          "criticality": "medium",
+          "revenue_pct": 7
+        }
+      ],
+      "supply_chain_summary": "Micron Technology sits at the heart of the global memory supply chain, dependent on a concentrated set of semiconductor equipment makers (ASML, Applied Materials, Lam Research) for the capital-intensive machinery required to manufacture DRAM and NAND at leading-edge nodes. On the demand side, Micron is heavily exposed to hyperscalers and AI infrastructure builders\u2014particularly NVIDIA for HBM\u2014as well as consumer electronics OEMs, making its revenue highly cyclical and sensitive to cloud capex cycles and smartphone upgrade trends."
+    },
+    "ARM": {
+      "upstream": [
+        {
+          "ticker": "CDNS",
+          "name": "Cadence Design Systems",
+          "relationship": "EDA software tools critical for IP design, verification, and simulation workflows",
           "criticality": "high",
           "revenue_pct": 8
         },
         {
-          "ticker": "CSCO",
-          "name": "Cisco Systems",
-          "relationship": "Networking OEM customer using Marvell Ethernet controllers, PHYs, and switching silicon in enterprise equipment",
-          "criticality": "medium",
+          "ticker": "SNPS",
+          "name": "Synopsys Inc.",
+          "relationship": "EDA tools and IP verification platforms used in ARM architecture development",
+          "criticality": "high",
           "revenue_pct": 7
         },
         {
-          "ticker": "SEAI",
-          "name": "Samsung Electronics",
-          "relationship": "Consumer and enterprise device customer using Marvell storage controllers and networking solutions",
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Cloud infrastructure (Azure) for engineering compute, simulation, and enterprise operations",
+          "criticality": "medium",
+          "revenue_pct": 4
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Google Cloud platform services supporting R&D and internal engineering workloads",
+          "criticality": "low",
+          "revenue_pct": 2
+        },
+        {
+          "ticker": "CRM",
+          "name": "Salesforce Inc.",
+          "relationship": "CRM and enterprise software supporting licensing sales operations and partner management",
+          "criticality": "low",
+          "revenue_pct": 1
+        }
+      ],
+      "downstream": [
+        {
+          "ticker": "QCOM",
+          "name": "Qualcomm Inc.",
+          "relationship": "Major ARM architecture licensee for Snapdragon mobile, automotive, and IoT SoCs",
+          "criticality": "high",
+          "revenue_pct": 11
+        },
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA Corporation",
+          "relationship": "ARM architecture licensee for Grace CPU and embedded/automotive processor designs",
+          "criticality": "high",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "AAPL",
+          "name": "Apple Inc.",
+          "relationship": "Custom ARM architecture licensee (ALA) for A-series and M-series chips across all major product lines",
+          "criticality": "high",
+          "revenue_pct": 25
+        },
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "ARM licensee for Graviton cloud server CPUs deployed across AWS data centers",
+          "criticality": "high",
+          "revenue_pct": 6
+        },
+        {
+          "ticker": "MRVL",
+          "name": "Marvell Technology Inc.",
+          "relationship": "ARM licensee for custom data infrastructure and networking SoCs",
+          "criticality": "medium",
+          "revenue_pct": 4
+        },
+        {
+          "ticker": "TSM",
+          "name": "Taiwan Semiconductor Manufacturing Co.",
+          "relationship": "Fabrication partner for ARM's own chip designs (CSS products); licensees rely on TSMC to manufacture ARM-based chips, making TSMC critical to ARM ecosystem health",
+          "criticality": "high",
+          "revenue_pct": 5
+        }
+      ],
+      "supply_chain_summary": "ARM Holdings occupies a uniquely asset-light position at the apex of the semiconductor IP supply chain, designing and licensing CPU/GPU architectures to virtually every major chip company rather than manufacturing silicon itself. Its upstream dependencies are primarily EDA software vendors and cloud infrastructure providers, while its downstream customer base spans mobile, cloud, automotive, and IoT semiconductor markets \u2014 making ARM's revenue highly correlated with global chip design activity and silicon unit shipment volumes."
+    },
+    "MRVL": {
+      "upstream": [
+        {
+          "ticker": "TSM",
+          "name": "Taiwan Semiconductor Manufacturing Company",
+          "relationship": "Primary foundry for advanced node chip fabrication (5nm, 3nm)",
+          "criticality": "high",
+          "revenue_pct": 40
+        },
+        {
+          "ticker": "ASML",
+          "name": "ASML Holding",
+          "relationship": "EUV lithography equipment supplier to TSMC used in Marvell chip production",
+          "criticality": "high",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "CDNS",
+          "name": "Cadence Design Systems",
+          "relationship": "EDA software tools for chip design and verification",
+          "criticality": "high",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "SNPS",
+          "name": "Synopsys Inc.",
+          "relationship": "EDA tools and semiconductor IP licensing for SoC design",
+          "criticality": "high",
+          "revenue_pct": 5
+        },
+        {
+          "ticker": "AMAT",
+          "name": "Applied Materials",
+          "relationship": "Semiconductor process equipment supplier to foundry partners",
           "criticality": "medium",
           "revenue_pct": 5
         },
         {
-          "ticker": "WDC",
-          "name": "Western Digital Corporation",
-          "relationship": "Storage OEM customer integrating Marvell SAS/SATA/NVMe storage controllers into HDDs and SSDs",
+          "ticker": "ASX",
+          "name": "Advanced Semiconductor Engineering",
+          "relationship": "Chip packaging, assembly, and testing services (OSAT)",
           "criticality": "medium",
-          "revenue_pct": 6
+          "revenue_pct": 8
         }
       ],
-      "supply_chain_summary": "Marvell Technology operates as a fabless semiconductor company, sitting between advanced foundry partners (primarily TSMC) and large-scale hyperscaler and OEM customers who embed its data infrastructure chips into data centers, storage systems, and networking equipment. Its strategic position is increasingly critical as it expands into custom AI silicon and high-speed optical/electrical networking, making it a key enabler of cloud and AI infrastructure buildouts for major hyperscalers like Amazon, Google, and Microsoft."
+      "downstream": [
+        {
+          "ticker": "AMZN",
+          "name": "Amazon.com Inc.",
+          "relationship": "Major hyperscale data center customer for custom AI/ML ASICs and networking chips (AWS)",
+          "criticality": "high",
+          "revenue_pct": 20
+        },
+        {
+          "ticker": "GOOGL",
+          "name": "Alphabet Inc.",
+          "relationship": "Hyperscale customer for custom silicon and optical interconnect solutions",
+          "criticality": "high",
+          "revenue_pct": 15
+        },
+        {
+          "ticker": "MSFT",
+          "name": "Microsoft Corporation",
+          "relationship": "Azure data center customer for networking and custom ASIC solutions",
+          "criticality": "high",
+          "revenue_pct": 10
+        },
+        {
+          "ticker": "CSCO",
+          "name": "Cisco Systems",
+          "relationship": "Customer for Ethernet switching and networking silicon used in enterprise/carrier equipment",
+          "criticality": "medium",
+          "revenue_pct": 8
+        },
+        {
+          "ticker": "SEAI",
+          "name": "Samsung Electronics",
+          "relationship": "Customer for storage controllers and SSD silicon solutions",
+          "criticality": "medium",
+          "revenue_pct": 7
+        },
+        {
+          "ticker": "WDC",
+          "name": "Western Digital Corporation",
+          "relationship": "Key customer for HDD and SSD storage controller semiconductors",
+          "criticality": "medium",
+          "revenue_pct": 8
+        }
+      ],
+      "supply_chain_summary": "Marvell Technology is a fabless semiconductor company that sits at a critical juncture in the data infrastructure supply chain, relying heavily on TSMC for advanced node manufacturing while serving hyperscale cloud providers (Amazon, Google, Microsoft) and networking OEMs with custom ASICs, Ethernet silicon, and storage controllers. Its strategic pivot toward AI-driven custom silicon (XPUs) for cloud data centers has significantly elevated its dependency on leading-edge foundry capacity and deepened its revenue concentration among a handful of major hyperscaler customers."
     }
   },
-  "supply_chain_last_updated": "2026-07-26",
+  "supply_chain_last_updated": "2026-08-02",
   "themes": [
     {
       "name": "AI Infrastructure",
